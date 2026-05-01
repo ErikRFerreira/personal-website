@@ -1,0 +1,12 @@
+.simple-text-block {
+  padding: 4rem 0;
+  background: var(--muted);
+}
+
+.simple-text-block__text {
+  max-width: 48rem;
+  margin: 0;
+  color: var(--foreground);
+  font-size: 1.25rem;
+  line-height: 1.7;
+}

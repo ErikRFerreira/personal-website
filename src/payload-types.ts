@@ -203,7 +203,7 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | SimpleTextBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -785,6 +785,16 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SimpleTextBlock".
+ */
+export interface SimpleTextBlock {
+  text: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'simpleText';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
@@ -1112,6 +1122,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        simpleText?: T | SimpleTextBlockSelect<T>;
       };
   meta?:
     | T
@@ -1208,6 +1219,15 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SimpleTextBlock_select".
+ */
+export interface SimpleTextBlockSelect<T extends boolean = true> {
+  text?: T;
   id?: T;
   blockName?: T;
 }
