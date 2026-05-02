@@ -161,7 +161,10 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'portfolioHero';
+    eyebrow?: string | null;
+    headline?: string | null;
+    description?: string | null;
     richText?: {
       root: {
         type: string;
@@ -202,6 +205,7 @@ export interface Page {
         }[]
       | null;
     media?: (number | null) | Media;
+    scrollLabel?: string | null;
   };
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | SimpleTextBlock)[];
   meta?: {
@@ -1096,6 +1100,9 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
+        eyebrow?: T;
+        headline?: T;
+        description?: T;
         richText?: T;
         links?:
           | T
@@ -1113,6 +1120,7 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        scrollLabel?: T;
       };
   layout?:
     | T

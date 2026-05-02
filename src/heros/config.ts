@@ -35,8 +35,37 @@ export const hero: Field = {
           label: 'Low Impact',
           value: 'lowImpact',
         },
+        {
+          label: 'Portfolio Hero',
+          value: 'portfolioHero',
+        },
       ],
       required: true,
+    },
+    {
+      name: 'eyebrow',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'portfolioHero',
+      },
+      label: 'Eyebrow',
+    },
+    {
+      name: 'headline',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'portfolioHero',
+      },
+      label: 'Headline',
+      required: true,
+    },
+    {
+      name: 'description',
+      type: 'textarea',
+      admin: {
+        condition: (_, { type } = {}) => type === 'portfolioHero',
+      },
+      label: 'Description',
     },
     {
       name: 'richText',
@@ -51,6 +80,10 @@ export const hero: Field = {
           ]
         },
       }),
+      // Only show the rich text editor for non-portfolio hero types
+      admin: {
+        condition: (_, { type } = {}) => type !== 'portfolioHero',
+      },
       label: false,
     },
     linkGroup({
@@ -62,10 +95,19 @@ export const hero: Field = {
       name: 'media',
       type: 'upload',
       admin: {
-        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+        condition: (_, { type } = {}) =>
+          ['highImpact', 'mediumImpact', 'portfolioHero'].includes(type),
       },
       relationTo: 'media',
       required: true,
+    },
+    {
+      name: 'scrollLabel',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'portfolioHero',
+      },
+      label: 'Scroll label',
     },
   ],
   label: false,
