@@ -40,6 +40,7 @@ export const Projects: CollectionConfig<'projects'> = {
       type: 'text',
       required: true,
       unique: true,
+      defaultValue: '',
       admin: {
         description: 'A URL-friendly identifier for the project (e.g., "my-awesome-project")',
       },
