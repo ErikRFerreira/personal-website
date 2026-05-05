@@ -8,6 +8,7 @@ import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { SimpleTextBlock } from '@/blocks/SimpleText/Component'
+import { SelectedProjectsBlock } from '@/blocks/SelectedProjects/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -16,6 +17,7 @@ const blockComponents = {
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   simpleText: SimpleTextBlock,
+  selectedProjects: SelectedProjectsBlock,
 }
 
 export const RenderBlocks: React.FC<{

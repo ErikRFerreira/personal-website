@@ -16,6 +16,10 @@ export const Projects: CollectionConfig<'projects'> = {
       type: 'textarea',
     },
     {
+      name: 'role',
+      type: 'text',
+    },
+    {
       name: 'tech',
       type: 'array',
       label: 'Tech Stack',
@@ -25,6 +29,20 @@ export const Projects: CollectionConfig<'projects'> = {
           type: 'text',
         },
       ],
+    },
+    {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+    },
+    {
+      name: 'slug',
+      type: 'text',
+      required: true,
+      unique: true,
+      admin: {
+        description: 'A URL-friendly identifier for the project (e.g., "my-awesome-project")',
+      },
     },
   ],
 }

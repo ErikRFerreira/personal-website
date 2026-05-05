@@ -207,7 +207,15 @@ export interface Page {
     media?: (number | null) | Media;
     scrollLabel?: string | null;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | SimpleTextBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | SimpleTextBlock
+    | SelectedProjectsBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -799,18 +807,39 @@ export interface SimpleTextBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SelectedProjectsBlock".
+ */
+export interface SelectedProjectsBlock {
+  eyebrow?: string | null;
+  label?: string | null;
+  /**
+   * Choose which projects should appear in this block.
+   */
+  projects: (number | Project)[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'selectedProjects';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
   id: number;
   title: string;
   description?: string | null;
+  role?: string | null;
   tech?:
     | {
         techName?: string | null;
         id?: string | null;
       }[]
     | null;
+  image?: (number | null) | Media;
+  /**
+   * A URL-friendly identifier for the project (e.g., "my-awesome-project")
+   */
+  slug: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1131,6 +1160,7 @@ export interface PagesSelect<T extends boolean = true> {
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         simpleText?: T | SimpleTextBlockSelect<T>;
+        selectedProjects?: T | SelectedProjectsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1236,6 +1266,17 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface SimpleTextBlockSelect<T extends boolean = true> {
   text?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SelectedProjectsBlock_select".
+ */
+export interface SelectedProjectsBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  label?: T;
+  projects?: T;
   id?: T;
   blockName?: T;
 }
@@ -1414,12 +1455,15 @@ export interface UsersSelect<T extends boolean = true> {
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
+  role?: T;
   tech?:
     | T
     | {
         techName?: T;
         id?: T;
       };
+  image?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }
