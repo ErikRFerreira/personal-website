@@ -10,8 +10,8 @@
 
   position: relative;
   min-height: 100svh;
-  margin-top: -10.4rem;
-  padding-top: 10.4rem;
+  margin-top: calc(var(--header-height) * -1);
+  padding-top: var(--header-height);
   overflow: hidden;
   background: var(--portfolio-hero-bg);
   color: var(--portfolio-hero-text);
@@ -34,7 +34,7 @@
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  min-height: calc(100svh - 10.4rem);
+  min-height: calc(100svh - var(--header-height));
   transition: grid-template-columns 720ms var(--portfolio-hero-ease);
 }
 
@@ -210,16 +210,16 @@
   align-self: flex-end;
   width: min(100%, 44rem);
   padding: clamp(2rem, 5vw, 5rem);
-  padding-bottom: clamp(7.5rem, 15vh, 10rem);
+  padding-bottom: clamp(5.75rem, 10vh, 7.25rem);
 }
 
 .portfolio-hero__panel--dev .portfolio-hero__panel-content {
-  margin-left: auto;
-  padding-left: clamp(3rem, 7vw, 7rem);
+  width: min(100%, 38rem);
+  padding-left: clamp(2.75rem, 4.5vw, 5rem);
 }
 
 .portfolio-hero__eyebrow {
-  margin: 0 0 1.55rem;
+  margin: 0 0 1.15rem;
   color: var(--portfolio-hero-muted);
   font-size: clamp(0.68rem, 0.9vw, 0.82rem);
   font-weight: 800;
@@ -232,7 +232,7 @@
   max-width: 8.8ch;
   margin: 0;
   color: var(--portfolio-hero-text);
-  font-size: clamp(4rem, 7.2vw, 7.5rem);
+  font-size: clamp(3.25rem, 4.6vw, 5.1rem);
   font-weight: 800;
   letter-spacing: 0;
   line-height: 0.96;
@@ -298,10 +298,14 @@
   inset-block: 0;
   left: var(--portfolio-hero-split);
   z-index: 4;
-  width: 2.1rem;
-  background:
-    linear-gradient(90deg, transparent, rgb(0 0 0 / 62%) 42%, rgb(0 0 0 / 78%) 58%, transparent),
-    linear-gradient(180deg, transparent, rgb(17 217 232 / 16%) 50%, transparent);
+  width: 0.7rem;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(17 217 232 / 10%),
+    rgb(0 0 0 / 42%),
+    transparent
+  );
   pointer-events: none;
   transform: translateX(-50%) skewX(-4deg);
   transform-origin: center;
@@ -314,13 +318,13 @@
   left: var(--portfolio-hero-split);
   z-index: 5;
   display: grid;
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   place-items: center;
   border: 1px solid rgb(255 255 255 / 16%);
-  border-radius: 0.75rem;
-  background: rgb(26 27 27 / 88%);
-  box-shadow: 0 1rem 3rem rgb(0 0 0 / 34%);
+  border-radius: 0.45rem;
+  background: rgb(26 27 27 / 72%);
+  box-shadow: 0 0.65rem 1.8rem rgb(0 0 0 / 28%);
   color: var(--portfolio-hero-accent);
   pointer-events: none;
   transform: translate(-50%, -50%);
@@ -330,32 +334,32 @@
 }
 
 .portfolio-hero__affordance svg {
-  width: 2rem;
-  height: 2rem;
-  stroke-width: 2.4;
+  width: 1.15rem;
+  height: 1.15rem;
+  stroke-width: 2;
 }
 
 .portfolio-hero:has(.portfolio-hero__panel--lens:is(:hover, :focus-within))
   .portfolio-hero__affordance {
-  transform: translate(-50%, -50%) rotate(-6deg);
+  transform: translate(-50%, -50%);
 }
 
 .portfolio-hero:has(.portfolio-hero__panel--dev:is(:hover, :focus-within))
   .portfolio-hero__affordance {
-  transform: translate(-50%, -50%) rotate(6deg);
+  transform: translate(-50%, -50%);
 }
 
 .portfolio-hero__positioning {
   position: absolute;
   inset-inline: 1rem;
-  bottom: 2.3rem;
+  bottom: 3.25rem;
   z-index: 6;
   max-width: 58rem;
   margin: 0 auto;
   color: rgb(242 242 239 / 55%);
-  font-size: clamp(0.68rem, 0.95vw, 0.82rem);
+  font-size: clamp(0.6rem, 0.72vw, 0.7rem);
   font-weight: 800;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   line-height: 1.55;
   text-align: center;
   text-transform: uppercase;
@@ -400,7 +404,7 @@
 
   .portfolio-hero__headline {
     max-width: 9.5ch;
-    font-size: clamp(3.2rem, 14vw, 5.5rem);
+    font-size: clamp(2.5rem, 8.5vw, 3.7rem);
   }
 
   .portfolio-hero__reveal {
@@ -447,6 +451,10 @@
 
   .portfolio-hero__eyebrow {
     margin-bottom: 1.1rem;
+  }
+
+  .portfolio-hero__headline {
+    font-size: clamp(2.15rem, 9.5vw, 3rem);
   }
 
   .portfolio-hero__cta {

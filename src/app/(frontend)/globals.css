@@ -11,6 +11,10 @@
 @custom-variant 2xl (@media (width >= theme(--breakpoint-2xl)));
 
 @layer base {
+  :root {
+    --header-height: 3.8125rem; /* 61px */
+  }
+
   h1,
   h2,
   h3,
