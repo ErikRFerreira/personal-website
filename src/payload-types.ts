@@ -165,6 +165,10 @@ export interface Page {
     eyebrow?: string | null;
     headline?: string | null;
     description?: string | null;
+    rightEyebrow?: string | null;
+    rightHeadline?: string | null;
+    rightDescription?: string | null;
+    positioningLine?: string | null;
     richText?: {
       root: {
         type: string;
@@ -1132,6 +1136,10 @@ export interface PagesSelect<T extends boolean = true> {
         eyebrow?: T;
         headline?: T;
         description?: T;
+        rightEyebrow?: T;
+        rightHeadline?: T;
+        rightDescription?: T;
+        positioningLine?: T;
         richText?: T;
         links?:
           | T

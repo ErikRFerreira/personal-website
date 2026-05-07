@@ -68,6 +68,42 @@ export const hero: Field = {
       label: 'Description',
     },
     {
+      name: 'rightEyebrow',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'portfolioHero',
+      },
+      defaultValue: 'Software Engineer',
+      label: 'Right eyebrow',
+    },
+    {
+      name: 'rightHeadline',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'portfolioHero',
+      },
+      defaultValue: 'Engineering Scale.',
+      label: 'Right headline',
+    },
+    {
+      name: 'rightDescription',
+      type: 'textarea',
+      admin: {
+        condition: (_, { type } = {}) => type === 'portfolioHero',
+      },
+      label: 'Right description',
+    },
+    {
+      name: 'positioningLine',
+      type: 'textarea',
+      admin: {
+        condition: (_, { type } = {}) => type === 'portfolioHero',
+      },
+      defaultValue:
+        'Software engineering and visual storytelling shaped by depth, precision, and perspective.',
+      label: 'Positioning line',
+    },
+    {
       name: 'richText',
       type: 'richText',
       editor: lexicalEditor({

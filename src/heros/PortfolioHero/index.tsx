@@ -3,10 +3,101 @@
 import type { Page } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
+import { ArrowRight, MoveHorizontal } from 'lucide-react'
 import { useEffect } from 'react'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 
 import './styles.css'
+
+type PortfolioHeroLink = NonNullable<Page['hero']['links']>[number]['link']
+
+type HeroPanelProps = {
+  description?: string | null
+  eyebrow?: string | null
+  headline?: string | null
+  headingLevel: 'h1' | 'h2'
+  link?: PortfolioHeroLink
+  media?: Page['hero']['media']
+  side: 'lens' | 'dev'
+}
+
+const fallbackPositioningLine =
+  'Software engineering and visual storytelling shaped by depth, precision, and perspective.'
+
+function HeroPanel({
+  description,
+  eyebrow,
+  headline,
+  headingLevel,
+  link,
+  media,
+  side,
+}: HeroPanelProps) {
+  const isLens = side === 'lens'
+  const HeadingTag = headingLevel
+
+  return (
+    <section className={`portfolio-hero__panel portfolio-hero__panel--${side}`}>
+      {isLens && media && typeof media === 'object' && (
+        <Media
+          fill
+          className="portfolio-hero__media"
+          imgClassName="portfolio-hero__image"
+          priority
+          resource={media}
+          size="(max-width: 767px) 100vw, 60vw"
+        />
+      )}
+
+      {!isLens && (
+        <div className="portfolio-hero__system" aria-hidden="true">
+          <div className="portfolio-hero__code-card">
+            <span className="portfolio-hero__code-label">system_architecture.ts</span>
+            <pre>
+              <code>{`import { System } from '@core/engine';
+
+const architecture = {
+  scale: 'global',
+  resilience: true,
+  nodes: ['us-east', 'eu-west', 'ap-south'],
+  metrics: {
+    latency: '< 10ms',
+    uptime: '99.999%'
+  }
+};
+
+async function deploy(config) {
+  await System.initialize(config);
+  System.mount();
+}`}</code>
+            </pre>
+          </div>
+        </div>
+      )}
+
+      <div className="portfolio-hero__panel-content">
+        {eyebrow && <p className="portfolio-hero__eyebrow">{eyebrow}</p>}
+        {headline && <HeadingTag className="portfolio-hero__headline">{headline}</HeadingTag>}
+
+        {(description || link) && (
+          <div className="portfolio-hero__reveal">
+            {description && <p className="portfolio-hero__description">{description}</p>}
+
+            {link && (
+              <CMSLink
+                {...link}
+                appearance={link.appearance === 'outline' ? 'outline' : 'default'}
+                className="portfolio-hero__cta"
+              >
+                <ArrowRight aria-hidden="true" />
+              </CMSLink>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
 
 export function PortfolioHero({
   eyebrow,
@@ -14,7 +105,10 @@ export function PortfolioHero({
   description,
   links,
   media,
-  scrollLabel,
+  positioningLine,
+  rightDescription,
+  rightEyebrow,
+  rightHeadline,
 }: Page['hero']) {
   const { setHeaderTheme } = useHeaderTheme()
 
@@ -24,53 +118,33 @@ export function PortfolioHero({
 
   return (
     <section className="portfolio-hero" data-theme="dark">
-      <div className="portfolio-hero__content">
-        <div className="portfolio-hero__copy">
-          {eyebrow && <p className="portfolio-hero__eyebrow">{eyebrow}</p>}
+      <div className="portfolio-hero__stage">
+        <HeroPanel
+          description={description}
+          eyebrow={eyebrow || 'Visual Narrator'}
+          headingLevel="h1"
+          headline={headline || 'Framing Perspective.'}
+          link={Array.isArray(links) ? links[0]?.link : undefined}
+          media={media}
+          side="lens"
+        />
 
-          {headline && <h1 className="portfolio-hero__headline">{headline}</h1>}
+        <HeroPanel
+          description={rightDescription}
+          eyebrow={rightEyebrow || 'Software Engineer'}
+          headingLevel="h2"
+          headline={rightHeadline || 'Engineering Scale.'}
+          link={Array.isArray(links) ? links[1]?.link : undefined}
+          side="dev"
+        />
 
-          {description && <p className="portfolio-hero__description">{description}</p>}
-
-          {/*Payload array fields can be null, undefined, or an array. This guards before .map(). */}
-          {Array.isArray(links) && links.length > 0 && (
-            <ul className="portfolio-hero__links">
-              {links.map(({ link }, index) => (
-                <li key={index}>
-                  <CMSLink
-                    {...link}
-                    appearance={link.appearance === 'outline' ? 'outline' : 'default'}
-                    className={
-                      link.appearance === 'outline'
-                        ? 'portfolio-hero__link portfolio-hero__link--outline'
-                        : 'portfolio-hero__link portfolio-hero__link--primary'
-                    }
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {scrollLabel && (
-            <div className="portfolio-hero__scroll" aria-hidden="true">
-              <span>{scrollLabel}</span>
-            </div>
-          )}
+        <div className="portfolio-hero__divider" aria-hidden="true" />
+        <div className="portfolio-hero__affordance" aria-hidden="true">
+          <MoveHorizontal />
         </div>
       </div>
 
-      <div className="portfolio-hero__media-panel" aria-hidden={!media}>
-        {media && typeof media === 'object' && (
-          <Media
-            fill
-            className="portfolio-hero__media"
-            imgClassName="portfolio-hero__image"
-            priority
-            resource={media}
-            size="(max-width: 767px) 100vw, 46vw"
-          />
-        )}
-      </div>
+      <p className="portfolio-hero__positioning">{positioningLine || fallbackPositioningLine}</p>
     </section>
   )
 }
