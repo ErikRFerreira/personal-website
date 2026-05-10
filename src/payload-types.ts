@@ -219,6 +219,7 @@ export interface Page {
     | FormBlock
     | SimpleTextBlock
     | SelectedProjectsBlock
+    | CapabilitiesBlock
   )[];
   meta?: {
     title?: string | null;
@@ -849,6 +850,25 @@ export interface Project {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CapabilitiesBlock".
+ */
+export interface CapabilitiesBlock {
+  eyebrow?: string | null;
+  label?: string | null;
+  capabilities?:
+    | {
+        name: string;
+        description: string;
+        icon: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'capabilities';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1169,6 +1189,7 @@ export interface PagesSelect<T extends boolean = true> {
         formBlock?: T | FormBlockSelect<T>;
         simpleText?: T | SimpleTextBlockSelect<T>;
         selectedProjects?: T | SelectedProjectsBlockSelect<T>;
+        capabilities?: T | CapabilitiesBlockSelect<T>;
       };
   meta?:
     | T
@@ -1285,6 +1306,24 @@ export interface SelectedProjectsBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   label?: T;
   projects?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CapabilitiesBlock_select".
+ */
+export interface CapabilitiesBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  label?: T;
+  capabilities?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

@@ -11,7 +11,7 @@ export const SelectedProjects: Block = {
     {
       name: 'eyebrow',
       type: 'text',
-      defaultValue: '01 — CODE',
+      defaultValue: '01 — Code',
     },
     {
       name: 'label',
