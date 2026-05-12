@@ -9,6 +9,7 @@ import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { SimpleTextBlock } from '@/blocks/SimpleText/Component'
 import { SelectedProjectsBlock } from '@/blocks/SelectedProjects/Component'
+import Capabilities from './Capabilities/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -18,6 +19,7 @@ const blockComponents = {
   mediaBlock: MediaBlock,
   simpleText: SimpleTextBlock,
   selectedProjects: SelectedProjectsBlock,
+  capabilities: Capabilities,
 }
 
 export const RenderBlocks: React.FC<{
