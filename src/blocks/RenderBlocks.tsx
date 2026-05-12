@@ -10,6 +10,7 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { SimpleTextBlock } from '@/blocks/SimpleText/Component'
 import { SelectedProjectsBlock } from '@/blocks/SelectedProjects/Component'
 import Capabilities from './Capabilities/Component'
+import { LensBlockComponent } from './LensBlock/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -20,6 +21,7 @@ const blockComponents = {
   simpleText: SimpleTextBlock,
   selectedProjects: SelectedProjectsBlock,
   capabilities: Capabilities,
+  lensBlock: LensBlockComponent,
 }
 
 export const RenderBlocks: React.FC<{

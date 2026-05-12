@@ -73,6 +73,7 @@ export interface Config {
     categories: Category;
     users: User;
     projects: Project;
+    lens: Len;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -96,6 +97,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    lens: LensSelect<false> | LensSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -220,6 +222,7 @@ export interface Page {
     | SimpleTextBlock
     | SelectedProjectsBlock
     | CapabilitiesBlock
+    | LensBlock
   )[];
   meta?: {
     title?: string | null;
@@ -869,6 +872,33 @@ export interface CapabilitiesBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LensBlock".
+ */
+export interface LensBlock {
+  eyebrow?: string | null;
+  label?: string | null;
+  /**
+   * Choose which photos should appear in this block.
+   */
+  photos: (number | Len)[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'lensBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lens".
+ */
+export interface Len {
+  id: number;
+  title: string;
+  description?: string | null;
+  photo: number | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1082,6 +1112,10 @@ export interface PayloadLockedDocument {
         value: number | Project;
       } | null)
     | ({
+        relationTo: 'lens';
+        value: number | Len;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: number | Redirect;
       } | null)
@@ -1190,6 +1224,7 @@ export interface PagesSelect<T extends boolean = true> {
         simpleText?: T | SimpleTextBlockSelect<T>;
         selectedProjects?: T | SelectedProjectsBlockSelect<T>;
         capabilities?: T | CapabilitiesBlockSelect<T>;
+        lensBlock?: T | LensBlockSelect<T>;
       };
   meta?:
     | T
@@ -1324,6 +1359,17 @@ export interface CapabilitiesBlockSelect<T extends boolean = true> {
         icon?: T;
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LensBlock_select".
+ */
+export interface LensBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  label?: T;
+  photos?: T;
   id?: T;
   blockName?: T;
 }
@@ -1511,6 +1557,17 @@ export interface ProjectsSelect<T extends boolean = true> {
       };
   image?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lens_select".
+ */
+export interface LensSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  photo?: T;
   updatedAt?: T;
   createdAt?: T;
 }
