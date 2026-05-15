@@ -13,16 +13,16 @@ export function AboutIntroBlock({
   ctaLink,
 }: AboutIntroBlockProps) {
   return (
-    <section className="bg-slate-950 px-6 py-16 text-white md:px-12">
-      <div className="mx-auto max-w-6xl">
+    <section className="portfolio-section" data-theme="dark">
+      <div className="portfolio-container">
         {/* Top zone: bio left, connect right */}
         <div className="grid grid-cols-1 gap-12 md:grid-cols-[3fr_2fr]">
           {/* Left: heading + bio */}
           <div>
             {heading && (
-              <h2 className="mb-6 text-2xl font-bold leading-tight md:text-3xl">{heading}</h2>
+              <h2 className="portfolio-card-title mb-6">{heading}</h2>
             )}
-            <div className="space-y-4 text-sm leading-relaxed text-slate-300">
+            <div className="portfolio-body-sm space-y-4">
               {bio && <p>{bio}</p>}
               {bioSecondParagraph && <p>{bioSecondParagraph}</p>}
             </div>
@@ -31,9 +31,7 @@ export function AboutIntroBlock({
           {/* Right: connect section */}
           <div className="flex flex-col items-start gap-6 md:items-end">
             <div className="flex flex-col items-start gap-3 md:items-end">
-              <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-                Connect
-              </p>
+              <p className="portfolio-eyebrow text-portfolio-text-muted">Connect</p>
               {socialLinks && socialLinks.length > 0 && (
                 <div className="flex gap-6">
                   {socialLinks.map(({ label, url }, i) => (
@@ -42,7 +40,7 @@ export function AboutIntroBlock({
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-white transition-colors hover:text-cyan-400"
+                      className="portfolio-focus-ring portfolio-transition text-sm text-portfolio-text-primary hover:text-portfolio-accent"
                     >
                       {label}
                     </a>
@@ -56,7 +54,7 @@ export function AboutIntroBlock({
                   url={bioPageLink.url}
                   label={bioPageLink.label}
                   appearance="inline"
-                  className="text-sm font-medium text-cyan-400 transition-colors hover:text-cyan-300"
+                  className="portfolio-focus-ring portfolio-transition text-sm font-medium text-portfolio-accent hover:text-portfolio-accent-hover"
                 >
                   {bioPageLink.label ?? 'Read full bio'} →
                 </CMSLink>
@@ -66,12 +64,12 @@ export function AboutIntroBlock({
         </div>
 
         {/* Bottom CTA card */}
-        <div className="mt-16 rounded-2xl border border-white/10 p-10 text-center md:p-14">
+        <div className="portfolio-card mt-16 p-10 text-center md:p-14">
           <div className="mx-auto max-w-md">
             {/* Envelope icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="mx-auto mb-4 h-8 w-8 text-cyan-400"
+              className="mx-auto mb-4 h-8 w-8 text-portfolio-accent"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -84,9 +82,9 @@ export function AboutIntroBlock({
               />
             </svg>
 
-            {ctaHeading && <h3 className="text-3xl font-bold tracking-tight">{ctaHeading}</h3>}
+            {ctaHeading && <h3 className="portfolio-card-title">{ctaHeading}</h3>}
             {ctaDescription && (
-              <p className="mt-3 text-sm leading-relaxed text-slate-400">{ctaDescription}</p>
+              <p className="portfolio-body-sm mt-3">{ctaDescription}</p>
             )}
             {(ctaLink?.url || ctaLink?.reference) && (
               <div className="mt-8">
@@ -96,7 +94,7 @@ export function AboutIntroBlock({
                   url={ctaLink.url}
                   label={ctaLink.label}
                   appearance="default"
-                  className="rounded-full bg-cyan-400 px-8 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-300"
+                  className="px-8 py-3"
                 >
                   {ctaLink.label ?? 'Get in touch'}
                 </CMSLink>

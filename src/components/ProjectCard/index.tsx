@@ -1,4 +1,5 @@
 import type { Project } from '@/payload-types'
+import { Tag } from '@/components/Tag'
 
 type Props = {
   project: Project
@@ -9,45 +10,43 @@ function ProjectCard({ project, index }: Props) {
   const image = typeof project.image === 'object' && project.image !== null ? project.image : null
 
   return (
-    <article className="grid overflow-hidden rounded-lg border border-white/10 bg-slate-900 md:grid-cols-2">
+    <article className="portfolio-card group grid overflow-hidden md:grid-cols-2">
       <div className={['p-8 md:p-12', index % 2 === 1 ? 'md:order-2' : ''].join(' ')}>
-        <h3 className="mb-4 text-2xl font-bold md:text-3xl">{project.title}</h3>
+        <h3 className="portfolio-card-title mb-4">{project.title}</h3>
 
         {project.description && (
-          <p className="mb-6 max-w-md text-sm leading-6 text-blue-100">{project.description}</p>
+          <p className="portfolio-body-sm mb-6 max-w-md">{project.description}</p>
         )}
 
-        {project.role && <p className="mb-3 text-xs font-semibold">Role: {project.role}</p>}
+        {project.role && <p className="portfolio-meta mb-3">Role: {project.role}</p>}
 
         {Array.isArray(project.tech) && (
           <div className="mb-8 flex flex-wrap gap-2">
             {project.tech.map((tech) => (
-              <span
-                key={tech.id}
-                className="rounded bg-cyan-500/10 px-3 py-1 text-xs font-bold uppercase text-cyan-300"
-              >
-                {tech.techName}
-              </span>
+              <Tag key={tech.id}>{tech.techName}</Tag>
             ))}
           </div>
         )}
 
         <a
           href={`/projects/${project.slug}`}
-          className="inline-flex items-center text-sm font-bold text-white hover:text-cyan-300"
+          className="portfolio-cta-text portfolio-focus-ring portfolio-transition inline-flex items-center text-portfolio-text-primary hover:text-portfolio-accent"
         >
           View Case Study
-          <span className="ml-2">→</span>
+          <span className="ml-2">{'\u2192'}</span>
         </a>
       </div>
 
-      <div className="min-h-72 bg-slate-800">
+      <div className="relative min-h-72 overflow-hidden bg-portfolio-elevated">
         {image?.url && (
-          <img
-            src={image.url}
-            alt={image.alt ?? project.title}
-            className="h-full min-h-72 w-full object-cover"
-          />
+          <>
+            <img
+              src={image.url}
+              alt={image.alt ?? project.title}
+              className="portfolio-transition h-full min-h-72 w-full object-cover group-hover:scale-[1.02]"
+            />
+            <div className="portfolio-overlay-readable pointer-events-none absolute inset-0 opacity-70" />
+          </>
         )}
       </div>
     </article>
