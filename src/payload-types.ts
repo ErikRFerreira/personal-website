@@ -610,6 +610,7 @@ export interface ArchiveBlock {
  */
 export interface FormBlock {
   form: number | Form;
+  layout?: ('default' | 'contact') | null;
   enableIntro?: boolean | null;
   introContent?: {
     root: {
@@ -626,6 +627,36 @@ export interface FormBlock {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Small label above the heading (e.g. "Contact")
+   */
+  eyebrow?: string | null;
+  heading?: string | null;
+  /**
+   * Short paragraph below the heading
+   */
+  introText?: string | null;
+  /**
+   * Overrides the form's own submit button label
+   */
+  ctaLabel?: string | null;
+  quickAccessCard?: {
+    name?: string | null;
+    jobTitle?: string | null;
+    email?: string | null;
+    location?: string | null;
+    avatar?: (number | null) | Media;
+    tags?:
+      | {
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * e.g. "Response typically within 24 hours."
+     */
+    responseTime?: string | null;
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'formBlock';
@@ -1372,8 +1403,29 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
  */
 export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
+  layout?: T;
   enableIntro?: T;
   introContent?: T;
+  eyebrow?: T;
+  heading?: T;
+  introText?: T;
+  ctaLabel?: T;
+  quickAccessCard?:
+    | T
+    | {
+        name?: T;
+        jobTitle?: T;
+        email?: T;
+        location?: T;
+        avatar?: T;
+        tags?:
+          | T
+          | {
+              label?: T;
+              id?: T;
+            };
+        responseTime?: T;
+      };
   id?: T;
   blockName?: T;
 }
