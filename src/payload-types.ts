@@ -223,6 +223,7 @@ export interface Page {
     | SelectedProjectsBlock
     | CapabilitiesBlock
     | LensBlock
+    | AboutIntroBlock
   )[];
   meta?: {
     title?: string | null;
@@ -899,6 +900,57 @@ export interface Len {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutIntroBlock".
+ */
+export interface AboutIntroBlock {
+  heading: string;
+  bio?: string | null;
+  bioSecondParagraph?: string | null;
+  socialLinks?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  bioPageLink: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+  };
+  ctaHeading: string;
+  ctaDescription?: string | null;
+  ctaLink: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutIntro';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1225,6 +1277,7 @@ export interface PagesSelect<T extends boolean = true> {
         selectedProjects?: T | SelectedProjectsBlockSelect<T>;
         capabilities?: T | CapabilitiesBlockSelect<T>;
         lensBlock?: T | LensBlockSelect<T>;
+        aboutIntro?: T | AboutIntroBlockSelect<T>;
       };
   meta?:
     | T
@@ -1370,6 +1423,44 @@ export interface LensBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   label?: T;
   photos?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutIntroBlock_select".
+ */
+export interface AboutIntroBlockSelect<T extends boolean = true> {
+  heading?: T;
+  bio?: T;
+  bioSecondParagraph?: T;
+  socialLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  bioPageLink?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+      };
+  ctaHeading?: T;
+  ctaDescription?: T;
+  ctaLink?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+      };
   id?: T;
   blockName?: T;
 }
