@@ -74,6 +74,7 @@ export interface Config {
     users: User;
     projects: Project;
     lens: Len;
+    series: Series;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -98,6 +99,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     lens: LensSelect<false> | LensSelect<true>;
+    series: SeriesSelect<false> | SeriesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -227,10 +229,6 @@ export interface Page {
   )[];
   meta?: {
     title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
@@ -270,10 +268,6 @@ export interface Post {
   categories?: (number | Category)[] | null;
   meta?: {
     title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
@@ -924,8 +918,72 @@ export interface LensBlock {
 export interface Len {
   id: number;
   title: string;
-  description?: string | null;
   photo: number | Media;
+  /**
+   * Group this photo under a named series or collection
+   */
+  series?: string | null;
+  /**
+   * A brief caption or teaser shown in listings
+   */
+  intro?: string | null;
+  fullStory?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  location?: string | null;
+  /**
+   * Year the photo was taken
+   */
+  year?: number | null;
+  technicalMetadata?: {
+    camera?: string | null;
+    lens?: string | null;
+    aperture?: string | null;
+    shutterSpeed?: string | null;
+    iso?: number | null;
+    focalLength?: string | null;
+  };
+  /**
+   * Available print sizes and pricing
+   */
+  printOptions?:
+    | {
+        size: string;
+        material?: string | null;
+        price?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Usage rights, licensing terms, or copyright notice
+   */
+  licensingText?: string | null;
+  /**
+   * Other photos from the same shoot or series
+   */
+  relatedPhotos?: (number | Len)[] | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  status: 'draft' | 'published';
   updatedAt: string;
   createdAt: string;
 }
@@ -982,6 +1040,28 @@ export interface AboutIntroBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "series".
+ */
+export interface Series {
+  id: number;
+  name: string;
+  /**
+   * A brief description of the series or collection
+   */
+  description?: string | null;
+  /**
+   * An optional image representing the series or collection
+   */
+  'Cover Image'?: (number | null) | Media;
+  /**
+   * A URL-friendly identifier for the series (e.g., "summer-2024")
+   */
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1033,10 +1113,27 @@ export interface Search {
   id: number;
   title?: string | null;
   priority?: number | null;
-  doc: {
-    relationTo: 'posts';
-    value: number | Post;
-  };
+  doc:
+    | {
+        relationTo: 'posts';
+        value: number | Post;
+      }
+    | {
+        relationTo: 'pages';
+        value: number | Page;
+      }
+    | {
+        relationTo: 'lens';
+        value: number | Len;
+      }
+    | {
+        relationTo: 'series';
+        value: number | Series;
+      }
+    | {
+        relationTo: 'projects';
+        value: number | Project;
+      };
   slug?: string | null;
   meta?: {
     title?: string | null;
@@ -1199,6 +1296,10 @@ export interface PayloadLockedDocument {
         value: number | Len;
       } | null)
     | ({
+        relationTo: 'series';
+        value: number | Series;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: number | Redirect;
       } | null)
@@ -1314,7 +1415,6 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        image?: T;
         description?: T;
       };
   publishedAt?: T;
@@ -1530,7 +1630,6 @@ export interface PostsSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        image?: T;
         description?: T;
       };
   publishedAt?: T;
@@ -1709,8 +1808,53 @@ export interface ProjectsSelect<T extends boolean = true> {
  */
 export interface LensSelect<T extends boolean = true> {
   title?: T;
-  description?: T;
   photo?: T;
+  series?: T;
+  intro?: T;
+  fullStory?: T;
+  location?: T;
+  year?: T;
+  technicalMetadata?:
+    | T
+    | {
+        camera?: T;
+        lens?: T;
+        aperture?: T;
+        shutterSpeed?: T;
+        iso?: T;
+        focalLength?: T;
+      };
+  printOptions?:
+    | T
+    | {
+        size?: T;
+        material?: T;
+        price?: T;
+        id?: T;
+      };
+  licensingText?: T;
+  relatedPhotos?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  generateSlug?: T;
+  slug?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "series_select".
+ */
+export interface SeriesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  'Cover Image'?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -11,6 +11,7 @@ import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 import { Projects } from './collections/Projects'
 import { Lens } from './collections/Lens'
+import { Series } from './collections/Series'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
@@ -64,7 +65,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Projects, Lens],
+  collections: [Pages, Posts, Media, Categories, Users, Projects, Lens, Series],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,

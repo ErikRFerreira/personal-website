@@ -17,8 +17,15 @@ const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
 }
 
-const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
+const generateURL: GenerateURL<Post | Page | { slug?: string; title?: string }> = ({
+  doc,
+  collectionConfig,
+}) => {
   const url = getServerSideURL()
+
+  if (collectionConfig?.slug === 'lens') {
+    return doc?.slug ? `${url}/lens/${doc.slug}` : url
+  }
 
   return doc?.slug ? `${url}/${doc.slug}` : url
 }
@@ -51,6 +58,7 @@ export const plugins: Plugin[] = [
     generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc.slug}`, ''),
   }),
   seoPlugin({
+    collections: ['pages', 'posts', 'lens'],
     generateTitle,
     generateURL,
   }),
@@ -81,7 +89,7 @@ export const plugins: Plugin[] = [
     },
   }),
   searchPlugin({
-    collections: ['posts'],
+    collections: ['posts', 'pages', 'lens', 'series', 'projects'],
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
       fields: ({ defaultFields }) => {
