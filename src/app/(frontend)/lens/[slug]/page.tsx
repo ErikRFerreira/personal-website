@@ -1,9 +1,32 @@
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
+import { getPayload } from 'payload'
 import React, { cache } from 'react'
 
 import type { Len } from '@/payload-types'
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config: configPromise })
+
+  const photos = await payload.find({
+    collection: 'lens',
+    limit: 1000,
+    overrideAccess: false,
+    pagination: false,
+    select: {
+      slug: true,
+    },
+    where: {
+      status: {
+        equals: 'published',
+      },
+    },
+  })
+
+  return photos.docs.map(({ slug }) => {
+    return { slug }
+  })
+}
 
 type Args = {
   params: Promise<{
