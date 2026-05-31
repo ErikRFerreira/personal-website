@@ -104,7 +104,7 @@ export const Lens: CollectionConfig = {
               fields: [
                 { name: 'size', type: 'text', label: 'Size (e.g. 8×10″)', required: true },
                 { name: 'material', type: 'text', label: 'Material (e.g. Fine Art Paper)' },
-                { name: 'price', type: 'number', label: 'Price (USD)' },
+                { name: 'price', type: 'number', label: 'Price (EUR)' },
               ],
             },
             {

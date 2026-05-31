@@ -2,6 +2,7 @@ import type { LensBlock, Len } from '@/payload-types'
 import DefaultSection from '@/components/DefaultSection'
 
 export function LensBlockComponent({ eyebrow, label, photos }: LensBlock) {
+  // Filter out any non-object or null entries from the photos array
   const resolvedPhotos = photos?.filter((p): p is Len => typeof p === 'object' && p !== null)
 
   if (!resolvedPhotos?.length) return null
