@@ -40,7 +40,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     <header
       className={[
         'top-0 left-0 w-full z-20 transition-all duration-300',
-        scrolled ? 'fixed bg-background shadow-md' : 'absolute bg-black/30 backdrop-blur-md',
+        scrolled
+          ? 'fixed bg-background shadow-md text-foreground'
+          : 'absolute bg-black/30 backdrop-blur-md text-white',
       ].join(' ')}
       style={{ height: 'var(--header-height)' }}
       {...(theme ? { 'data-theme': theme } : {})}
