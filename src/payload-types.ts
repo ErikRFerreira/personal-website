@@ -212,7 +212,22 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
+    /**
+     * For Portfolio Hero CDN videos, select an image to use as the poster and fallback.
+     */
     media?: (number | null) | Media;
+    /**
+     * Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.
+     */
+    videoUrl?: string | null;
+    /**
+     * Select an image to use as the poster and fallback for a right-panel CDN video.
+     */
+    rightMedia?: (number | null) | Media;
+    /**
+     * Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.
+     */
+    rightVideoUrl?: string | null;
     scrollLabel?: string | null;
   };
   layout: (
@@ -1395,6 +1410,9 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        videoUrl?: T;
+        rightMedia?: T;
+        rightVideoUrl?: T;
         scrollLabel?: T;
       };
   layout?:

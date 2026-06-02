@@ -1,4 +1,4 @@
-import type { Field } from 'payload'
+import type { Field, TextFieldSingleValidation, UploadFieldSingleValidation } from 'payload'
 
 import {
   FixedToolbarFeature,
@@ -8,6 +8,38 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { linkGroup } from '@/fields/linkGroup'
+
+const validateHTTPSVideoURL = (value?: null | string): string | true => {
+  if (!value) return true
+
+  try {
+    return new URL(value).protocol === 'https:' ? true : 'Video URL must use HTTPS'
+  } catch {
+    return 'Video URL must be an absolute HTTPS URL'
+  }
+}
+
+const validateVideoURL: TextFieldSingleValidation = (value) => validateHTTPSVideoURL(value)
+
+const validateRightVideoURL: TextFieldSingleValidation = (value, { siblingData }) => {
+  const urlValidation = validateHTTPSVideoURL(value)
+
+  if (urlValidation !== true) return urlValidation
+
+  if (value && !(siblingData as { rightMedia?: unknown })?.rightMedia) {
+    return 'Select right media to use as the video fallback'
+  }
+
+  return true
+}
+
+const validateRightMedia: UploadFieldSingleValidation = (value, { siblingData }) => {
+  if ((siblingData as { rightVideoUrl?: unknown })?.rightVideoUrl && !value) {
+    return 'Select right media to use as the video fallback'
+  }
+
+  return true
+}
 
 export const hero: Field = {
   name: 'hero',
@@ -133,9 +165,43 @@ export const hero: Field = {
       admin: {
         condition: (_, { type } = {}) =>
           ['highImpact', 'mediumImpact', 'portfolioHero'].includes(type),
+        description:
+          'For Portfolio Hero CDN videos, select an image to use as the poster and fallback.',
       },
       relationTo: 'media',
-      required: true,
+      required: false,
+    },
+    {
+      name: 'videoUrl',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'portfolioHero',
+        description: 'Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.',
+      },
+      label: 'Video URL',
+      validate: validateVideoURL,
+    },
+    {
+      name: 'rightMedia',
+      type: 'upload',
+      admin: {
+        condition: (_, { type } = {}) => type === 'portfolioHero',
+        description:
+          'Select an image to use as the poster and fallback for a right-panel CDN video.',
+      },
+      label: 'Right media',
+      relationTo: 'media',
+      validate: validateRightMedia,
+    },
+    {
+      name: 'rightVideoUrl',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'portfolioHero',
+        description: 'Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.',
+      },
+      label: 'Right video URL',
+      validate: validateRightVideoURL,
     },
     {
       name: 'scrollLabel',

@@ -1,31 +1,35 @@
 'use client'
 
 import { cn } from '@/utilities/ui'
-import React, { useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 
 import type { Props as MediaProps } from '../types'
 
 import { getMediaUrl } from '@/utilities/getMediaUrl'
+import { ImageMedia } from '../ImageMedia'
 
 export const VideoMedia: React.FC<MediaProps> = (props) => {
-  const { onClick, resource, videoClassName } = props
+  const { onClick, resource, videoClassName, videoSrc } = props
 
-  const videoRef = useRef<HTMLVideoElement>(null)
-  // const [showFallback] = useState<boolean>()
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
+  const mediaResource = resource && typeof resource === 'object' ? resource : null
+  const resourceIsVideo = mediaResource?.mimeType?.includes('video')
+  const fallbackResource = mediaResource && !resourceIsVideo ? mediaResource : null
+  const src = getMediaUrl(
+    videoSrc ||
+      mediaResource?.url ||
+      (mediaResource?.filename ? `/media/${mediaResource.filename}` : ''),
+  )
+  const poster = fallbackResource
+    ? getMediaUrl(fallbackResource.url, fallbackResource.updatedAt)
+    : undefined
+  const showFallback = failedSrc === src
 
-  useEffect(() => {
-    const { current: video } = videoRef
-    if (video) {
-      video.addEventListener('suspend', () => {
-        // setShowFallback(true);
-        // console.warn('Video was suspended, rendering fallback image.')
-      })
-    }
-  }, [])
+  if (showFallback && fallbackResource) {
+    return <ImageMedia {...props} resource={fallbackResource} />
+  }
 
-  if (resource && typeof resource === 'object') {
-    const { filename } = resource
-
+  if (src) {
     return (
       <video
         autoPlay
@@ -34,10 +38,11 @@ export const VideoMedia: React.FC<MediaProps> = (props) => {
         loop
         muted
         onClick={onClick}
+        onError={() => setFailedSrc(src)}
         playsInline
-        ref={videoRef}
+        poster={poster}
       >
-        <source src={getMediaUrl(`/media/${filename}`)} />
+        <source onError={() => setFailedSrc(src)} src={src} />
       </video>
     )
   }

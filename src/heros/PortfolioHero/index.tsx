@@ -19,6 +19,7 @@ type HeroPanelProps = {
   link?: PortfolioHeroLink
   media?: Page['hero']['media']
   side: 'lens' | 'dev'
+  videoSrc?: string | null
 }
 
 const fallbackPositioningLine =
@@ -32,43 +33,46 @@ function HeroPanel({
   link,
   media,
   side,
+  videoSrc,
 }: HeroPanelProps) {
   const isLens = side === 'lens'
   const HeadingTag = headingLevel
 
   return (
     <section className={`portfolio-hero__panel portfolio-hero__panel--${side}`}>
-      {isLens && media && typeof media === 'object' && (
+      {(videoSrc || (media && typeof media === 'object')) && (
         <Media
           fill
           className="portfolio-hero__media"
-          imgClassName="portfolio-hero__image"
+          imgClassName="portfolio-hero__visual portfolio-hero__image"
           priority
           resource={media}
           size="(max-width: 767px) 100vw, 60vw"
+          videoClassName="portfolio-hero__visual portfolio-hero__video"
+          videoSrc={videoSrc}
         />
       )}
 
-      {!isLens && (
+      {!isLens && !videoSrc && (!media || typeof media !== 'object') && (
         <div className="portfolio-hero__system" aria-hidden="true">
           <div className="portfolio-hero__code-card">
-            <span className="portfolio-hero__code-label">system_architecture.ts</span>
+            <span className="portfolio-hero__code-label">project-filter.tsx</span>
             <pre>
-              <code>{`import { System } from '@core/engine';
+              <code>{`'use client';
 
-const architecture = {
-  scale: 'global',
-  resilience: true,
-  nodes: ['us-east', 'eu-west', 'ap-south'],
-  metrics: {
-    latency: '< 10ms',
-    uptime: '99.999%'
-  }
-};
+import { useState } from 'react';
 
-async function deploy(config) {
-  await System.initialize(config);
-  System.mount();
+export function ProjectFilter({ projects }: Props) {
+  const [active, setActive] = useState('all');
+
+  const visible = projects.filter(({ tech }) =>
+    active === 'all' ||
+    tech?.some(({ techName }) => techName === active)
+  );
+
+  return (
+    <ProjectGrid projects={visible} onFilter={setActive} />
+  );
 }`}</code>
             </pre>
           </div>
@@ -109,6 +113,9 @@ export function PortfolioHero({
   rightDescription,
   rightEyebrow,
   rightHeadline,
+  rightMedia,
+  rightVideoUrl,
+  videoUrl,
 }: Page['hero']) {
   const { setHeaderTheme } = useHeaderTheme()
 
@@ -127,6 +134,7 @@ export function PortfolioHero({
           link={Array.isArray(links) ? links[0]?.link : undefined}
           media={media}
           side="lens"
+          videoSrc={videoUrl}
         />
 
         <HeroPanel
@@ -135,7 +143,9 @@ export function PortfolioHero({
           headingLevel="h2"
           headline={rightHeadline || 'Engineering Scale.'}
           link={Array.isArray(links) ? links[1]?.link : undefined}
+          media={rightMedia}
           side="dev"
+          videoSrc={rightVideoUrl}
         />
 
         <div className="portfolio-hero__divider" aria-hidden="true" />

@@ -1,6 +1,8 @@
 import * as migration_20260507_141650_add_portfolio_hero_split_fields from './20260507_141650_add_portfolio_hero_split_fields';
 import * as migration_20260512_114149_add_lens_collection from './20260512_114149_add_lens_collection';
 import * as migration_20260522_022329_add_series_to_lens from './20260522_022329_add_series_to_lens';
+import * as migration_20260602_122156_add_portfolio_hero_right_media from './20260602_122156_add_portfolio_hero_right_media';
+import * as migration_20260602_133849_add_portfolio_hero_cdn_video_urls from './20260602_133849_add_portfolio_hero_cdn_video_urls';
 
 export const migrations = [
   {
@@ -16,6 +18,16 @@ export const migrations = [
   {
     up: migration_20260522_022329_add_series_to_lens.up,
     down: migration_20260522_022329_add_series_to_lens.down,
-    name: '20260522_022329_add_series_to_lens'
+    name: '20260522_022329_add_series_to_lens',
+  },
+  {
+    up: migration_20260602_122156_add_portfolio_hero_right_media.up,
+    down: migration_20260602_122156_add_portfolio_hero_right_media.down,
+    name: '20260602_122156_add_portfolio_hero_right_media',
+  },
+  {
+    up: migration_20260602_133849_add_portfolio_hero_cdn_video_urls.up,
+    down: migration_20260602_133849_add_portfolio_hero_cdn_video_urls.down,
+    name: '20260602_133849_add_portfolio_hero_cdn_video_urls'
   },
 ];

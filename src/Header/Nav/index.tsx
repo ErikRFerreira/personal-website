@@ -1,12 +1,8 @@
 'use client'
 
 import React from 'react'
-
 import type { Header as HeaderType } from '@/payload-types'
-
 import { CMSLink } from '@/components/Link'
-import Link from 'next/link'
-import { SearchIcon } from 'lucide-react'
 
 export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const navItems = data?.navItems || []
@@ -20,8 +16,8 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
           appearance={isCta ? 'inline' : 'link'}
           className={
             isCta
-              ? 'border border-current rounded-[6px] px-4 py-1.5 text-sm leading-none'
-              : undefined
+              ? 'border border-current rounded-full px-4 py-1.5 text-sm leading-none transition-colors duration-200 hover:border-[var(--portfolio-accent)] hover:text-[var(--portfolio-accent)]'
+              : 'transition-colors duration-200 hover:text-[var(--portfolio-accent)]'
           }
         />
       ))}
