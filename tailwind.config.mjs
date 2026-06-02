@@ -2,6 +2,9 @@
 const config = {
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['var(--font-serif)', 'Georgia', 'serif'],
+      },
       typography: () => ({
         DEFAULT: {
           css: [

@@ -12,10 +12,19 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const navItems = data?.navItems || []
 
   return (
-    <nav className="flex gap-3 items-center">
-      {navItems.map(({ link }, i) => {
-        return <CMSLink key={i} {...link} appearance="link" />
-      })}
+    <nav className="flex gap-6 items-center">
+      {navItems.map(({ link, isCta }, i) => (
+        <CMSLink
+          key={i}
+          {...link}
+          appearance={isCta ? 'inline' : 'link'}
+          className={
+            isCta
+              ? 'border border-current rounded-[6px] px-4 py-1.5 text-sm leading-none'
+              : undefined
+          }
+        />
+      ))}
     </nav>
   )
 }

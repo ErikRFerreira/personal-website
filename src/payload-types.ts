@@ -2156,6 +2156,10 @@ export interface Header {
           url?: string | null;
           label: string;
         };
+        /**
+         * Renders the link with a transparent background, border, and rounded corners.
+         */
+        isCta?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -2208,6 +2212,7 @@ export interface HeaderSelect<T extends boolean = true> {
               url?: T;
               label?: T;
             };
+        isCta?: T;
         id?: T;
       };
   updatedAt?: T;
