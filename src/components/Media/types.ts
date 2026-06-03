@@ -12,6 +12,7 @@ export interface Props {
   imgClassName?: string
   onClick?: () => void
   onLoad?: () => void
+  playWhenActive?: boolean
   loading?: 'lazy' | 'eager' // for NextImage only
   priority?: boolean // for NextImage only
   ref?: Ref<HTMLImageElement | HTMLVideoElement | null>
@@ -19,5 +20,6 @@ export interface Props {
   size?: string // for NextImage only
   src?: StaticImageData // for static media
   videoClassName?: string
+  videoPlaybackActive?: boolean
   videoSrc?: string | null
 }

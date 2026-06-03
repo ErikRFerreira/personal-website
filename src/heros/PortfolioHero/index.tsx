@@ -1,107 +1,16 @@
 'use client'
 
 import type { Page } from '@/payload-types'
-import { CMSLink } from '@/components/Link'
-import { Media } from '@/components/Media'
-import { ArrowRight, MoveHorizontal } from 'lucide-react'
-import { useEffect } from 'react'
+import { MoveHorizontal } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
+import { HeroPanel, type PortfolioHeroSide } from './HeroPanel'
+import { useMediaQuery } from './useMediaQuery'
 
 import './styles.css'
 
-type PortfolioHeroLink = NonNullable<Page['hero']['links']>[number]['link']
-
-type HeroPanelProps = {
-  description?: string | null
-  eyebrow?: string | null
-  headline?: string | null
-  headingLevel: 'h1' | 'h2'
-  link?: PortfolioHeroLink
-  media?: Page['hero']['media']
-  side: 'lens' | 'dev'
-  videoSrc?: string | null
-}
-
 const fallbackPositioningLine =
   'Software engineering and visual storytelling shaped by depth, precision, and perspective.'
-
-function HeroPanel({
-  description,
-  eyebrow,
-  headline,
-  headingLevel,
-  link,
-  media,
-  side,
-  videoSrc,
-}: HeroPanelProps) {
-  const isLens = side === 'lens'
-  const HeadingTag = headingLevel
-
-  return (
-    <section className={`portfolio-hero__panel portfolio-hero__panel--${side}`}>
-      {(videoSrc || (media && typeof media === 'object')) && (
-        <Media
-          fill
-          className="portfolio-hero__media"
-          imgClassName="portfolio-hero__visual portfolio-hero__image"
-          priority
-          resource={media}
-          size="(max-width: 767px) 100vw, 60vw"
-          videoClassName="portfolio-hero__visual portfolio-hero__video"
-          videoSrc={videoSrc}
-        />
-      )}
-
-      {!isLens && !videoSrc && (!media || typeof media !== 'object') && (
-        <div className="portfolio-hero__system" aria-hidden="true">
-          <div className="portfolio-hero__code-card">
-            <span className="portfolio-hero__code-label">project-filter.tsx</span>
-            <pre>
-              <code>{`'use client';
-
-import { useState } from 'react';
-
-export function ProjectFilter({ projects }: Props) {
-  const [active, setActive] = useState('all');
-
-  const visible = projects.filter(({ tech }) =>
-    active === 'all' ||
-    tech?.some(({ techName }) => techName === active)
-  );
-
-  return (
-    <ProjectGrid projects={visible} onFilter={setActive} />
-  );
-}`}</code>
-            </pre>
-          </div>
-        </div>
-      )}
-
-      <div className="portfolio-hero__panel-content">
-        {eyebrow && <p className="portfolio-hero__eyebrow">{eyebrow}</p>}
-        {headline && <HeadingTag className="portfolio-hero__headline">{headline}</HeadingTag>}
-
-        {(description || link) && (
-          <div className="portfolio-hero__reveal">
-            {description && <p className="portfolio-hero__description">{description}</p>}
-
-            {link && (
-              <CMSLink
-                {...link}
-                appearance={link.appearance === 'outline' ? 'outline' : 'default'}
-                className="portfolio-hero__cta"
-              >
-                <ArrowRight aria-hidden="true" />
-              </CMSLink>
-            )}
-          </div>
-        )}
-      </div>
-    </section>
-  )
-}
 
 export function PortfolioHero({
   eyebrow,
@@ -118,10 +27,30 @@ export function PortfolioHero({
   videoUrl,
 }: Page['hero']) {
   const { setHeaderTheme } = useHeaderTheme()
+  const [activePanel, setActivePanel] = useState<PortfolioHeroSide | null>(null)
+  const canUseHover = useMediaQuery('(hover: hover) and (pointer: fine)')
+  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const allowHoverPlayback = canUseHover && !prefersReducedMotion
+
+  const handlePanelFocus = (side: PortfolioHeroSide) => {
+    if (!allowHoverPlayback) return
+
+    setActivePanel(side)
+  }
+
+  const handlePanelLeave = () => {
+    setActivePanel(null)
+  }
 
   useEffect(() => {
     setHeaderTheme('dark')
   })
+
+  useEffect(() => {
+    if (!allowHoverPlayback) {
+      setActivePanel(null)
+    }
+  }, [allowHoverPlayback])
 
   return (
     <section className="portfolio-hero" data-theme="dark">
@@ -133,6 +62,9 @@ export function PortfolioHero({
           headline={headline || 'Framing Perspective.'}
           link={Array.isArray(links) ? links[0]?.link : undefined}
           media={media}
+          onPanelFocus={handlePanelFocus}
+          onPanelLeave={handlePanelLeave}
+          playbackActive={allowHoverPlayback && activePanel === 'lens'}
           side="lens"
           videoSrc={videoUrl}
         />
@@ -144,6 +76,9 @@ export function PortfolioHero({
           headline={rightHeadline || 'Engineering Scale.'}
           link={Array.isArray(links) ? links[1]?.link : undefined}
           media={rightMedia}
+          onPanelFocus={handlePanelFocus}
+          onPanelLeave={handlePanelLeave}
+          playbackActive={allowHoverPlayback && activePanel === 'dev'}
           side="dev"
           videoSrc={rightVideoUrl}
         />

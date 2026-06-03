@@ -9,8 +9,13 @@
   --portfolio-hero-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   position: relative;
+  box-sizing: border-box;
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+  min-height: 100vh;
   min-height: 100svh;
-  margin-top: calc(var(--header-height) * -1);
+  min-height: 100dvh;
   padding-top: var(--header-height);
   overflow: hidden;
   background: var(--portfolio-hero-bg);
@@ -34,7 +39,10 @@
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  min-height: calc(100svh - var(--header-height));
+  height: calc(100vh - var(--header-height));
+  height: calc(100svh - var(--header-height));
+  height: calc(100dvh - var(--header-height));
+  min-height: 0;
   transition: grid-template-columns 720ms var(--portfolio-hero-ease);
 }
 
@@ -158,6 +166,7 @@
   inset: 0;
   z-index: 1;
   display: flex;
+  box-sizing: border-box;
   align-items: flex-start;
   justify-content: center;
   padding: clamp(5rem, 11vh, 8rem) clamp(1.5rem, 5vw, 5rem);
@@ -212,6 +221,7 @@
 .portfolio-hero__panel-content {
   position: relative;
   z-index: 3;
+  box-sizing: border-box;
   align-self: flex-end;
   width: min(100%, 44rem);
   padding: clamp(2rem, 5vw, 5rem);
@@ -377,8 +387,32 @@
   }
 }
 
+@media (width >= 64rem) {
+  .portfolio-hero {
+    --portfolio-hero-separator-safe: clamp(2.25rem, 4vw, 4.75rem);
+    --portfolio-hero-tilt: 2.25rem;
+  }
+
+  .portfolio-hero__panel--lens .portfolio-hero__media {
+    clip-path: polygon(0 0, calc(100% - var(--portfolio-hero-tilt)) 0, 100% 100%, 0 100%);
+  }
+
+  .portfolio-hero__panel--lens .portfolio-hero__panel-content {
+    padding-right: calc(clamp(2rem, 5vw, 5rem) + var(--portfolio-hero-separator-safe));
+  }
+
+  .portfolio-hero__panel--dev .portfolio-hero__panel-content {
+    padding-left: calc(clamp(2.75rem, 4.5vw, 5rem) + var(--portfolio-hero-separator-safe));
+  }
+
+  .portfolio-hero__panel--dev .portfolio-hero__system {
+    padding-left: calc(clamp(1.5rem, 5vw, 5rem) + var(--portfolio-hero-separator-safe));
+  }
+}
+
 @media (width < 64rem) {
   .portfolio-hero {
+    height: auto;
     min-height: auto;
     background: #050606;
   }
@@ -387,6 +421,7 @@
     display: flex;
     flex-direction: column;
     gap: 1px;
+    height: auto;
     min-height: auto;
     padding: 1rem;
   }
@@ -442,7 +477,6 @@
 
 @media (width < 40rem) {
   .portfolio-hero {
-    margin-top: -8.5rem;
     padding-top: 8.5rem;
   }
 

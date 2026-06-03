@@ -12,7 +12,7 @@ export async function Footer() {
   const navItems = footerData?.navItems || []
 
   return (
-    <footer className="mt-auto bg-card text-white border-t-2 border-violet-500">
+    <footer className="mt-auto bg-card text-white" data-theme="dark">
       <div className="container py-20 md:py-28 flex flex-col h-full">
         {/* Top row: nav links aligned right */}
         <div className="flex justify-end mb-auto">
