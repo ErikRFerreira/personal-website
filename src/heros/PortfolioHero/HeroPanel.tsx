@@ -16,7 +16,7 @@ export type HeroPanelProps = {
   headline?: string | null
   headingLevel: 'h1' | 'h2'
   link?: PortfolioHeroLink
-  media?: Page['hero']['media'] | Page['hero']['rightMedia']
+  media?: Page['hero']['media']
   onPanelFocus: (side: PortfolioHeroSide) => void
   onPanelLeave: () => void
   playbackActive: boolean
@@ -38,6 +38,9 @@ export function HeroPanel({
   videoSrc,
 }: HeroPanelProps) {
   const isLens = side === 'lens'
+  const isDev = side === 'dev'
+  const hasMediaResource = Boolean(videoSrc) || Boolean(media && typeof media === 'object')
+  const shouldRenderMedia = isLens && hasMediaResource
   const HeadingTag = headingLevel
 
   return (
@@ -52,7 +55,7 @@ export function HeroPanel({
       onMouseEnter={() => onPanelFocus(side)}
       onMouseLeave={onPanelLeave}
     >
-      {(videoSrc || (media && typeof media === 'object')) && (
+      {shouldRenderMedia && (
         <Media
           fill
           className="portfolio-hero__media"
@@ -67,28 +70,60 @@ export function HeroPanel({
         />
       )}
 
-      {!isLens && !videoSrc && (!media || typeof media !== 'object') && (
+      {isDev && (
         <div className="portfolio-hero__system" aria-hidden="true">
+          <div className="portfolio-hero__system-grid" />
+
+          <svg
+            className="portfolio-hero__system-lines"
+            focusable="false"
+            preserveAspectRatio="none"
+            viewBox="0 0 640 460"
+          >
+            <path
+              className="portfolio-hero__system-line portfolio-hero__system-line--primary"
+              d="M54 294 H178 L236 236 H356 L432 160 H586"
+              pathLength={1}
+            />
+            <path
+              className="portfolio-hero__system-line portfolio-hero__system-line--secondary"
+              d="M118 126 H244 L318 202 H496"
+              pathLength={1}
+            />
+            <path
+              className="portfolio-hero__system-line portfolio-hero__system-line--tertiary"
+              d="M166 366 H292 L366 292 H532"
+              pathLength={1}
+            />
+          </svg>
+
+          <span className="portfolio-hero__system-node portfolio-hero__system-node--source" />
+          <span className="portfolio-hero__system-node portfolio-hero__system-node--cache" />
+          <span className="portfolio-hero__system-node portfolio-hero__system-node--edge" />
+          <span className="portfolio-hero__system-node portfolio-hero__system-node--deploy" />
+
           <div className="portfolio-hero__code-card">
-            <span className="portfolio-hero__code-label">project-filter.tsx</span>
+            <span className="portfolio-hero__code-label">deploy-pipeline.ts</span>
             <pre>
-              <code>{`'use client';
+              <code>{`type ReleaseTarget = 'edge' | 'api' | 'cms';
 
-import { useState } from 'react';
+const checks = ['typed', 'cached', 'secure'] as const;
 
-export function ProjectFilter({ projects }: Props) {
-  const [active, setActive] = useState('all');
+export async function ship(target: ReleaseTarget) {
+  const build = await pipeline.verify({
+    target,
+    checks,
+    preview: true,
+  });
 
-  const visible = projects.filter(({ tech }) =>
-    active === 'all' ||
-    tech?.some(({ techName }) => techName === active)
-  );
-
-  return (
-    <ProjectGrid projects={visible} onFilter={setActive} />
-  );
+  return build.ready ? deploy(target) : rollback();
 }`}</code>
             </pre>
+          </div>
+
+          <div className="portfolio-hero__status-chip">
+            <span className="portfolio-hero__status-dot" />
+            System online
           </div>
         </div>
       )}
@@ -105,7 +140,7 @@ export function ProjectFilter({ projects }: Props) {
               <CMSLink
                 {...link}
                 appearance={link.appearance === 'outline' ? 'outline' : 'default'}
-                className="portfolio-hero__cta"
+                className={`portfolio-hero__cta portfolio-hero__cta--${side}`}
               >
                 <ArrowRight aria-hidden="true" />
               </CMSLink>

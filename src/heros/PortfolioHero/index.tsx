@@ -22,8 +22,6 @@ export function PortfolioHero({
   rightDescription,
   rightEyebrow,
   rightHeadline,
-  rightMedia,
-  rightVideoUrl,
   videoUrl,
 }: Page['hero']) {
   const { setHeaderTheme } = useHeaderTheme()
@@ -75,12 +73,10 @@ export function PortfolioHero({
           headingLevel="h2"
           headline={rightHeadline || 'Engineering Scale.'}
           link={Array.isArray(links) ? links[1]?.link : undefined}
-          media={rightMedia}
           onPanelFocus={handlePanelFocus}
           onPanelLeave={handlePanelLeave}
           playbackActive={allowHoverPlayback && activePanel === 'dev'}
           side="dev"
-          videoSrc={rightVideoUrl}
         />
 
         <div className="portfolio-hero__divider" aria-hidden="true" />
