@@ -73,6 +73,34 @@ export const Projects: CollectionConfig<'projects'> = {
                 },
               ],
             },
+            {
+              name: 'metrics',
+              type: 'array',
+              label: 'Metrics',
+              maxRows: 2,
+              admin: {
+                description:
+                  'Up to 2 stat boxes shown on the project row (e.g., "STRATEGIC OUTCOME" / "+40% Conversion").',
+              },
+              fields: [
+                {
+                  name: 'label',
+                  type: 'text',
+                  required: true,
+                  admin: {
+                    description: 'Stat category label (e.g., "STRATEGIC OUTCOME")',
+                  },
+                },
+                {
+                  name: 'value',
+                  type: 'text',
+                  required: true,
+                  admin: {
+                    description: 'Stat value (e.g., "+40% Conversion")',
+                  },
+                },
+              ],
+            },
           ],
         },
         {

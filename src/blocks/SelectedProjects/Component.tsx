@@ -1,6 +1,6 @@
 import type { Project } from '@/payload-types'
 import DefaultSection from '@/components/DefaultSection'
-import ProjectCard from '@/components/ProjectCard'
+import { ProjectRow } from './ProjectRow'
 
 type SelectedProjectsProps = {
   eyebrow?: string | null
@@ -18,7 +18,7 @@ export function SelectedProjectsBlock({ eyebrow, label, projects }: SelectedProj
   return (
     <DefaultSection eyebrow={eyebrow} label={label}>
       {selectedProjects.map((project, index) => (
-        <ProjectCard key={project.id} project={project} index={index} />
+        <ProjectRow key={project.id} project={project} index={index} />
       ))}
     </DefaultSection>
   )

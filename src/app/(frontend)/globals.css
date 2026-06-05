@@ -15,6 +15,7 @@
     --header-height: 3.8125rem; /* 61px */
 
     /* Portfolio semantic tokens: intentionally dark even when the broader app theme changes. */
+    --portfolio-surface-deep: #070d1f;
     --portfolio-surface-base: #0c1324;
     --portfolio-surface-elevated: #151d2b;
     --portfolio-text-primary: #ffffff;
@@ -236,6 +237,7 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-error: var(--error);
+  --color-portfolio-deep: var(--portfolio-surface-deep);
   --color-portfolio-base: var(--portfolio-surface-base);
   --color-portfolio-elevated: var(--portfolio-surface-elevated);
   --color-portfolio-text-primary: var(--portfolio-text-primary);
@@ -248,7 +250,8 @@
   --color-portfolio-border-active: var(--portfolio-border-active);
   --color-portfolio-overlay-dark: var(--portfolio-overlay-image-dark);
   --color-portfolio-glow-accent: var(--portfolio-glow-accent);
-  --shadow-portfolio-glow: 0 0 0 1px var(--portfolio-border-active), 0 0 2rem var(--portfolio-glow-accent);
+  --shadow-portfolio-glow:
+    0 0 0 1px var(--portfolio-border-active), 0 0 2rem var(--portfolio-glow-accent);
 }
 
 @layer base {

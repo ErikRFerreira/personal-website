@@ -895,6 +895,22 @@ export interface Project {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Up to 2 stat boxes shown on the project row (e.g., "STRATEGIC OUTCOME" / "+40% Conversion").
+   */
+  metrics?:
+    | {
+        /**
+         * Stat category label (e.g., "STRATEGIC OUTCOME")
+         */
+        label: string;
+        /**
+         * Stat value (e.g., "+40% Conversion")
+         */
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
   image?: (number | null) | Media;
   gallery?:
     | {
@@ -1856,6 +1872,13 @@ export interface ProjectsSelect<T extends boolean = true> {
     | {
         label?: T;
         url?: T;
+        id?: T;
+      };
+  metrics?:
+    | T
+    | {
+        label?: T;
+        value?: T;
         id?: T;
       };
   image?: T;
