@@ -11,12 +11,18 @@ export const LensBlock: Block = {
     {
       name: 'eyebrow',
       type: 'text',
-      defaultValue: '02 — Lens',
+      defaultValue: 'Visual Storytelling',
     },
     {
       name: 'label',
       type: 'text',
-      defaultValue: 'Visual Diary',
+      defaultValue: '01 — Lens',
+    },
+    {
+      name: 'intro',
+      type: 'textarea',
+      defaultValue:
+        'A curated selection of moments frozen in time, spanning architectural geometry, natural landscapes, and the silent depths of the ocean.',
     },
     {
       name: 'photos',

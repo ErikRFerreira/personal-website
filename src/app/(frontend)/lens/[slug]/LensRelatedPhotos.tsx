@@ -14,30 +14,21 @@ export const LensRelatedPhotos: React.FC<Props> = ({ series, relatedPhotos }) =>
   const showPlaceholders = photos.length === 0
 
   return (
-    <section className="portfolio-section py-20">
-      <div className="portfolio-container">
+    <section className="site-section py-20">
+      <div className="site-container">
         {/* Section header */}
         <div className="flex items-end justify-between mb-10">
           <div className="flex flex-col gap-2">
-            <span
-              className="portfolio-eyebrow"
-              style={{ fontSize: '11px', letterSpacing: '0.12em', fontWeight: 600 }}
-            >
+            <span className="font-mono text-[11px] leading-[1.2] font-semibold tracking-[0.12em] text-site-accent uppercase">
               From the Same Collection
             </span>
             {series && (
-              <h2
-                className="text-[var(--portfolio-text-primary)] font-bold"
-                style={{ fontSize: '32px', lineHeight: '1.2' }}
-              >
-                {series}
-              </h2>
+              <h2 className="text-3xl leading-tight font-bold text-site-text-primary">{series}</h2>
             )}
           </div>
           <Link
             href="/lens"
-            className="text-[var(--portfolio-text-secondary)] hover:text-[var(--portfolio-text-primary)] portfolio-transition text-sm"
-            style={{ letterSpacing: '0.04em' }}
+            className="text-sm tracking-[0.04em] text-site-text-secondary transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-200 ease-out hover:text-site-text-primary motion-reduce:transition-none"
           >
             Explore Collection
           </Link>
@@ -65,7 +56,7 @@ function RelatedPhotoCard({ photo }: { photo: Len }) {
 
   return (
     <Link href={`/lens/${photo.slug}`} className="group block">
-      <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
+      <div className="relative aspect-[4/3] overflow-hidden">
         {photoMedia ? (
           <Media
             resource={photoMedia}
@@ -73,26 +64,18 @@ function RelatedPhotoCard({ photo }: { photo: Len }) {
             imgClassName="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full bg-[var(--portfolio-surface-elevated)]" />
+          <div className="h-full w-full bg-site-surface-elevated" />
         )}
         {/* Overlay */}
-        <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{ background: 'var(--portfolio-overlay-image-dark)' }}
-        />
+        <div className="absolute inset-0 bg-site-overlay-dark opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       </div>
       <div className="mt-3 flex flex-col gap-1">
         {photo.series && (
-          <span
-            className="portfolio-eyebrow"
-            style={{ fontSize: '10px', letterSpacing: '0.12em', fontWeight: 600 }}
-          >
+          <span className="font-mono text-[10px] leading-[1.2] font-semibold tracking-[0.12em] text-site-accent uppercase">
             {photo.series}
           </span>
         )}
-        <span className="text-[var(--portfolio-text-primary)] text-sm font-medium">
-          {photo.title}
-        </span>
+        <span className="text-sm font-medium text-site-text-primary">{photo.title}</span>
       </div>
     </Link>
   )
@@ -101,13 +84,10 @@ function RelatedPhotoCard({ photo }: { photo: Len }) {
 function PlaceholderCard() {
   return (
     <div>
-      <div
-        className="w-full bg-[var(--portfolio-surface-elevated)] border border-[var(--portfolio-border-subtle)]"
-        style={{ aspectRatio: '4/3' }}
-      />
+      <div className="aspect-[4/3] w-full border border-site-border-subtle bg-site-surface-elevated" />
       <div className="mt-3 flex flex-col gap-2">
-        <div className="h-2 w-20 bg-[var(--portfolio-border-subtle)] rounded-none" />
-        <div className="h-3 w-32 bg-[var(--portfolio-surface-elevated)] rounded-none" />
+        <div className="h-2 w-20 rounded-none bg-site-border-subtle" />
+        <div className="h-3 w-32 rounded-none bg-site-surface-elevated" />
       </div>
     </div>
   )

@@ -969,6 +969,7 @@ export interface CapabilitiesBlock {
 export interface LensBlock {
   eyebrow?: string | null;
   label?: string | null;
+  intro?: string | null;
   /**
    * Choose which photos should appear in this block.
    */
@@ -1643,6 +1644,7 @@ export interface CapabilitiesBlockSelect<T extends boolean = true> {
 export interface LensBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   label?: T;
+  intro?: T;
   photos?: T;
   id?: T;
   blockName?: T;

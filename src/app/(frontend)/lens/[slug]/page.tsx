@@ -90,30 +90,26 @@ export default async function LensPage({ params: paramsPromise }: Args) {
   const breadcrumb = [lens.series, lens.location, lens.year].filter(Boolean).join(' // ')
 
   return (
-    <div className="portfolio-section" style={{ paddingBlock: 0 }}>
+    <div className="site-section !py-0">
       {/* Full-width hero image */}
       {photo && <LensHero photo={photo} />}
 
       {/* Main content */}
-      <div className="portfolio-container py-12 md:py-16">
+      <div className="site-container py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_420px] gap-12 xl:gap-16 items-start">
           {/* Left column */}
           <div>
             {/* Breadcrumb + series link */}
             <div className="flex items-center justify-between mb-6">
               {breadcrumb && (
-                <span
-                  className="portfolio-eyebrow"
-                  style={{ fontSize: '11px', letterSpacing: '0.12em', fontWeight: 600 }}
-                >
+                <span className="font-mono text-[11px] leading-[1.2] font-semibold tracking-[0.12em] text-site-accent uppercase">
                   {breadcrumb}
                 </span>
               )}
               {lens.series && (
                 <a
                   href="/lens"
-                  className="text-[var(--portfolio-text-muted)] hover:text-[var(--portfolio-accent)] portfolio-transition"
-                  style={{ fontSize: '11px', letterSpacing: '0.08em', textDecoration: 'none' }}
+                  className="text-[11px] tracking-[0.08em] text-site-text-muted no-underline transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-200 ease-out hover:text-site-accent motion-reduce:transition-none"
                 >
                   View Full Series
                 </a>
@@ -121,31 +117,16 @@ export default async function LensPage({ params: paramsPromise }: Args) {
             </div>
 
             {/* Title */}
-            <h1
-              className="text-[var(--portfolio-text-primary)] font-bold"
-              style={{
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
-                lineHeight: '1.15',
-                letterSpacing: '-0.02em',
-              }}
-            >
+            <h1 className="text-3xl leading-[1.15] font-bold text-site-text-primary md:text-5xl">
               {lens.title}
             </h1>
 
             {/* Cyan divider */}
-            <div
-              className="mt-5 mb-6"
-              style={{ height: '2px', width: '3rem', background: 'var(--portfolio-accent)' }}
-            />
+            <div className="mt-5 mb-6 h-0.5 w-12 bg-site-accent" />
 
             {/* Intro / caption */}
             {lens.intro && (
-              <p
-                className="text-[var(--portfolio-text-secondary)] leading-relaxed"
-                style={{ fontSize: '1rem', lineHeight: '1.7' }}
-              >
-                {lens.intro}
-              </p>
+              <p className="text-base leading-[1.7] text-site-text-secondary">{lens.intro}</p>
             )}
 
             {/* Technical metadata */}

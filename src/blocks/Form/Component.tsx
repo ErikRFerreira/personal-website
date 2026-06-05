@@ -167,11 +167,7 @@ export const FormBlock: React.FC<
           </div>
 
           {layout === 'contact' ? (
-            <Button
-              className="gap-2 px-6 py-3"
-              form={formID}
-              type="submit"
-            >
+            <Button className="gap-2 px-6 py-3" form={formID} type="submit">
               {effectiveSubmitLabel}
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -188,25 +184,29 @@ export const FormBlock: React.FC<
   // ── Contact layout ───────────────────────────────────────────────────────
   if (layout === 'contact') {
     return (
-      <section className="portfolio-section" data-theme="dark">
-        <div className="portfolio-container">
+      <section className="site-section" data-theme="dark">
+        <div className="site-container">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[3fr_2fr] lg:gap-16">
             {/* Left: heading + form */}
             <div>
               {eyebrow && (
-                <p className="portfolio-eyebrow mb-3">{eyebrow}</p>
+                <p className="mb-3 font-mono text-[0.6875rem] leading-[1.2] font-bold tracking-[0.18em] text-site-accent uppercase">
+                  {eyebrow}
+                </p>
               )}
               {heading && (
-                <h1 className="mb-4 text-4xl font-bold leading-tight tracking-tight text-portfolio-text-primary md:text-5xl lg:text-6xl">
+                <h1 className="mb-4 text-4xl leading-tight font-bold text-site-text-primary md:text-5xl lg:text-6xl">
                   {heading}
                 </h1>
               )}
               {introText && (
-                <p className="portfolio-body-sm mb-10 max-w-lg">{introText}</p>
+                <p className="mb-10 max-w-lg text-sm leading-[1.7] text-site-text-secondary">
+                  {introText}
+                </p>
               )}
 
               {/* Form with underline-style inputs */}
-              <div className="[&_input]:rounded-none [&_input]:border-0 [&_input]:border-b [&_input]:border-portfolio-border-subtle [&_input]:bg-transparent [&_input]:px-0 [&_input]:text-portfolio-text-primary [&_input]:placeholder:text-portfolio-text-muted [&_input]:focus-visible:border-portfolio-border-active [&_input]:focus-visible:ring-0 [&_label]:text-[0.625rem] [&_label]:font-semibold [&_label]:uppercase [&_label]:tracking-widest [&_label]:text-portfolio-text-muted [&_textarea]:rounded-none [&_textarea]:border-0 [&_textarea]:border-b [&_textarea]:border-portfolio-border-subtle [&_textarea]:bg-transparent [&_textarea]:px-0 [&_textarea]:text-portfolio-text-primary [&_textarea]:placeholder:text-portfolio-text-muted [&_textarea]:focus-visible:border-portfolio-border-active [&_textarea]:focus-visible:ring-0 [&_[role=combobox]]:rounded-none [&_[role=combobox]]:border-0 [&_[role=combobox]]:border-b [&_[role=combobox]]:border-portfolio-border-subtle [&_[role=combobox]]:bg-transparent [&_[role=combobox]]:text-portfolio-text-primary [&_[role=combobox]]:focus:ring-0">
+              <div className="[&_input]:rounded-none [&_input]:border-0 [&_input]:border-b [&_input]:bg-transparent [&_input]:px-0 [&_input]:text-site-text-primary [&_input]:placeholder:text-site-text-muted [&_input]:focus-visible:border-site-border-active [&_input]:focus-visible:ring-0 [&_label]:text-[0.625rem] [&_label]:font-semibold [&_label]:tracking-widest [&_label]:text-site-text-muted [&_label]:uppercase [&_textarea]:rounded-none [&_textarea]:border-0 [&_textarea]:border-b [&_textarea]:bg-transparent [&_textarea]:px-0 [&_textarea]:text-site-text-primary [&_textarea]:placeholder:text-site-text-muted [&_textarea]:focus-visible:border-site-border-active [&_textarea]:focus-visible:ring-0 [&_[role=combobox]]:rounded-none [&_[role=combobox]]:border-0 [&_[role=combobox]]:border-b [&_[role=combobox]]:bg-transparent [&_[role=combobox]]:text-site-text-primary [&_[role=combobox]]:focus:ring-0">
                 {formJSX}
               </div>
             </div>

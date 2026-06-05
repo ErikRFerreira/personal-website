@@ -15,40 +15,30 @@ export const LensPrintOptions: React.FC<Props> = ({ printOptions }) => {
   const hasPrintOptions = printOptions && printOptions.length > 0
 
   return (
-    <div
-      className="border border-[var(--portfolio-border-subtle)] flex flex-col"
-      style={{ background: 'var(--portfolio-surface-elevated)' }}
-    >
+    <div className="flex flex-col border border-site-border-subtle bg-site-surface-elevated">
       {/* Header */}
-      <div className="px-6 pt-6 pb-4 border-b border-[var(--portfolio-border-subtle)]">
-        <span
-          className="portfolio-eyebrow"
-          style={{ fontSize: '11px', letterSpacing: '0.12em', fontWeight: 600 }}
-        >
+      <div className="border-b border-site-border-subtle px-6 pt-6 pb-4">
+        <span className="font-mono text-[11px] leading-[1.2] font-semibold tracking-[0.12em] text-site-accent uppercase">
           Acquire a Print
         </span>
       </div>
 
       {/* Print options list */}
-      <div className="flex flex-col divide-y divide-[var(--portfolio-border-subtle)]">
+      <div className="flex flex-col divide-y divide-site-border-subtle">
         {hasPrintOptions ? (
           printOptions.map((option, i) => (
             <div
               key={option.id ?? i}
-              className="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-[var(--portfolio-border-subtle)] transition-colors duration-150"
+              className="flex cursor-pointer items-center justify-between px-6 py-4 transition-colors duration-150 hover:bg-site-border-subtle"
             >
               <div className="flex flex-col gap-0.5">
-                <span className="text-[var(--portfolio-text-primary)] text-sm font-medium">
-                  {option.size}
-                </span>
+                <span className="text-sm font-medium text-site-text-primary">{option.size}</span>
                 {option.material && (
-                  <span className="text-[var(--portfolio-text-muted)]" style={{ fontSize: '11px' }}>
-                    {option.material}
-                  </span>
+                  <span className="text-[11px] text-site-text-muted">{option.material}</span>
                 )}
               </div>
               {option.price != null && (
-                <span className="text-[var(--portfolio-text-primary)] text-sm font-semibold tabular-nums">
+                <span className="text-sm font-semibold text-site-text-primary tabular-nums">
                   ${option.price.toLocaleString()}
                 </span>
               )}
@@ -76,16 +66,10 @@ export const LensPrintOptions: React.FC<Props> = ({ printOptions }) => {
       </div>
 
       {/* CTA */}
-      <div className="px-6 pt-5 pb-6 flex flex-col gap-4">
+      <div className="flex flex-col gap-4 px-6 pt-5 pb-6">
         <button
           type="button"
-          className="w-full flex items-center justify-center gap-2 py-4 text-[var(--portfolio-accent-foreground)] font-semibold uppercase tracking-widest cursor-not-allowed"
-          style={{
-            background: 'var(--portfolio-accent)',
-            fontSize: '13px',
-            letterSpacing: '0.1em',
-            borderRadius: 0,
-          }}
+          className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-none bg-site-accent py-4 text-[13px] font-semibold tracking-[0.1em] text-site-accent-foreground uppercase"
           disabled
           aria-disabled="true"
         >
@@ -93,16 +77,10 @@ export const LensPrintOptions: React.FC<Props> = ({ printOptions }) => {
           Request Print
         </button>
         <div className="flex flex-col gap-1 text-center">
-          <span
-            className="text-[var(--portfolio-text-muted)] uppercase tracking-widest"
-            style={{ fontSize: '10px', fontWeight: 600 }}
-          >
+          <span className="text-[10px] font-semibold tracking-widest text-site-text-muted uppercase">
             Signed certificate of authenticity included
           </span>
-          <span
-            className="text-[var(--portfolio-text-muted)] uppercase tracking-widest"
-            style={{ fontSize: '10px' }}
-          >
+          <span className="text-[10px] tracking-widest text-site-text-muted uppercase">
             Secure art-grade packaging · Worldwide tracking
           </span>
         </div>
@@ -121,14 +99,12 @@ function PrintOptionPlaceholder({
   price: number
 }) {
   return (
-    <div className="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-[var(--portfolio-border-subtle)] transition-colors duration-150">
+    <div className="flex cursor-pointer items-center justify-between px-6 py-4 transition-colors duration-150 hover:bg-site-border-subtle">
       <div className="flex flex-col gap-0.5">
-        <span className="text-[var(--portfolio-text-primary)] text-sm font-medium">{label}</span>
-        <span className="text-[var(--portfolio-text-muted)]" style={{ fontSize: '11px' }}>
-          {sub}
-        </span>
+        <span className="text-sm font-medium text-site-text-primary">{label}</span>
+        <span className="text-[11px] text-site-text-muted">{sub}</span>
       </div>
-      <span className="text-[var(--portfolio-text-primary)] text-sm font-semibold tabular-nums">
+      <span className="text-sm font-semibold text-site-text-primary tabular-nums">
         ${price.toLocaleString()}
       </span>
     </div>

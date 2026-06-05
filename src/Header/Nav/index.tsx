@@ -16,8 +16,8 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
           appearance={isCta ? 'inline' : 'link'}
           className={
             isCta
-              ? 'border border-current rounded-full px-4 py-1.5 text-sm leading-none transition-colors duration-200 hover:border-[var(--portfolio-accent)] hover:text-[var(--portfolio-accent)]'
-              : 'transition-colors duration-200 hover:text-[var(--portfolio-accent)]'
+              ? 'rounded-full border border-current px-4 py-1.5 text-sm leading-none transition-colors duration-200 hover:border-site-accent hover:text-site-accent'
+              : 'transition-colors duration-200 hover:text-site-accent'
           }
         />
       ))}

@@ -22,14 +22,11 @@ type MetaCell = {
 const MetaCell: React.FC<MetaCell> = ({ label, value }) => {
   if (!value) return null
   return (
-    <div className="flex flex-col gap-1 py-4 px-4">
-      <span
-        className="text-[var(--portfolio-text-muted)] uppercase tracking-widest"
-        style={{ fontSize: '10px', fontWeight: 600, lineHeight: 1 }}
-      >
+    <div className="flex flex-col gap-1 px-4 py-4">
+      <span className="text-[10px] leading-none font-semibold tracking-widest text-site-text-muted uppercase">
         {label}
       </span>
-      <span className="text-[var(--portfolio-text-primary)] text-sm font-medium">{value}</span>
+      <span className="text-sm font-medium text-site-text-primary">{value}</span>
     </div>
   )
 }
@@ -48,11 +45,8 @@ export const LensTechnicalMeta: React.FC<Props> = ({ metadata, location }) => {
   if (cells.length === 0) return null
 
   return (
-    <div
-      className="border border-[var(--portfolio-border-subtle)] mt-8"
-      style={{ background: 'var(--portfolio-surface-elevated)' }}
-    >
-      <div className="grid grid-cols-3 divide-x divide-y divide-[var(--portfolio-border-subtle)]">
+    <div className="mt-8 border border-site-border-subtle bg-site-surface-elevated">
+      <div className="grid grid-cols-3 divide-x divide-y divide-site-border-subtle">
         {cells.map((cell) => (
           <MetaCell key={cell.label} label={cell.label} value={cell.value} />
         ))}

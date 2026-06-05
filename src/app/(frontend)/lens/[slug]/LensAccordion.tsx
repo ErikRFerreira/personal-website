@@ -17,7 +17,7 @@ export const LensAccordion: React.FC<Props> = ({ fullStory, licensingText }) => 
   const toggle = (panel: Panel) => setOpen((prev) => (prev === panel ? null : panel))
 
   return (
-    <div className="border-t border-[var(--portfolio-border-subtle)]">
+    <div className="border-t border-site-border-subtle">
       <AccordionRow
         label="Story Behind the Shot"
         isOpen={open === 'story'}
@@ -28,7 +28,7 @@ export const LensAccordion: React.FC<Props> = ({ fullStory, licensingText }) => 
           <RichText
             data={fullStory}
             enableGutter={false}
-            className="text-[var(--portfolio-text-secondary)] text-sm leading-relaxed [&_p]:mb-3 [&_p:last-child]:mb-0"
+            className="text-sm leading-relaxed text-site-text-secondary [&_p]:mb-3 [&_p:last-child]:mb-0"
           />
         )}
       </AccordionRow>
@@ -38,7 +38,7 @@ export const LensAccordion: React.FC<Props> = ({ fullStory, licensingText }) => 
         isOpen={open === 'shipping'}
         onToggle={() => toggle('shipping')}
       >
-        <div className="text-[var(--portfolio-text-secondary)] text-sm leading-relaxed space-y-3">
+        <div className="space-y-3 text-sm leading-relaxed text-site-text-secondary">
           <p>
             All prints are carefully packaged with acid-free tissue and rigid backing boards before
             being placed in custom-fit tubes or flat boxes. We use art-grade materials throughout to
@@ -46,9 +46,9 @@ export const LensAccordion: React.FC<Props> = ({ fullStory, licensingText }) => 
           </p>
           <p>
             Shipping typically takes{' '}
-            <strong className="text-[var(--portfolio-text-primary)]">5–10 business days</strong> for
-            standard destinations. Expedited options are available upon request. All orders include
-            full tracking and insurance coverage.
+            <strong className="text-site-text-primary">5–10 business days</strong> for standard
+            destinations. Expedited options are available upon request. All orders include full
+            tracking and insurance coverage.
           </p>
           <p>
             If your print arrives damaged, contact us within 48 hours with photos of the packaging
@@ -64,9 +64,7 @@ export const LensAccordion: React.FC<Props> = ({ fullStory, licensingText }) => 
         disabled={!licensingText}
       >
         {licensingText && (
-          <p className="text-[var(--portfolio-text-secondary)] text-sm leading-relaxed">
-            {licensingText}
-          </p>
+          <p className="text-sm leading-relaxed text-site-text-secondary">{licensingText}</p>
         )}
       </AccordionRow>
     </div>
@@ -83,24 +81,25 @@ type RowProps = {
 
 function AccordionRow({ label, isOpen, onToggle, disabled, children }: RowProps) {
   return (
-    <div className="border-b border-[var(--portfolio-border-subtle)]">
+    <div className="border-b border-site-border-subtle">
       <button
         type="button"
         onClick={disabled ? undefined : onToggle}
-        className="w-full flex items-center justify-between py-5 text-left portfolio-transition"
-        style={{ cursor: disabled ? 'default' : 'pointer' }}
+        className={[
+          'flex w-full items-center justify-between py-5 text-left transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-200 ease-out motion-reduce:transition-none',
+          disabled ? 'cursor-default' : 'cursor-pointer',
+        ].join(' ')}
         aria-expanded={isOpen}
       >
-        <span
-          className="text-[var(--portfolio-text-secondary)] uppercase tracking-widest"
-          style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em' }}
-        >
+        <span className="text-[11px] font-semibold tracking-[0.12em] text-site-text-secondary uppercase">
           {label}
         </span>
         {!disabled && (
           <ChevronIcon
-            className="shrink-0 transition-transform duration-200"
-            style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+            className={[
+              'shrink-0 text-site-accent transition-transform duration-200',
+              isOpen ? 'rotate-180' : 'rotate-0',
+            ].join(' ')}
           />
         )}
       </button>
@@ -109,7 +108,7 @@ function AccordionRow({ label, isOpen, onToggle, disabled, children }: RowProps)
   )
 }
 
-function ChevronIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
+function ChevronIcon({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -117,12 +116,11 @@ function ChevronIcon({ className, style }: { className?: string; style?: React.C
       height="16"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="var(--portfolio-accent)"
+      stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
-      style={style}
       aria-hidden="true"
     >
       <path d="m6 9 6 6 6-6" />

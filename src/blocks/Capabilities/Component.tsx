@@ -19,7 +19,7 @@ function Capabilities({ eyebrow, label, capabilities }: Props) {
   return (
     <DefaultSection eyebrow={eyebrow} label={label}>
       {Array.isArray(capabilities) && capabilities.length > 0 && (
-        <div className="portfolio-grid-gap grid grid-cols-1 items-stretch md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 items-stretch gap-[var(--site-card-gap)] md:grid-cols-2 lg:grid-cols-4">
           {capabilities.map((capability, i) => (
             <CapabilityCard
               key={i}
