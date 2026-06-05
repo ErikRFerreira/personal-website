@@ -876,6 +876,10 @@ export interface SelectedProjectsBlock {
 export interface Project {
   id: number;
   title: string;
+  /**
+   * A URL-friendly identifier for the project (e.g., "my-awesome-project")
+   */
+  slug: string;
   description?: string | null;
   role?: string | null;
   tech?:
@@ -884,11 +888,42 @@ export interface Project {
         id?: string | null;
       }[]
     | null;
+  links?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
   image?: (number | null) | Media;
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  status: 'draft' | 'published';
+  type?: ('web-app' | 'mobile-app' | 'open-source' | 'design' | 'other') | null;
   /**
-   * A URL-friendly identifier for the project (e.g., "my-awesome-project")
+   * The year the project was completed or started.
    */
-  slug: string;
+  year?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1807,6 +1842,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
+  slug?: T;
   description?: T;
   role?: T;
   tech?:
@@ -1815,8 +1851,25 @@ export interface ProjectsSelect<T extends boolean = true> {
         techName?: T;
         id?: T;
       };
+  links?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
   image?: T;
-  slug?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  content?: T;
+  status?: T;
+  type?: T;
+  year?: T;
   updatedAt?: T;
   createdAt?: T;
 }
