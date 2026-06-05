@@ -42,6 +42,15 @@ export function HeroPanel({
   const hasMediaResource = Boolean(videoSrc) || Boolean(media && typeof media === 'object')
   const shouldRenderMedia = isLens && hasMediaResource
   const HeadingTag = headingLevel
+  const ctaLink: PortfolioHeroLink | undefined = isDev
+    ? {
+        appearance: link?.appearance || 'default',
+        label: 'See Dev Work',
+        newTab: false,
+        type: 'custom',
+        url: '/projects',
+      }
+    : link
 
   return (
     <section
@@ -70,76 +79,18 @@ export function HeroPanel({
         />
       )}
 
-      {isDev && (
-        <div className="portfolio-hero__system" aria-hidden="true">
-          <div className="portfolio-hero__system-grid" />
-
-          <svg
-            className="portfolio-hero__system-lines"
-            focusable="false"
-            preserveAspectRatio="none"
-            viewBox="0 0 640 460"
-          >
-            <path
-              className="portfolio-hero__system-line portfolio-hero__system-line--primary"
-              d="M54 294 H178 L236 236 H356 L432 160 H586"
-              pathLength={1}
-            />
-            <path
-              className="portfolio-hero__system-line portfolio-hero__system-line--secondary"
-              d="M118 126 H244 L318 202 H496"
-              pathLength={1}
-            />
-            <path
-              className="portfolio-hero__system-line portfolio-hero__system-line--tertiary"
-              d="M166 366 H292 L366 292 H532"
-              pathLength={1}
-            />
-          </svg>
-
-          <span className="portfolio-hero__system-node portfolio-hero__system-node--source" />
-          <span className="portfolio-hero__system-node portfolio-hero__system-node--cache" />
-          <span className="portfolio-hero__system-node portfolio-hero__system-node--edge" />
-          <span className="portfolio-hero__system-node portfolio-hero__system-node--deploy" />
-
-          <div className="portfolio-hero__code-card">
-            <span className="portfolio-hero__code-label">deploy-pipeline.ts</span>
-            <pre>
-              <code>{`type ReleaseTarget = 'edge' | 'api' | 'cms';
-
-const checks = ['typed', 'cached', 'secure'] as const;
-
-export async function ship(target: ReleaseTarget) {
-  const build = await pipeline.verify({
-    target,
-    checks,
-    preview: true,
-  });
-
-  return build.ready ? deploy(target) : rollback();
-}`}</code>
-            </pre>
-          </div>
-
-          <div className="portfolio-hero__status-chip">
-            <span className="portfolio-hero__status-dot" />
-            System online
-          </div>
-        </div>
-      )}
-
       <div className="portfolio-hero__panel-content">
         {eyebrow && <p className="portfolio-hero__eyebrow">{eyebrow}</p>}
         {headline && <HeadingTag className="portfolio-hero__headline">{headline}</HeadingTag>}
 
-        {(description || link) && (
+        {(description || ctaLink) && (
           <div className="portfolio-hero__reveal">
             {description && <p className="portfolio-hero__description">{description}</p>}
 
-            {link && (
+            {ctaLink && (
               <CMSLink
-                {...link}
-                appearance={link.appearance === 'outline' ? 'outline' : 'default'}
+                {...ctaLink}
+                appearance={ctaLink.appearance === 'outline' ? 'outline' : 'default'}
                 className={`portfolio-hero__cta portfolio-hero__cta--${side}`}
               >
                 <ArrowRight aria-hidden="true" />
