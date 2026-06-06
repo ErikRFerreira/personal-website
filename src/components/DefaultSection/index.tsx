@@ -1,14 +1,21 @@
+import { cn } from '@/utilities/ui'
 import { SectionHeading } from '@/components/SectionHeading'
 
 type Props = {
   eyebrow?: string | null
   label?: string | null
+  bgColor?: string | null
+  className?: string
   children: React.ReactNode
 }
 
-function DefaultSection({ eyebrow, label, children }: Props) {
+function DefaultSection({ eyebrow, label, bgColor, className, children }: Props) {
   return (
-    <section className="site-section" data-theme="dark">
+    <section
+      className={cn('site-section', className)}
+      data-theme="dark"
+      style={{ backgroundColor: bgColor || 'var(--site-surface-base)' }}
+    >
       <div className="site-container">
         <SectionHeading title={eyebrow} label={label} />
 

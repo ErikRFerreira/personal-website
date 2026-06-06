@@ -16,7 +16,7 @@ export function SelectedProjectsBlock({ eyebrow, label, projects }: SelectedProj
   if (!selectedProjects?.length) return null
 
   return (
-    <DefaultSection eyebrow={eyebrow} label={label}>
+    <DefaultSection eyebrow={eyebrow} label={label} bgColor="var(--site-surface-deep)">
       {selectedProjects.map((project, index) => (
         <ProjectRow key={project.id} project={project} index={index} />
       ))}

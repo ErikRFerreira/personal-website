@@ -17,7 +17,8 @@
     /* Shared dark site tokens: intentionally stable when the broader app theme changes. */
     --site-surface-deep: #070d1f;
     --site-surface-base: #0c1324;
-    --site-surface-elevated: #151d2b;
+    --site-surface-elevated: #151d2d;
+    --site-surface-footer: #191f31;
     --site-text-primary: #ffffff;
     --site-text-secondary: #94a3b8;
     --site-text-muted: #64748b;

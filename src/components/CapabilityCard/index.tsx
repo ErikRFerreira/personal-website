@@ -8,7 +8,7 @@ type Props = {
 
 function CapabilityCard({ name, description, icon }: Props) {
   return (
-    <div className="rounded-site-card flex h-full flex-col border border-site-border-subtle bg-site-surface-elevated px-8 pt-8 pb-[60px] transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-200 ease-out hover:border-site-border-active hover:shadow-site-glow motion-reduce:transition-none">
+    <div className="rounded-site-card flex h-full flex-col border border-[rgb(46_52_71/30%)] bg-[rgb(12_19_36/30%)] p-10 transition-[background-color] duration-200 ease-out hover:bg-[rgb(12_19_36/50%)] motion-reduce:transition-none">
       <div className="flex flex-col gap-[11px]">
         <img src={icon.url} alt="" aria-hidden className="h-[22px] w-auto self-start" />
         <h3 className="text-base font-bold text-site-text-primary">{name}</h3>
