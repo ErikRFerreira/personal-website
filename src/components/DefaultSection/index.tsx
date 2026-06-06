@@ -19,7 +19,7 @@ function DefaultSection({ eyebrow, label, bgColor, className, children }: Props)
       <div className="site-container">
         <SectionHeading title={eyebrow} label={label} />
 
-        <div className="flex flex-col gap-[var(--site-card-gap)]">{children}</div>
+        <div className="flex flex-col gap-(--site-card-gap)">{children}</div>
       </div>
     </section>
   )
