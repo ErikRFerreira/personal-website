@@ -4,6 +4,7 @@ import * as migration_20260522_022329_add_series_to_lens from './20260522_022329
 import * as migration_20260602_122156_add_portfolio_hero_right_media from './20260602_122156_add_portfolio_hero_right_media';
 import * as migration_20260602_133849_add_portfolio_hero_cdn_video_urls from './20260602_133849_add_portfolio_hero_cdn_video_urls';
 import * as migration_20260605_032917 from './20260605_032917';
+import * as migration_20260606_131310 from './20260606_131310';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20260605_032917.up,
     down: migration_20260605_032917.down,
-    name: '20260605_032917'
+    name: '20260605_032917',
+  },
+  {
+    up: migration_20260606_131310.up,
+    down: migration_20260606_131310.down,
+    name: '20260606_131310'
   },
 ];

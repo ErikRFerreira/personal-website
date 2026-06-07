@@ -9,6 +9,7 @@ import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { SimpleTextBlock } from '@/blocks/SimpleText/Component'
 import { SelectedProjectsBlock } from '@/blocks/SelectedProjects/Component'
+import { InitiateProjectBlock } from '@/blocks/InitiateProject/Component'
 import Capabilities from './Capabilities/Component'
 import { LensBlockComponent } from './LensBlock/Component'
 import { AboutIntroBlock } from './AboutIntro/Component'
@@ -21,6 +22,7 @@ const blockComponents = {
   mediaBlock: MediaBlock,
   simpleText: SimpleTextBlock,
   selectedProjects: SelectedProjectsBlock,
+  initiateProject: InitiateProjectBlock,
   capabilities: Capabilities,
   lensBlock: LensBlockComponent,
   aboutIntro: AboutIntroBlock,

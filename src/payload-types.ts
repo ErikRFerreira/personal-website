@@ -241,6 +241,7 @@ export interface Page {
     | CapabilitiesBlock
     | LensBlock
     | AboutIntroBlock
+    | InitiateProjectBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1059,7 +1060,9 @@ export interface Len {
  * via the `definition` "AboutIntroBlock".
  */
 export interface AboutIntroBlock {
-  heading: string;
+  eyebrow?: string | null;
+  headlineLineOne: string;
+  headlineLineTwo?: string | null;
   bio?: string | null;
   bioSecondParagraph?: string | null;
   socialLinks?:
@@ -1069,41 +1072,42 @@ export interface AboutIntroBlock {
         id?: string | null;
       }[]
     | null;
-  bioPageLink: {
-    type?: ('reference' | 'custom') | null;
-    newTab?: boolean | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
-    url?: string | null;
-    label: string;
-  };
-  ctaHeading: string;
-  ctaDescription?: string | null;
-  ctaLink: {
-    type?: ('reference' | 'custom') | null;
-    newTab?: boolean | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
-    url?: string | null;
-    label: string;
-  };
+  portrait?: (number | null) | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'aboutIntro';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InitiateProjectBlock".
+ */
+export interface InitiateProjectBlock {
+  eyebrowText: string;
+  heading: string;
+  description: string;
+  ctaLabel: string;
+  ctaLink?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: 'default' | null;
+  };
+  partnershipNote?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'initiateProject';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1480,6 +1484,7 @@ export interface PagesSelect<T extends boolean = true> {
         capabilities?: T | CapabilitiesBlockSelect<T>;
         lensBlock?: T | LensBlockSelect<T>;
         aboutIntro?: T | AboutIntroBlockSelect<T>;
+        initiateProject?: T | InitiateProjectBlockSelect<T>;
       };
   meta?:
     | T
@@ -1654,7 +1659,9 @@ export interface LensBlockSelect<T extends boolean = true> {
  * via the `definition` "AboutIntroBlock_select".
  */
 export interface AboutIntroBlockSelect<T extends boolean = true> {
-  heading?: T;
+  eyebrow?: T;
+  headlineLineOne?: T;
+  headlineLineTwo?: T;
   bio?: T;
   bioSecondParagraph?: T;
   socialLinks?:
@@ -1664,17 +1671,19 @@ export interface AboutIntroBlockSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
-  bioPageLink?:
-    | T
-    | {
-        type?: T;
-        newTab?: T;
-        reference?: T;
-        url?: T;
-        label?: T;
-      };
-  ctaHeading?: T;
-  ctaDescription?: T;
+  portrait?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InitiateProjectBlock_select".
+ */
+export interface InitiateProjectBlockSelect<T extends boolean = true> {
+  eyebrowText?: T;
+  heading?: T;
+  description?: T;
+  ctaLabel?: T;
   ctaLink?:
     | T
     | {
@@ -1682,8 +1691,9 @@ export interface AboutIntroBlockSelect<T extends boolean = true> {
         newTab?: T;
         reference?: T;
         url?: T;
-        label?: T;
+        appearance?: T;
       };
+  partnershipNote?: T;
   id?: T;
   blockName?: T;
 }

@@ -1,7 +1,5 @@
 import type { Block } from 'payload'
 
-import { link } from '@/fields/link'
-
 export const AboutIntro: Block = {
   slug: 'aboutIntro',
   interfaceName: 'AboutIntroBlock',
@@ -11,10 +9,23 @@ export const AboutIntro: Block = {
   },
   fields: [
     {
-      name: 'heading',
+      name: 'eyebrow',
       type: 'text',
+      label: 'Eyebrow',
+      defaultValue: 'THE ARCHITECT & THE EXPLORER',
+    },
+    {
+      name: 'headlineLineOne',
+      type: 'text',
+      label: 'Headline — Line 1',
       required: true,
-      defaultValue: 'The Intersection of Logic & Art',
+      defaultValue: 'Precision in code.',
+    },
+    {
+      name: 'headlineLineTwo',
+      type: 'text',
+      label: 'Headline — Line 2',
+      defaultValue: 'Calm in the deep.',
     },
     {
       name: 'bio',
@@ -43,31 +54,11 @@ export const AboutIntro: Block = {
         },
       ],
     },
-    link({
-      appearances: false,
-      overrides: {
-        name: 'bioPageLink',
-        label: 'Read Full Bio Link',
-      },
-    }),
     {
-      name: 'ctaHeading',
-      type: 'text',
-      required: true,
-      defaultValue: "Let's build something.",
+      name: 'portrait',
+      type: 'upload',
+      label: 'Portrait',
+      relationTo: 'media',
     },
-    {
-      name: 'ctaDescription',
-      type: 'text',
-      defaultValue:
-        'Currently open for new senior development roles and select freelance engineering projects.',
-    },
-    link({
-      appearances: false,
-      overrides: {
-        name: 'ctaLink',
-        label: 'CTA Link',
-      },
-    }),
   ],
 }

@@ -13,29 +13,27 @@ export async function Footer() {
 
   return (
     <footer className="mt-auto bg-card text-white" data-theme="dark">
-      <div className="container py-20 md:py-28 flex flex-col h-full">
-        {/* Top row: nav links aligned right */}
-        <div className="flex justify-end mb-auto">
-          <nav className="flex flex-col md:flex-row gap-6 items-end md:items-center">
+      <div className="container py-12 md:py-16 flex flex-col md:flex-row md:items-end md:justify-between gap-8 md:gap-6">
+        {/* Left: brand */}
+        <Link href="/" className="flex items-center">
+          <Logo className="text-white" />
+        </Link>
+
+        {/* Right: nav links + copyright grouped */}
+        <div className="flex flex-col gap-4 md:items-end">
+          <nav className="flex flex-row flex-wrap gap-x-6 gap-y-2">
             {navItems.map(({ link }, i) => {
               return (
                 <CMSLink
-                  className="text-white/70 hover:text-white text-xs tracking-widest uppercase transition-colors"
+                  className="relative pb-px text-white/60 hover:text-white text-xs tracking-widest uppercase transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
                   key={i}
                   {...link}
                 />
               )
             })}
           </nav>
-        </div>
 
-        {/* Bottom row: logo left, copyright right */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mt-24">
-          <Link href="/" className="flex items-center">
-            <Logo className="text-white" />
-          </Link>
-
-          <p className="text-white/40 text-[0.6rem] tracking-widest uppercase">
+          <p className="text-white/50 text-[0.6rem] tracking-widest uppercase">
             &copy; {new Date().getFullYear()} Erik Ferreira. All rights reserved.
           </p>
         </div>

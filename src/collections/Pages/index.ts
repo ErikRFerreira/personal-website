@@ -12,6 +12,7 @@ import { SelectedProjects } from '../../blocks/SelectedProjects/config'
 import { Capabilities } from '../../blocks/Capabilities/config'
 import { LensBlock } from '../../blocks/LensBlock/config'
 import { AboutIntro } from '../../blocks/AboutIntro/config'
+import { InitiateProject } from '../../blocks/InitiateProject/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -88,6 +89,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Capabilities,
                 LensBlock,
                 AboutIntro,
+                InitiateProject,
               ],
               required: true,
               admin: {
