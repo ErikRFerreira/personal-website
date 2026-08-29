@@ -9,8 +9,24 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
+import { authenticated } from '../../access/authenticated'
+
 export const Projects: CollectionConfig<'projects'> = {
   slug: 'projects',
+  access: {
+    create: authenticated,
+    delete: authenticated,
+    read: ({ req: { user } }) => {
+      if (user) return true
+
+      return {
+        status: {
+          equals: 'published',
+        },
+      }
+    },
+    update: authenticated,
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'status', 'type', 'year', 'updatedAt'],

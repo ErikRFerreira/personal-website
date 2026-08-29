@@ -13,7 +13,6 @@ const cormorantGaramond = Cormorant_Garamond({
   display: 'swap',
 })
 
-import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'

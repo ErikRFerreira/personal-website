@@ -1,5 +1,6 @@
 import type { LensBlock, Len } from '@/payload-types'
 import Link from 'next/link'
+import LightRays from '../../components/LightRays'
 
 export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock) {
   const resolvedPhotos = photos?.filter((p): p is Len => typeof p === 'object' && p !== null)
@@ -11,10 +12,23 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
       className="relative overflow-hidden bg-[#0C1324] py-[var(--site-section-space-mobile)] text-site-text-primary md:py-[var(--site-section-space-tablet)] lg:py-[var(--site-section-space-desktop)]"
       data-theme="dark"
     >
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(ellipse_at_top,rgba(0,242,255,0.16)_0%,rgba(20,48,76,0.26)_34%,rgba(12,19,36,0)_72%)]"
-        aria-hidden="true"
-      />
+      <div style={{ width: '100%', height: '800px', position: 'absolute', top: '0' }}>
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#ffffff"
+          raysSpeed={1}
+          lightSpread={0.5}
+          rayLength={3}
+          followMouse={true}
+          mouseInfluence={0.1}
+          noiseAmount={0}
+          distortion={0}
+          className="custom-rays"
+          pulsating={false}
+          fadeDistance={1}
+          saturation={1}
+        />
+      </div>
 
       <div className="site-container relative z-10">
         <header className="mb-16 max-w-[42rem] md:mb-24">

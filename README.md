@@ -214,13 +214,90 @@ This command will check for any migrations that have not yet been run and try to
 
 ### Docker
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
+This project is configured to run Payload, Next.js, and PostgreSQL with Docker Compose. Make sure the `.env` file exists in the project root, then start the development environment with:
 
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
+```bash
+docker compose up
+```
 
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
+The frontend is available at `http://localhost:3000` and the Payload Admin Panel at `http://localhost:3000/admin`. Source and server-side configuration changes are reloaded automatically during development.
+
+To run the containers in the background:
+
+```bash
+docker compose up -d
+```
+
+To follow the Payload and Next.js logs:
+
+```bash
+docker compose logs -f payload
+```
+
+To stop the containers while preserving the PostgreSQL database:
+
+```bash
+docker compose down
+```
+
+After changing Payload collections, blocks, or fields, regenerate the Payload types:
+
+```bash
+docker compose exec payload pnpm generate:types
+```
+
+After creating or changing Payload Admin components, regenerate the import map:
+
+```bash
+docker compose exec payload pnpm generate:importmap
+```
+
+Validate the TypeScript project with:
+
+```bash
+docker compose exec payload pnpm exec tsc --noEmit
+```
+
+If the development server becomes stuck, restart only the Payload service:
+
+```bash
+docker compose restart payload
+```
+
+> **Warning:** Do not run `docker compose down -v` unless you intentionally want to delete the local PostgreSQL database and all of its data.
+
+#### Database and media backups
+
+The PostgreSQL Docker volume survives normal container restarts and `docker compose down`, but it should not be the only copy of your data. A complete backup includes both the PostgreSQL database and the uploaded files stored in `public/media`.
+
+Create a backup from the project directory with PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force backups
+docker compose exec -T postgres pg_dump -U postgres -d payload -Fc -f /tmp/payload.dump
+docker compose cp postgres:/tmp/payload.dump ./backups/payload.dump
+Compress-Archive -Path public/media/* -DestinationPath backups/media.zip -Force
+```
+
+This creates `backups/payload.dump` and `backups/media.zip`. The database dump can be created while the application is running.
+
+To restore the database, stop the Payload service first:
+
+```powershell
+docker compose stop payload
+docker compose cp ./backups/payload.dump postgres:/tmp/payload.dump
+docker compose exec -T postgres pg_restore -U postgres -d payload --clean --if-exists /tmp/payload.dump
+docker compose start payload
+```
+
+Restore uploaded media with:
+
+```powershell
+New-Item -ItemType Directory -Force public/media
+Expand-Archive -Path backups/media.zip -DestinationPath public/media -Force
+```
+
+> **Warning:** Restoring a database dump replaces the current database contents. Keep another copy of the `backups` directory outside this repository, such as on another disk or a cloud storage provider.
 
 ### Seed
 
