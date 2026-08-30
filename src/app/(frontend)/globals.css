@@ -265,6 +265,12 @@
 }
 
 @layer utilities {
+  .site-page {
+    flex: 1;
+    background: var(--site-surface-base);
+    color: var(--site-text-primary);
+  }
+
   .site-container {
     width: 100%;
     max-width: var(--site-container-max);

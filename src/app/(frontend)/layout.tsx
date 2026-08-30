@@ -37,7 +37,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <Header />
-          {children}
+          <div className="site-page" data-theme="dark">
+            {children}
+          </div>
           <Footer />
         </Providers>
       </body>
