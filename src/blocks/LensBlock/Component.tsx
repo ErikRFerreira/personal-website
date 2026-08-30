@@ -1,6 +1,6 @@
 import type { LensBlock, Len } from '@/payload-types'
 import Link from 'next/link'
-import LightRays from '../../components/LightRays'
+import LightRays from '@/components/LightRays'
 
 export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock) {
   const resolvedPhotos = photos?.filter((p): p is Len => typeof p === 'object' && p !== null)
@@ -12,7 +12,7 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
       className="relative overflow-hidden bg-[#0C1324] py-[var(--site-section-space-mobile)] text-site-text-primary md:py-[var(--site-section-space-tablet)] lg:py-[var(--site-section-space-desktop)]"
       data-theme="dark"
     >
-      <div style={{ width: '100%', height: '800px', position: 'absolute', top: '0' }}>
+      <div className="absolute inset-x-0 top-0 h-full w-full">
         <LightRays
           raysOrigin="top-center"
           raysColor="#ffffff"

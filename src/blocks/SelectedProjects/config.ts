@@ -19,6 +19,12 @@ export const SelectedProjects: Block = {
       defaultValue: 'Selected Works',
     },
     {
+      name: 'intro',
+      type: 'textarea',
+      defaultValue:
+        'A selection of coding projects that combine thoughtful design, robust engineering, and practical solutions to real-world problems.',
+    },
+    {
       name: 'projects',
       type: 'relationship',
       relationTo: 'projects',

@@ -862,6 +862,7 @@ export interface SimpleTextBlock {
 export interface SelectedProjectsBlock {
   eyebrow?: string | null;
   label?: string | null;
+  intro?: string | null;
   /**
    * Choose which projects should appear in this block.
    */
@@ -951,6 +952,7 @@ export interface Project {
 export interface CapabilitiesBlock {
   eyebrow?: string | null;
   label?: string | null;
+  intro?: string | null;
   capabilities?:
     | {
         name: string;
@@ -1620,6 +1622,7 @@ export interface SimpleTextBlockSelect<T extends boolean = true> {
 export interface SelectedProjectsBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   label?: T;
+  intro?: T;
   projects?: T;
   id?: T;
   blockName?: T;
@@ -1631,6 +1634,7 @@ export interface SelectedProjectsBlockSelect<T extends boolean = true> {
 export interface CapabilitiesBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   label?: T;
+  intro?: T;
   capabilities?:
     | T
     | {

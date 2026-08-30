@@ -4,6 +4,7 @@ import DefaultSection from '@/components/DefaultSection'
 type Props = {
   eyebrow?: string | null
   label?: string | null
+  intro?: string | null
   capabilities?:
     | {
         name: string
@@ -15,11 +16,12 @@ type Props = {
     | null
 }
 
-function Capabilities({ eyebrow, label, capabilities }: Props) {
+function Capabilities({ eyebrow, label, intro, capabilities }: Props) {
   return (
     <DefaultSection
       eyebrow={eyebrow}
       label={label}
+      intro={intro}
       bgColor="var(--site-surface-elevated)"
       className="border-b border-[rgb(46_52_71/30%)]"
     >

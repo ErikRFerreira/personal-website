@@ -19,6 +19,12 @@ export const Capabilities: Block = {
       defaultValue: 'What I Do',
     },
     {
+      name: 'intro',
+      type: 'textarea',
+      defaultValue:
+        'From polished interfaces to robust backend systems, I build thoughtful, reliable digital products from end to end.',
+    },
+    {
       name: 'capabilities',
       type: 'array',
       fields: [

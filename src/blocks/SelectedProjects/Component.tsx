@@ -1,14 +1,16 @@
 import type { Project } from '@/payload-types'
 import DefaultSection from '@/components/DefaultSection'
 import { ProjectRow } from './ProjectRow'
+import ShapeGrid from '@/components/ShapeGrid'
 
 type SelectedProjectsProps = {
   eyebrow?: string | null
   label?: string | null
+  intro?: string | null
   projects?: (number | Project)[] | null
 }
 
-export function SelectedProjectsBlock({ eyebrow, label, projects }: SelectedProjectsProps) {
+export function SelectedProjectsBlock({ eyebrow, label, intro, projects }: SelectedProjectsProps) {
   const selectedProjects = projects?.filter(
     (project): project is Project => typeof project === 'object' && project !== null,
   )
@@ -16,9 +18,28 @@ export function SelectedProjectsBlock({ eyebrow, label, projects }: SelectedProj
   if (!selectedProjects?.length) return null
 
   return (
-    <DefaultSection eyebrow={eyebrow} label={label} bgColor="var(--site-surface-deep)">
+    <DefaultSection
+      eyebrow={eyebrow}
+      label={label}
+      intro={intro}
+      bgColor="var(--site-surface-deep)"
+      className="relative overflow-hidden"
+    >
+      <div>
+        <ShapeGrid
+          speed={0.3}
+          squareSize={40}
+          direction="diagonal" // up, down, left, right, diagonal
+          borderColor="#2F293A"
+          hoverFillColor="#222"
+          shape="square" // square, hexagon, circle, triangle
+          hoverTrailAmount={0} // number of trailing hovered shapes (0 = no trail)
+        />
+      </div>
       {selectedProjects.map((project, index) => (
-        <ProjectRow key={project.id} project={project} index={index} />
+        <div className="relative z-2" key={project.id}>
+          <ProjectRow key={project.id} project={project} index={index} />
+        </div>
       ))}
     </DefaultSection>
   )
