@@ -2,6 +2,7 @@
 
 import React from 'react'
 import type { Header as HeaderType } from '@/payload-types'
+import { CtaButton } from '@/components/CtaButton'
 import { CMSLink } from '@/components/Link'
 
 export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
@@ -9,18 +10,18 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
 
   return (
     <nav className="flex gap-6 items-center">
-      {navItems.map(({ link, isCta }, i) => (
-        <CMSLink
-          key={i}
-          {...link}
-          appearance={isCta ? 'inline' : 'link'}
-          className={
-            isCta
-              ? 'rounded-full border border-current px-4 py-1.5 text-sm leading-none transition-colors duration-200 hover:border-site-accent hover:text-site-accent'
-              : 'transition-colors duration-200 hover:text-site-accent'
-          }
-        />
-      ))}
+      {navItems.map(({ link, isCta }, i) =>
+        isCta ? (
+          <CtaButton key={i} {...link} size="sm" />
+        ) : (
+          <CMSLink
+            key={i}
+            {...link}
+            appearance="link"
+            className="transition-colors duration-200 hover:text-site-accent"
+          />
+        ),
+      )}
     </nav>
   )
 }

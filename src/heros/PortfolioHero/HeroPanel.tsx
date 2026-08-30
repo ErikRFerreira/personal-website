@@ -2,7 +2,7 @@
 
 import type { Page } from '@/payload-types'
 
-import { CMSLink } from '@/components/Link'
+import { CtaButton } from '@/components/CtaButton'
 import { Media } from '@/components/Media'
 import { ArrowRight } from 'lucide-react'
 
@@ -88,13 +88,13 @@ export function HeroPanel({
             {description && <p className="portfolio-hero__description">{description}</p>}
 
             {ctaLink && (
-              <CMSLink
+              <CtaButton
                 {...ctaLink}
-                appearance={ctaLink.appearance === 'outline' ? 'outline' : 'default'}
                 className={`portfolio-hero__cta portfolio-hero__cta--${side}`}
+                size="md"
               >
                 <ArrowRight aria-hidden="true" />
-              </CMSLink>
+              </CtaButton>
             )}
           </div>
         )}

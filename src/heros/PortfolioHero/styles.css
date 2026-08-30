@@ -240,32 +240,11 @@
 .portfolio-hero__cta {
   width: fit-content;
   min-width: 9.5rem;
-  border: 1px solid rgb(255 255 255 / 18%);
-  border-radius: 0;
-  background: rgb(18 18 18 / 78%);
   color: var(--portfolio-hero-text);
   font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  transition:
-    border-color 180ms ease,
-    background-color 180ms ease,
-    color 180ms ease,
-    transform 180ms ease;
-}
-
-.portfolio-hero__cta:hover,
-.portfolio-hero__cta:focus-visible {
-  border-color: rgb(17 217 232 / 62%);
-  background: rgb(17 217 232 / 12%);
-  color: var(--portfolio-hero-text);
-  transform: translateY(-1px);
-}
-
-.portfolio-hero__cta:focus-visible {
-  outline: 2px solid rgb(17 217 232 / 46%);
-  outline-offset: 0.28rem;
 }
 
 .portfolio-hero__cta svg {

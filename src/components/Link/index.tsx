@@ -5,7 +5,7 @@ import React from 'react'
 
 import type { Page, Post } from '@/payload-types'
 
-type CMSLinkType = {
+export type CMSLinkType = {
   appearance?: 'inline' | ButtonProps['variant']
   children?: React.ReactNode
   className?: string
@@ -20,6 +20,15 @@ type CMSLinkType = {
   url?: string | null
 }
 
+type CMSLinkDestination = Pick<CMSLinkType, 'reference' | 'type' | 'url'>
+
+export const getCMSLinkHref = ({ reference, type, url }: CMSLinkDestination) =>
+  type === 'reference' && typeof reference?.value === 'object' && reference.value.slug
+    ? `${reference.relationTo !== 'pages' ? `/${reference.relationTo}` : ''}/${
+        reference.value.slug
+      }`
+    : url
+
 export const CMSLink: React.FC<CMSLinkType> = (props) => {
   const {
     type,
@@ -33,12 +42,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     url,
   } = props
 
-  const href =
-    type === 'reference' && typeof reference?.value === 'object' && reference.value.slug
-      ? `${reference?.relationTo !== 'pages' ? `/${reference?.relationTo}` : ''}/${
-          reference.value.slug
-        }`
-      : url
+  const href = getCMSLinkHref({ reference, type, url })
 
   if (!href) return null
 
