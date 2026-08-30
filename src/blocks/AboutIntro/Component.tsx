@@ -77,7 +77,7 @@ export function AboutIntroBlock({
                   resource={portrait as MediaType}
                   fill
                   imgClassName="object-cover object-top"
-                  priority
+                  size="(max-width: 1023px) 384px, 40vw"
                 />
               ) : (
                 <div className="flex h-full flex-col items-center justify-center gap-3 text-site-text-muted">

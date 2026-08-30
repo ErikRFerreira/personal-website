@@ -1,6 +1,8 @@
 import type { LensBlock, Len } from '@/payload-types'
 import Link from 'next/link'
-import LightRays from '@/components/LightRays'
+import LazyLightRays from '@/components/LightRays/Lazy'
+import Image from 'next/image'
+import { getMediaUrl } from '@/utilities/getMediaUrl'
 
 export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock) {
   const resolvedPhotos = photos?.filter((p): p is Len => typeof p === 'object' && p !== null)
@@ -13,7 +15,7 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
       data-theme="dark"
     >
       <div className="absolute inset-x-0 top-0 h-full w-full">
-        <LightRays
+        <LazyLightRays
           raysOrigin="top-center"
           raysColor="#ffffff"
           raysSpeed={1}
@@ -68,10 +70,16 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
                 className="group mb-12 block break-inside-avoid focus-visible:outline-2 focus-visible:outline-offset-[6px] focus-visible:outline-site-border-active"
               >
                 <div className="overflow-hidden rounded-lg bg-site-surface-elevated">
-                  <img
-                    src={photoUrl}
+                  <Image
                     alt={photoAlt}
-                    className="w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transition-none"
+                    className="h-auto w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transition-none"
+                    decoding="async"
+                    height={photo.height ?? 800}
+                    loading="lazy"
+                    quality={75}
+                    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
+                    src={getMediaUrl(photoUrl, photo.updatedAt)}
+                    width={photo.width ?? 1200}
                   />
                 </div>
 

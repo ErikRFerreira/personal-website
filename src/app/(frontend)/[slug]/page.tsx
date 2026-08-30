@@ -13,8 +13,7 @@ import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-
-export const dynamic = 'force-dynamic'
+import { getPageBySlug } from '@/utilities/getPageBySlug'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -83,7 +82,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       {draft && <LivePreviewListener />}
 
       <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+      <RenderBlocks blocks={layout} deferOffscreen={decodedSlug === 'home' && !draft} />
     </article>
   )
 }
@@ -102,20 +101,5 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()
 
-  const payload = await getPayload({ config: configPromise })
-
-  const result = await payload.find({
-    collection: 'pages',
-    draft,
-    limit: 1,
-    pagination: false,
-    overrideAccess: draft,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-  })
-
-  return result.docs?.[0] || null
+  return getPageBySlug({ draft, slug })
 })

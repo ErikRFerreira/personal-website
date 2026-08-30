@@ -3,12 +3,20 @@ import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'paylo
 import { revalidatePath, revalidateTag } from 'next/cache'
 
 import type { Page } from '../../../payload-types'
+import { getPageCacheTag } from '../../../utilities/cacheTags'
 
-const getPagePaths = (slug?: string | null) => {
+export const getPagePaths = (slug?: string | null) => {
   if (slug === 'home') return ['/', '/home']
   if (!slug) return []
 
   return [`/${slug}`]
+}
+
+const revalidatePageSlug = (slug?: string | null) => {
+  if (!slug) return
+
+  getPagePaths(slug).forEach((path) => revalidatePath(path))
+  revalidateTag(getPageCacheTag(slug), 'max')
 }
 
 export const revalidatePage: CollectionAfterChangeHook<Page> = ({
@@ -22,21 +30,24 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
       paths.forEach((path) => {
         payload.logger.info(`Revalidating page at path: ${path}`)
-        revalidatePath(path)
       })
 
+      revalidatePageSlug(doc.slug)
       revalidateTag('pages-sitemap', 'max')
     }
 
-    // If the page was previously published, we need to revalidate the old path
-    if (previousDoc?._status === 'published' && doc._status !== 'published') {
+    // Invalidate a previously published path when it is unpublished or renamed.
+    if (
+      previousDoc?._status === 'published' &&
+      (doc._status !== 'published' || previousDoc.slug !== doc.slug)
+    ) {
       const oldPaths = getPagePaths(previousDoc.slug)
 
       oldPaths.forEach((oldPath) => {
         payload.logger.info(`Revalidating old page at path: ${oldPath}`)
-        revalidatePath(oldPath)
       })
 
+      revalidatePageSlug(previousDoc.slug)
       revalidateTag('pages-sitemap', 'max')
     }
   }
@@ -45,10 +56,7 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
 export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({ doc, req: { context } }) => {
   if (!context.disableRevalidate) {
-    getPagePaths(doc?.slug).forEach((path) => {
-      revalidatePath(path)
-    })
-
+    revalidatePageSlug(doc?.slug)
     revalidateTag('pages-sitemap', 'max')
   }
 

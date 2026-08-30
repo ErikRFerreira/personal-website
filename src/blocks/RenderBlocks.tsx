@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, Suspense } from 'react'
 
 import type { Page } from '@/payload-types'
 
@@ -30,8 +30,9 @@ const blockComponents = {
 
 export const RenderBlocks: React.FC<{
   blocks: Page['layout'][0][]
+  deferOffscreen?: boolean
 }> = (props) => {
-  const { blocks } = props
+  const { blocks, deferOffscreen = false } = props
 
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
@@ -46,9 +47,16 @@ export const RenderBlocks: React.FC<{
 
             if (Block) {
               return (
-                <div key={index}>
-                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
-                  <Block {...block} disableInnerContainer />
+                <div
+                  className={deferOffscreen && index > 0 ? 'homepage-deferred-block' : undefined}
+                  data-block-type={blockType}
+                  data-deferred={deferOffscreen && index > 0 ? 'true' : undefined}
+                  key={block.id ?? index}
+                >
+                  <Suspense fallback={<div aria-hidden="true" className="min-h-24" />}>
+                    {/* @ts-expect-error there may be some mismatch between the expected types here */}
+                    <Block {...block} disableInnerContainer />
+                  </Suspense>
                 </div>
               )
             }

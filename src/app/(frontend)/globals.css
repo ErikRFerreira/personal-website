@@ -316,3 +316,8 @@ html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
 }
+/* Keep homepage block HTML available while letting the browser skip off-screen layout and paint. */
+.homepage-deferred-block {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1000px;
+}

@@ -1,5 +1,7 @@
 import type { Project } from '@/payload-types'
 import { Tag } from '@/components/Tag'
+import Image from 'next/image'
+import { getMediaUrl } from '@/utilities/getMediaUrl'
 
 type Props = {
   project: Project
@@ -81,9 +83,14 @@ export function ProjectRow({ project, index }: Props) {
           ].join(' ')}
         >
           {image?.url && (
-            <img
-              src={image.url}
+            <Image
               alt={image.alt ?? project.title}
+              decoding="async"
+              fill
+              loading="lazy"
+              quality={75}
+              sizes="(max-width: 767px) 100vw, 50vw"
+              src={getMediaUrl(image.url, image.updatedAt)}
               className="h-full w-full object-cover transition-transform duration-200 ease-out hover:scale-[1.02] motion-reduce:transition-none"
             />
           )}

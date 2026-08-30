@@ -1,7 +1,7 @@
 import type { Project } from '@/payload-types'
 import DefaultSection from '@/components/DefaultSection'
 import { ProjectRow } from './ProjectRow'
-import ShapeGrid from '@/components/ShapeGrid'
+import LazyShapeGrid from '@/components/ShapeGrid/Lazy'
 
 type SelectedProjectsProps = {
   eyebrow?: string | null
@@ -25,17 +25,15 @@ export function SelectedProjectsBlock({ eyebrow, label, intro, projects }: Selec
       bgColor="var(--site-surface-deep)"
       className="relative overflow-hidden"
     >
-      <div>
-        <ShapeGrid
-          speed={0.3}
-          squareSize={40}
-          direction="diagonal" // up, down, left, right, diagonal
-          borderColor="#2F293A"
-          hoverFillColor="#222"
-          shape="square" // square, hexagon, circle, triangle
-          hoverTrailAmount={0} // number of trailing hovered shapes (0 = no trail)
-        />
-      </div>
+      <LazyShapeGrid
+        speed={0.3}
+        squareSize={40}
+        direction="diagonal"
+        borderColor="#2F293A"
+        hoverFillColor="#222"
+        shape="square"
+        hoverTrailAmount={0}
+      />
       {selectedProjects.map((project, index) => (
         <div className="relative z-2" key={project.id}>
           <ProjectRow key={project.id} project={project} index={index} />
