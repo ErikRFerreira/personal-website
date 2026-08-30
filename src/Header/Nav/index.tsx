@@ -18,7 +18,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
             key={i}
             {...link}
             appearance="link"
-            className="transition-colors duration-200 hover:text-site-accent"
+            className="text-site-text-primary transition-colors duration-200 hover:text-site-accent"
           />
         ),
       )}

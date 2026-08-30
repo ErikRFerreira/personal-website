@@ -13,7 +13,7 @@ test.describe('Frontend', () => {
     page.on('pageerror', (error) => browserErrors.push(error.message))
 
     await page.goto('http://localhost:3000')
-    await expect(page).toHaveTitle(/Payload Website Template/)
+    await expect(page).toHaveTitle(/Erik Fereira - Developer & Photographer/)
     const heading = page.locator('h1').first()
     await expect(heading).toBeVisible()
     await expect(heading).not.toHaveText('')

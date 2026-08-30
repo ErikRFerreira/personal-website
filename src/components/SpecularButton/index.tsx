@@ -42,6 +42,7 @@ type SharedSpecularButtonProps = {
 
 type SpecularButtonAsButtonProps = SharedSpecularButtonProps & {
   disabled?: boolean
+  form?: string
   href?: never
   onClick?: MouseEventHandler<HTMLButtonElement>
   rel?: never
@@ -51,6 +52,7 @@ type SpecularButtonAsButtonProps = SharedSpecularButtonProps & {
 
 type SpecularButtonAsLinkProps = SharedSpecularButtonProps & {
   disabled?: never
+  form?: never
   href: string
   onClick?: MouseEventHandler<HTMLAnchorElement>
   rel?: string
@@ -161,6 +163,7 @@ const SpecularButton = ({
   proximity = 250,
   autoAnimate = false,
   disabled = false,
+  form,
   href,
   onClick,
   rel,
@@ -377,6 +380,7 @@ const SpecularButton = ({
       ref={btnRef as Ref<HTMLButtonElement>}
       type={type}
       disabled={disabled}
+      form={form}
       onClick={onClick as MouseEventHandler<HTMLButtonElement>}
     >
       {content}

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
-import { Button } from '@/components/ui/button'
+import { CtaButton } from '@/components/CtaButton'
 import { ContactCard } from '@/components/ContactCard'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 import type { FormBlock as FormBlockType_Generated } from '@/payload-types'
@@ -167,14 +167,14 @@ export const FormBlock: React.FC<
           </div>
 
           {layout === 'contact' ? (
-            <Button className="gap-2 px-6 py-3" form={formID} type="submit">
+            <CtaButton form={formID} size="md" type="submit">
               {effectiveSubmitLabel}
               <ArrowRight className="h-4 w-4" />
-            </Button>
+            </CtaButton>
           ) : (
-            <Button form={formID} type="submit" variant="default">
+            <CtaButton form={formID} size="md" type="submit">
               {effectiveSubmitLabel}
-            </Button>
+            </CtaButton>
           )}
         </form>
       )}
@@ -185,7 +185,7 @@ export const FormBlock: React.FC<
   if (layout === 'contact') {
     return (
       <section className="site-section" data-theme="dark">
-        <div className="site-container">
+        <div className="site-container pb-24">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[3fr_2fr] lg:gap-16">
             {/* Left: heading + form */}
             <div>
@@ -206,7 +206,7 @@ export const FormBlock: React.FC<
               )}
 
               {/* Form with underline-style inputs */}
-              <div className="[&_input]:rounded-none [&_input]:border-0 [&_input]:border-b [&_input]:bg-transparent [&_input]:px-0 [&_input]:text-site-text-primary [&_input]:placeholder:text-site-text-muted [&_input]:focus-visible:border-site-border-active [&_input]:focus-visible:ring-0 [&_label]:text-[0.625rem] [&_label]:font-semibold [&_label]:tracking-widest [&_label]:text-site-text-muted [&_label]:uppercase [&_textarea]:rounded-none [&_textarea]:border-0 [&_textarea]:border-b [&_textarea]:bg-transparent [&_textarea]:px-0 [&_textarea]:text-site-text-primary [&_textarea]:placeholder:text-site-text-muted [&_textarea]:focus-visible:border-site-border-active [&_textarea]:focus-visible:ring-0 [&_[role=combobox]]:rounded-none [&_[role=combobox]]:border-0 [&_[role=combobox]]:border-b [&_[role=combobox]]:bg-transparent [&_[role=combobox]]:text-site-text-primary [&_[role=combobox]]:focus:ring-0">
+              <div className="[&_input]:rounded-none [&_input]:border-0 [&_input]:border-b [&_input]:bg-transparent [&_input]:px-0 [&_input]:text-site-text-primary [&_input]:placeholder:text-site-text-muted [&_input]:focus-visible:border-site-border-active [&_input]:focus-visible:ring-0 [&_input]:focus-visible:outline-none [&_label]:text-[0.625rem] [&_label]:font-semibold [&_label]:tracking-widest [&_label]:text-site-text-muted [&_label]:uppercase [&_textarea]:rounded-none [&_textarea]:border-0 [&_textarea]:border-b [&_textarea]:bg-transparent [&_textarea]:px-0 [&_textarea]:text-site-text-primary [&_textarea]:placeholder:text-site-text-muted [&_textarea]:focus-visible:border-site-border-active [&_textarea]:focus-visible:ring-0 [&_textarea]:focus-visible:outline-none [&_[role=combobox]]:rounded-none [&_[role=combobox]]:border-0 [&_[role=combobox]]:border-b [&_[role=combobox]]:bg-transparent [&_[role=combobox]]:text-site-text-primary [&_[role=combobox]]:focus-visible:border-site-border-active [&_[role=combobox]]:focus-visible:ring-0 [&_[role=combobox]]:focus-visible:outline-none [&_[data-slot=checkbox]]:focus-visible:ring-0 [&_[data-slot=checkbox]]:focus-visible:outline-none">
                 {formJSX}
               </div>
             </div>

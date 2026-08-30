@@ -321,3 +321,16 @@ html[data-theme='light'] {
   content-visibility: auto;
   contain-intrinsic-size: auto 1000px;
 }
+
+/* Form labels stay highlighted once their control has a value. */
+.form-field label {
+  transition: color 200ms ease-out;
+}
+
+.form-field:focus-within label,
+.form-field:has(input:not(:placeholder-shown)) label,
+.form-field:has(textarea:not(:placeholder-shown)) label,
+.form-field:has([data-slot='select-trigger']:not([data-placeholder])) label,
+.form-field:has([data-slot='checkbox'][data-state='checked']) label {
+  color: var(--site-accent);
+}

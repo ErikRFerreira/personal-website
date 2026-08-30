@@ -1,7 +1,9 @@
-import { cleanup, render } from '@testing-library/react'
+import { cleanup, fireEvent, render } from '@testing-library/react'
+import type { FormEvent } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import type { Header } from '@/payload-types'
+import { CtaButton } from '@/components/CtaButton'
 import { HeaderNav } from '@/Header/Nav'
 import { HeroPanel } from '@/heros/PortfolioHero/HeroPanel'
 
@@ -19,7 +21,36 @@ vi.mock('ogl', () => ({
 
 afterEach(cleanup)
 
-describe('shared CTA links', () => {
+describe('shared CTA', () => {
+  it('retains native form submission and disabled semantics', () => {
+    const onSubmit = vi.fn((event: FormEvent) => event.preventDefault())
+    const { getByRole, rerender } = render(
+      <form onSubmit={onSubmit}>
+        <CtaButton size="md" type="submit">
+          Send message
+        </CtaButton>
+      </form>,
+    )
+
+    const submitButton = getByRole('button', { name: 'Send message' })
+    expect(submitButton.classList.contains('specular-button--md')).toBe(true)
+    expect(submitButton.getAttribute('type')).toBe('submit')
+
+    fireEvent.click(submitButton)
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+
+    rerender(
+      <form onSubmit={onSubmit}>
+        <CtaButton disabled size="md" type="submit">
+          Send message
+        </CtaButton>
+      </form>,
+    )
+
+    fireEvent.click(getByRole('button', { name: 'Send message' }))
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+  })
+
   it('renders only flagged header items with the compact specular CTA', () => {
     const data = {
       navItems: [

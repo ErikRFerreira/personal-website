@@ -32,6 +32,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 80)
+
+    handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -41,7 +43,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       className={[
         'top-0 left-0 w-full z-20 transition-all duration-300',
         scrolled
-          ? 'fixed bg-background shadow-md text-foreground'
+          ? 'fixed bg-site-surface-deep/95 text-site-text-primary shadow-lg backdrop-blur-md'
           : 'absolute bg-black/10 backdrop-blur-sm text-white',
       ].join(' ')}
       style={{ height: 'var(--header-height)' }}

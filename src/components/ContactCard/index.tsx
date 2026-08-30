@@ -1,6 +1,7 @@
 import React from 'react'
 import { Mail, MapPin } from 'lucide-react'
 import { Media } from '@/components/Media'
+import SpotlightCard from '@/components/SpotlightCard'
 import { Tag } from '@/components/Tag'
 import type { FormBlock } from '@/payload-types'
 
@@ -25,7 +26,10 @@ export const ContactCard: React.FC<QuickAccessCard> = ({
     : '?'
 
   return (
-    <div className="rounded-site-card border border-site-border-subtle bg-site-surface-elevated p-[var(--site-card-padding)] backdrop-blur-sm">
+    <SpotlightCard
+      className="rounded-site-card! border! border-site-border-subtle! bg-site-surface-elevated! p-(--site-card-padding)! backdrop-blur-sm"
+      spotlightColor="rgba(59, 130, 246, 0.25)"
+    >
       {/* Avatar + name */}
       <div className="mb-6 flex items-center gap-4">
         <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-full">
@@ -83,6 +87,6 @@ export const ContactCard: React.FC<QuickAccessCard> = ({
           <span className="italic">{responseTime}</span>
         </div>
       )}
-    </div>
+    </SpotlightCard>
   )
 }
