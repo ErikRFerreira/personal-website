@@ -243,6 +243,7 @@ export interface Page {
     | AboutIntroBlock
     | InitiateProjectBlock
     | RevealTextBlock
+    | HomeBioBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1129,6 +1130,28 @@ export interface RevealTextBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeBioBlock".
+ */
+export interface HomeBioBlock {
+  eyebrow?: string | null;
+  name: string;
+  roles: string;
+  /**
+   * Keep this concise — ideally 2–3 sentences.
+   */
+  bio: string;
+  portrait: number | Media;
+  email: string;
+  cta: {
+    label: string;
+    url: string;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'homeBio';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "series".
  */
 export interface Series {
@@ -1504,6 +1527,7 @@ export interface PagesSelect<T extends boolean = true> {
         aboutIntro?: T | AboutIntroBlockSelect<T>;
         initiateProject?: T | InitiateProjectBlockSelect<T>;
         revealText?: T | RevealTextBlockSelect<T>;
+        homeBio?: T | HomeBioBlockSelect<T>;
       };
   meta?:
     | T
@@ -1725,6 +1749,26 @@ export interface InitiateProjectBlockSelect<T extends boolean = true> {
 export interface RevealTextBlockSelect<T extends boolean = true> {
   text?: T;
   supportingText?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeBioBlock_select".
+ */
+export interface HomeBioBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  name?: T;
+  roles?: T;
+  bio?: T;
+  portrait?: T;
+  email?: T;
+  cta?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+      };
   id?: T;
   blockName?: T;
 }

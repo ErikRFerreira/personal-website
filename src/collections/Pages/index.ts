@@ -14,6 +14,7 @@ import { LensBlock } from '../../blocks/LensBlock/config'
 import { AboutIntro } from '../../blocks/AboutIntro/config'
 import { InitiateProject } from '../../blocks/InitiateProject/config'
 import { RevealText } from '../../blocks/RevealText/config'
+import { HomeBio } from '../../blocks/HomeBio/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -92,6 +93,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 AboutIntro,
                 InitiateProject,
                 RevealText,
+                HomeBio,
               ],
               required: true,
               admin: {

@@ -22,7 +22,7 @@ export type CtaButtonProps = CtaButtonLinkProps | CtaButtonActionProps
 
 const CTA_APPEARANCE = {
   radius: 18,
-  tint: '#121212',
+  tint: '#0c1324',
   tintOpacity: 0.78,
   hoverTint: '#11d9e8',
   hoverTintOpacity: 0.12,
@@ -31,7 +31,7 @@ const CTA_APPEARANCE = {
   textColor: '#f2f2ef',
   focusColor: '#11d9e8',
   lineColor: '#11d9e8',
-  baseColor: '#666666',
+  baseColor: '#3a4a63',
   intensity: 1,
   shineSize: 10,
   shineFade: 40,

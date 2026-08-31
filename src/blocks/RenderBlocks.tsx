@@ -14,6 +14,7 @@ import Capabilities from './Capabilities/Component'
 import { LensBlockComponent } from './LensBlock/Component'
 import { AboutIntroBlock } from './AboutIntro/Component'
 import { RevealText } from './RevealText/Component'
+import HomeBio from './HomeBio/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -28,6 +29,7 @@ const blockComponents = {
   lensBlock: LensBlockComponent,
   aboutIntro: AboutIntroBlock,
   revealText: RevealText,
+  homeBio: HomeBio,
 }
 
 export const RenderBlocks: React.FC<{
