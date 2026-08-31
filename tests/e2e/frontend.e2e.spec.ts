@@ -145,6 +145,8 @@ test.describe('Frontend', () => {
       await page.emulateMedia({ reducedMotion: 'no-preference' })
     }
 
+    await expectReveal('[data-block-type="homeBio"] [data-reveal-name="home-bio"]')
+
     expect(browserErrors).toEqual([])
   })
 

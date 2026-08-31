@@ -3,6 +3,7 @@ import React from 'react'
 import type { HomeBioBlock as HomeBioBlockProps, Media as MediaType } from '@/payload-types'
 import { Media } from '@/components/Media'
 import { CtaButton } from '@/components/CtaButton'
+import { RevealOnScroll } from '@/components/RevealOnScroll'
 
 export function HomeBio({ eyebrow, name, roles, bio, portrait, email, cta }: HomeBioBlockProps) {
   return (
@@ -12,7 +13,10 @@ export function HomeBio({ eyebrow, name, roles, bio, portrait, email, cta }: Hom
       style={{ backgroundColor: 'var(--site-surface-deep)' }}
     >
       <div className="site-container">
-        <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
+        <RevealOnScroll
+          className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12"
+          revealName="home-bio"
+        >
           {/* ── Text column ── */}
           <div className="order-2 flex flex-col items-start lg:order-1 lg:col-span-7">
             {eyebrow && (
@@ -62,7 +66,7 @@ export function HomeBio({ eyebrow, name, roles, bio, portrait, email, cta }: Hom
               )}
             </div>
           </div>
-        </div>
+        </RevealOnScroll>
       </div>
     </section>
   )

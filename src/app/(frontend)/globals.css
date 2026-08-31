@@ -334,12 +334,6 @@ html[data-theme='light'] {
 
   padding-bottom: calc(var(--site-section-space-mobile) + var(--capabilities-transition-space));
   border-bottom: 0;
-  background-image: linear-gradient(
-    to bottom,
-    var(--site-surface-elevated) 0%,
-    var(--site-surface-elevated) 52%,
-    var(--site-surface-base) 100%
-  );
 }
 
 @media (width >= 48rem) {
