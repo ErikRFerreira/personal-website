@@ -328,6 +328,125 @@ html[data-theme='light'] {
   contain-intrinsic-size: auto 1000px;
 }
 
+/* Give Capabilities room to dissolve into an immediately following RevealText block. */
+[data-block-type='capabilities'][data-transition-to='revealText'] .capabilities-section {
+  --capabilities-transition-space: clamp(3rem, 5vw, 6rem);
+
+  padding-bottom: calc(var(--site-section-space-mobile) + var(--capabilities-transition-space));
+  border-bottom: 0;
+  background-image: linear-gradient(
+    to bottom,
+    var(--site-surface-elevated) 0%,
+    var(--site-surface-elevated) 52%,
+    var(--site-surface-base) 100%
+  );
+}
+
+@media (width >= 48rem) {
+  [data-block-type='capabilities'][data-transition-to='revealText'] .capabilities-section {
+    padding-bottom: calc(var(--site-section-space-tablet) + var(--capabilities-transition-space));
+  }
+}
+
+@media (width >= 64rem) {
+  [data-block-type='capabilities'][data-transition-to='revealText'] .capabilities-section {
+    padding-bottom: calc(var(--site-section-space-desktop) + var(--capabilities-transition-space));
+  }
+}
+
+/* Keep the Lens atmosphere continuous with an immediately preceding RevealText block. */
+[data-block-type='lensBlock'] {
+  --lens-ambient-feather-tail: clamp(3rem, 5vw, 5rem);
+  --lens-transition-overlap: clamp(10rem, 18vw, 18rem);
+}
+
+[data-block-type='lensBlock'][data-transition-from='revealText'] {
+  margin-top: calc(-1 * var(--lens-transition-overlap));
+}
+
+[data-block-type='lensBlock'][data-transition-from='revealText'] .lens-block-section {
+  padding-top: calc(var(--site-section-space-mobile) + var(--lens-transition-overlap));
+}
+
+.lens-ambient-layer {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3000px;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 48% 52% at 50% var(--lens-transition-overlap),
+      rgb(223 228 255 / 16%) 0,
+      rgb(153 174 219 / 8%) 42%,
+      transparent 74%
+    ),
+    radial-gradient(
+      ellipse 68% 38% at 50% var(--lens-transition-overlap),
+      rgb(0 242 255 / 6%) 0,
+      transparent 72%
+    );
+  opacity: 0.42;
+  animation: lens-ambient-pulse 8s ease-in-out infinite;
+  will-change: opacity;
+}
+
+[data-block-type='lensBlock'][data-transition-from='revealText'] .lens-ambient-layer {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgb(0 0 0 / 5%) clamp(2rem, 3vw, 3.5rem),
+    rgb(0 0 0 / 24%) clamp(4.5rem, 7.5vw, 7.5rem),
+    rgb(0 0 0 / 58%) clamp(7rem, 12vw, 12rem),
+    rgb(0 0 0 / 86%) var(--lens-transition-overlap),
+    #000 calc(var(--lens-transition-overlap) + var(--lens-ambient-feather-tail)),
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgb(0 0 0 / 5%) clamp(2rem, 3vw, 3.5rem),
+    rgb(0 0 0 / 24%) clamp(4.5rem, 7.5vw, 7.5rem),
+    rgb(0 0 0 / 58%) clamp(7rem, 12vw, 12rem),
+    rgb(0 0 0 / 86%) var(--lens-transition-overlap),
+    #000 calc(var(--lens-transition-overlap) + var(--lens-ambient-feather-tail)),
+    #000 100%
+  );
+}
+
+@keyframes lens-ambient-pulse {
+  0%,
+  100% {
+    opacity: 0.42;
+  }
+
+  50% {
+    opacity: 0.68;
+  }
+}
+
+@media (width >= 48rem) {
+  [data-block-type='lensBlock'][data-transition-from='revealText'] .lens-block-section {
+    padding-top: calc(var(--site-section-space-tablet) + var(--lens-transition-overlap));
+  }
+}
+
+@media (width >= 64rem) {
+  [data-block-type='lensBlock'][data-transition-from='revealText'] .lens-block-section {
+    padding-top: calc(var(--site-section-space-desktop) + var(--lens-transition-overlap));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lens-ambient-layer {
+    opacity: 0.52;
+    animation: none;
+    will-change: auto;
+  }
+}
+
 /* Form labels stay highlighted once their control has a value. */
 .form-field label {
   transition: color 200ms ease-out;

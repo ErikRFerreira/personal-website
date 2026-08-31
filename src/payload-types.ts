@@ -242,6 +242,7 @@ export interface Page {
     | LensBlock
     | AboutIntroBlock
     | InitiateProjectBlock
+    | RevealTextBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1117,6 +1118,17 @@ export interface InitiateProjectBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RevealTextBlock".
+ */
+export interface RevealTextBlock {
+  text: string;
+  supportingText: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'revealText';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "series".
  */
 export interface Series {
@@ -1491,6 +1503,7 @@ export interface PagesSelect<T extends boolean = true> {
         lensBlock?: T | LensBlockSelect<T>;
         aboutIntro?: T | AboutIntroBlockSelect<T>;
         initiateProject?: T | InitiateProjectBlockSelect<T>;
+        revealText?: T | RevealTextBlockSelect<T>;
       };
   meta?:
     | T
@@ -1702,6 +1715,16 @@ export interface InitiateProjectBlockSelect<T extends boolean = true> {
         appearance?: T;
       };
   partnershipNote?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RevealTextBlock_select".
+ */
+export interface RevealTextBlockSelect<T extends boolean = true> {
+  text?: T;
+  supportingText?: T;
   id?: T;
   blockName?: T;
 }
