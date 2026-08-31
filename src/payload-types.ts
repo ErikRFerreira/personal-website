@@ -1053,6 +1053,10 @@ export interface Len {
    */
   generateSlug?: boolean | null;
   slug: string;
+  /**
+   * Override the archive crop and frame shape, or use the uploaded image dimensions.
+   */
+  archiveFormat: 'auto' | 'portrait' | 'landscape' | 'square' | 'panorama';
   status: 'draft' | 'published';
   updatedAt: string;
   createdAt: string;
@@ -1952,6 +1956,7 @@ export interface LensSelect<T extends boolean = true> {
       };
   generateSlug?: T;
   slug?: T;
+  archiveFormat?: T;
   status?: T;
   updatedAt?: T;
   createdAt?: T;

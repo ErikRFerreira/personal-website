@@ -154,6 +154,25 @@ export const Lens: CollectionConfig = {
     },
     slugField(),
     {
+      name: 'archiveFormat',
+      type: 'select',
+      label: 'Archive Format',
+      options: [
+        { label: 'Auto (from image)', value: 'auto' },
+        { label: 'Portrait', value: 'portrait' },
+        { label: 'Landscape', value: 'landscape' },
+        { label: 'Square', value: 'square' },
+        { label: 'Panorama', value: 'panorama' },
+      ],
+      defaultValue: 'auto',
+      required: true,
+      admin: {
+        description:
+          'Override the archive crop and frame shape, or use the uploaded image dimensions.',
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'status',
       type: 'select',
       label: 'Published Status',

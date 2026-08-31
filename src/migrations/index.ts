@@ -1,10 +1,11 @@
-import * as migration_20260507_141650_add_portfolio_hero_split_fields from './20260507_141650_add_portfolio_hero_split_fields';
-import * as migration_20260512_114149_add_lens_collection from './20260512_114149_add_lens_collection';
-import * as migration_20260522_022329_add_series_to_lens from './20260522_022329_add_series_to_lens';
-import * as migration_20260602_122156_add_portfolio_hero_right_media from './20260602_122156_add_portfolio_hero_right_media';
-import * as migration_20260602_133849_add_portfolio_hero_cdn_video_urls from './20260602_133849_add_portfolio_hero_cdn_video_urls';
-import * as migration_20260605_032917 from './20260605_032917';
-import * as migration_20260606_131310 from './20260606_131310';
+import * as migration_20260507_141650_add_portfolio_hero_split_fields from './20260507_141650_add_portfolio_hero_split_fields'
+import * as migration_20260512_114149_add_lens_collection from './20260512_114149_add_lens_collection'
+import * as migration_20260522_022329_add_series_to_lens from './20260522_022329_add_series_to_lens'
+import * as migration_20260602_122156_add_portfolio_hero_right_media from './20260602_122156_add_portfolio_hero_right_media'
+import * as migration_20260602_133849_add_portfolio_hero_cdn_video_urls from './20260602_133849_add_portfolio_hero_cdn_video_urls'
+import * as migration_20260605_032917 from './20260605_032917'
+import * as migration_20260606_131310 from './20260606_131310'
+import * as migration_20260830_122849_add_lens_archive_format from './20260830_122849_add_lens_archive_format'
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20260606_131310.up,
     down: migration_20260606_131310.down,
-    name: '20260606_131310'
+    name: '20260606_131310',
   },
-];
+  {
+    up: migration_20260830_122849_add_lens_archive_format.up,
+    down: migration_20260830_122849_add_lens_archive_format.down,
+    name: '20260830_122849_add_lens_archive_format',
+  },
+]
