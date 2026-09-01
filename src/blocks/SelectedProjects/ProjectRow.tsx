@@ -1,5 +1,6 @@
 import type { Project } from '@/payload-types'
 import { Tag } from '@/components/Tag'
+import { CtaButton } from '@/components/CtaButton'
 import Image from 'next/image'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 
@@ -67,13 +68,17 @@ export function ProjectRow({ project, index }: Props) {
             </div>
           )}
 
-          <a
-            href={`/projects/${project.slug}`}
-            className="inline-flex items-center text-sm font-bold tracking-[0.01em] text-site-text-primary transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-200 ease-out hover:text-site-accent focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-site-border-active focus-visible:shadow-[0_0_0_4px_var(--site-glow-accent)] motion-reduce:transition-none"
+          <CtaButton
+            className="self-start"
+            size="md"
+            type="custom"
+            url={`/projects/${project.slug}`}
           >
             Read Case Study
-            <span className="ml-2">&rarr;</span>
-          </a>
+            <span className="ml-2" aria-hidden="true">
+              &rarr;
+            </span>
+          </CtaButton>
         </div>
 
         <div

@@ -4,6 +4,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import ArchiveHeader from '@/components/ArchiveHeader'
 import { ProjectArchiveItem } from '@/components/ProjectArchiveItem'
+import LazyShapeGrid from '@/components/ShapeGrid/Lazy'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -29,8 +30,19 @@ export default async function Page() {
   })
 
   return (
-    <main className="site-section pt-28 md:pt-36">
-      <div className="site-container pbe-24">
+    <main className="site-section pt-28 md:pt-36 relative">
+      <div className="absolute inset-0 z-1 overflow-hidden h-full">
+        <LazyShapeGrid
+          speed={0.3}
+          squareSize={40}
+          direction="diagonal"
+          borderColor="#2F293A"
+          hoverFillColor="#222"
+          shape="square"
+          hoverTrailAmount={0}
+        />
+      </div>
+      <div className="site-container pbe-24 relative z-2">
         <ArchiveHeader
           title="Projects"
           subtitle="A collection of digital products built with thoughtful design and robust engineering."

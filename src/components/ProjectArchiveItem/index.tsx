@@ -95,12 +95,12 @@ export function ProjectArchiveItem({ project }: ProjectArchiveItemProps) {
         className="group block rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
         href={`/projects/${project.slug}`}
       >
-        <div className="relative aspect-[21/9] w-full overflow-hidden bg-site-surface-elevated">
+        <div className="relative aspect-21/9 w-full overflow-hidden bg-site-surface-elevated">
           <div ref={imageFrameRef} className="absolute -inset-y-3 inset-x-0 will-change-transform">
             {image?.url && (
               <Image
                 alt={image.alt || project.title}
-                className="object-cover opacity-80 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.02] group-hover:opacity-100 motion-reduce:transition-none"
+                className="object-cover opacity-80 transition-all duration-500 ease-out will-change-transform group-hover:scale-105 group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none motion-reduce:will-change-auto"
                 fill
                 quality={75}
                 sizes="(max-width: 1535px) calc(100vw - 3rem), 84rem"
@@ -117,7 +117,7 @@ export function ProjectArchiveItem({ project }: ProjectArchiveItemProps) {
               {project.title}
             </h2>
             {project.description && (
-              <p className="mt-3 text-sm leading-[1.65] text-site-text-secondary transition-[color,transform] duration-300 group-hover:translate-x-1 group-hover:text-[#cbd5e1] md:text-base motion-reduce:transform-none motion-reduce:transition-none">
+              <p className="mt-3 text-sm leading-[1.65] text-site-text-secondary transition-colors duration-200 group-hover:text-site-text-primary md:text-base">
                 {project.description}
               </p>
             )}
