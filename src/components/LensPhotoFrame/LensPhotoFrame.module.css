@@ -34,7 +34,7 @@
 .imageStage {
   z-index: 5;
   overflow: hidden;
-  background: var(--site-surface-deep);
+  background: transparent;
 }
 
 .frameLabel {

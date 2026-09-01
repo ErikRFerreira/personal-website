@@ -1,10 +1,25 @@
 import type { CollectionConfig } from 'payload'
+import { slugField } from 'payload'
+
+import { anyone } from '../../access/anyone'
+import { authenticated } from '../../access/authenticated'
 
 export const Series: CollectionConfig = {
   slug: 'series',
+  labels: {
+    singular: 'Lens Collection',
+    plural: 'Lens Collections',
+  },
+  access: {
+    create: authenticated,
+    delete: authenticated,
+    read: anyone,
+    update: authenticated,
+  },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'description', 'updatedAt'],
+    group: 'Photography',
   },
   fields: [
     {
@@ -21,7 +36,7 @@ export const Series: CollectionConfig = {
       },
     },
     {
-      name: 'Cover Image',
+      name: 'coverImage',
       type: 'upload',
       relationTo: 'media',
       label: 'Cover Image',
@@ -29,14 +44,6 @@ export const Series: CollectionConfig = {
         description: 'An optional image representing the series or collection',
       },
     },
-    {
-      name: 'slug',
-      type: 'text',
-      required: true,
-      unique: true,
-      admin: {
-        description: 'A URL-friendly identifier for the series (e.g., "summer-2024")',
-      },
-    },
+    slugField({ fieldToUse: 'name' }),
   ],
 }

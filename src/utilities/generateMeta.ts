@@ -23,17 +23,22 @@ export const generateMeta = async (args: {
   doc: Partial<Page> | Partial<Post> | null
 }): Promise<Metadata> => {
   const { doc } = args
+  const meta = doc?.meta as
+    | (NonNullable<Page['meta'] | Post['meta']> & {
+        image?: Media | Config['db']['defaultIDType'] | null
+      })
+    | undefined
 
-  const ogImage = getImageURL(doc?.meta?.image)
+  const ogImage = getImageURL(meta?.image)
 
-  const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Erik Fereira - Developer & Photographer'
+  const title = meta?.title
+    ? meta.title + ' | Erik Fereira - Developer & Photographer'
     : 'Erik Fereira - Developer & Photographer'
 
   return {
-    description: doc?.meta?.description,
+    description: meta?.description,
     openGraph: mergeOpenGraph({
-      description: doc?.meta?.description || '',
+      description: meta?.description || '',
       images: ogImage
         ? [
             {

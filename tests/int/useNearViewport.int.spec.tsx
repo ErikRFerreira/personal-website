@@ -38,11 +38,13 @@ describe('useNearViewport', () => {
       'matchMedia',
       vi.fn(() => ({
         addEventListener: vi.fn(),
+        addListener: vi.fn(),
         dispatchEvent: vi.fn(),
         matches: false,
         media: '(prefers-reduced-motion: reduce)',
         onchange: null,
         removeEventListener: removeMotionListener,
+        removeListener: vi.fn(),
       })),
     )
   })
@@ -70,11 +72,13 @@ describe('useNearViewport', () => {
   it('does not observe effects when reduced motion is requested', async () => {
     vi.mocked(window.matchMedia).mockReturnValue({
       addEventListener: vi.fn(),
+      addListener: vi.fn(),
       dispatchEvent: vi.fn(),
       matches: true,
       media: '(prefers-reduced-motion: reduce)',
       onchange: null,
       removeEventListener: removeMotionListener,
+      removeListener: vi.fn(),
     })
 
     const { container } = render(<Probe />)

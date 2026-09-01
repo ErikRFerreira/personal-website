@@ -992,9 +992,13 @@ export interface Len {
   title: string;
   photo: number | Media;
   /**
-   * Group this photo under a named series or collection
+   * Group this photo in a managed Lens collection
    */
-  series?: string | null;
+  series?: (number | null) | Series;
+  /**
+   * Classify this photo with shared site taxonomy terms
+   */
+  categories?: (number | Category)[] | null;
   /**
    * A brief caption or teaser shown in listings
    */
@@ -1042,10 +1046,6 @@ export interface Len {
    * Usage rights, licensing terms, or copyright notice
    */
   licensingText?: string | null;
-  /**
-   * Other photos from the same shoot or series
-   */
-  relatedPhotos?: (number | Len)[] | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -1060,6 +1060,29 @@ export interface Len {
    */
   archiveFormat: 'auto' | 'portrait' | 'landscape' | 'square' | 'panorama';
   status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "series".
+ */
+export interface Series {
+  id: number;
+  name: string;
+  /**
+   * A brief description of the series or collection
+   */
+  description?: string | null;
+  /**
+   * An optional image representing the series or collection
+   */
+  coverImage?: (number | null) | Media;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1149,28 +1172,6 @@ export interface HomeBioBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'homeBio';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "series".
- */
-export interface Series {
-  id: number;
-  name: string;
-  /**
-   * A brief description of the series or collection
-   */
-  description?: string | null;
-  /**
-   * An optional image representing the series or collection
-   */
-  'Cover Image'?: (number | null) | Media;
-  /**
-   * A URL-friendly identifier for the series (e.g., "summer-2024")
-   */
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1991,6 +1992,7 @@ export interface LensSelect<T extends boolean = true> {
   title?: T;
   photo?: T;
   series?: T;
+  categories?: T;
   intro?: T;
   fullStory?: T;
   location?: T;
@@ -2014,7 +2016,6 @@ export interface LensSelect<T extends boolean = true> {
         id?: T;
       };
   licensingText?: T;
-  relatedPhotos?: T;
   meta?:
     | T
     | {
@@ -2035,7 +2036,8 @@ export interface LensSelect<T extends boolean = true> {
 export interface SeriesSelect<T extends boolean = true> {
   name?: T;
   description?: T;
-  'Cover Image'?: T;
+  coverImage?: T;
+  generateSlug?: T;
   slug?: T;
   updatedAt?: T;
   createdAt?: T;

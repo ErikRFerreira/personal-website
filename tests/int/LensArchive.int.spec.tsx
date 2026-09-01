@@ -8,11 +8,11 @@ import {
   resolveLensArchiveFormat,
   type LensArchivePhoto,
 } from '@/components/LensArchive'
-import type { Media } from '@/payload-types'
+import type { Media, Series } from '@/payload-types'
 
 vi.mock('next/image', () => ({
-  // eslint-disable-next-line @next/next/no-img-element
   default: ({ alt, src, style }: { alt: string; src: string; style?: CSSProperties }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img alt={alt} src={src} style={style} />
   ),
 }))
@@ -43,13 +43,23 @@ function makeMedia(id: number, overrides: Partial<Media> = {}): Media {
   }
 }
 
+function makeSeries(id = 1, name = 'Underwater'): Series {
+  return {
+    createdAt: '2026-01-01T00:00:00.000Z',
+    id,
+    name,
+    slug: name.trim().toLowerCase().replaceAll(' ', '-'),
+    updatedAt: '2026-01-01T00:00:00.000Z',
+  }
+}
+
 function makePhoto(id: number, overrides: Partial<LensArchivePhoto> = {}): LensArchivePhoto {
   return {
     archiveFormat: 'auto',
     id,
     location: 'Red Sea',
     photo: makeMedia(id),
-    series: 'Underwater',
+    series: makeSeries(),
     slug: `photo-${id}`,
     title: `Photo ${id}`,
     year: 2025,
@@ -105,7 +115,9 @@ describe('LensArchive', () => {
       formatLensArchiveCaption(makePhoto(2, { location: null, series: null, year: 2024 })),
     ).toBe('2024')
     expect(
-      formatLensArchiveCaption(makePhoto(3, { location: 'Cenote', series: ' ', year: null })),
+      formatLensArchiveCaption(
+        makePhoto(3, { location: 'Cenote', series: makeSeries(3, ' '), year: null }),
+      ),
     ).toBe('Cenote')
   })
 

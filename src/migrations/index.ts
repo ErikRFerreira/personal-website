@@ -6,6 +6,7 @@ import * as migration_20260602_133849_add_portfolio_hero_cdn_video_urls from './
 import * as migration_20260605_032917 from './20260605_032917'
 import * as migration_20260606_131310 from './20260606_131310'
 import * as migration_20260830_122849_add_lens_archive_format from './20260830_122849_add_lens_archive_format'
+import * as migration_20260901_081202_lens_taxonomies_and_detail from './20260901_081202_lens_taxonomies_and_detail'
 
 export const migrations = [
   {
@@ -47,5 +48,10 @@ export const migrations = [
     up: migration_20260830_122849_add_lens_archive_format.up,
     down: migration_20260830_122849_add_lens_archive_format.down,
     name: '20260830_122849_add_lens_archive_format',
+  },
+  {
+    up: migration_20260901_081202_lens_taxonomies_and_detail.up,
+    down: migration_20260901_081202_lens_taxonomies_and_detail.down,
+    name: '20260901_081202_lens_taxonomies_and_detail',
   },
 ]

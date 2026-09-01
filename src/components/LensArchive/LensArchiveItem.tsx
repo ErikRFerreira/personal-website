@@ -1,13 +1,13 @@
 'use client'
 
-import { Aperture, ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 
 import type { Len } from '@/payload-types'
+import { LensPhotoFrame } from '@/components/LensPhotoFrame'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
-import styles from './LensArchive.module.css'
 
 export type LensArchivePhoto = Pick<
   Len,
@@ -61,7 +61,8 @@ const formatPresentations: Record<ResolvedLensFormat, { aspect: string; stage: s
 export function formatLensArchiveCaption(
   photo: Pick<LensArchivePhoto, 'location' | 'series' | 'year'>,
 ): string {
-  const subject = photo.series?.trim()
+  const subject =
+    typeof photo.series === 'object' && photo.series !== null ? photo.series.name.trim() : null
   const placeAndYear = [photo.location?.trim(), photo.year].filter(Boolean).join(', ')
 
   return [subject, placeAndYear].filter(Boolean).join(' · ')
@@ -104,7 +105,9 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
   const caption = formatLensArchiveCaption(photo)
   const image = typeof photo.photo === 'object' && photo.photo !== null ? photo.photo : null
   const objectPosition = `${image?.focalX ?? 50}% ${image?.focalY ?? 50}%`
-  const archiveContext = [photo.series?.trim(), photo.location?.trim()].filter(Boolean).join(' / ')
+  const collectionName =
+    typeof photo.series === 'object' && photo.series !== null ? photo.series.name.trim() : null
+  const archiveContext = [collectionName, photo.location?.trim()].filter(Boolean).join(' / ')
   const technicalPrimary = [
     photo.technicalMetadata?.camera?.trim(),
     photo.technicalMetadata?.lens?.trim(),
@@ -114,7 +117,7 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
     .filter(Boolean)
     .join(' · ')
   const technicalSecondary = [
-    photo.technicalMetadata?.iso ? `ISO ${photo.technicalMetadata.iso}` : null,
+    photo.technicalMetadata?.iso != null ? `ISO ${photo.technicalMetadata.iso}` : null,
     photo.technicalMetadata?.focalLength?.trim(),
   ]
     .filter(Boolean)
@@ -129,8 +132,8 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
 
     if (!article || motionQuery.matches || typeof IntersectionObserver === 'undefined') {
-      setIsVisible(true)
-      return
+      const timeout = window.setTimeout(() => setIsVisible(true), 0)
+      return () => window.clearTimeout(timeout)
     }
 
     const observer = new IntersectionObserver(
@@ -194,73 +197,47 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
         href={`/lens/${photo.slug}`}
       >
         {hasArchiveFrame ? (
-          <div
-            className={`${styles.technicalFrame} relative w-full overflow-hidden ${layout.presentation.aspect}`}
+          <LensPhotoFrame
+            className={`w-full ${layout.presentation.aspect}`}
+            context={archiveContext || 'Field Study'}
             data-archive-frame="true"
             data-archive-format={format}
-          >
-            <div className={`${styles.imageStage} ${layout.presentation.stage}`}>
-              <div
-                className={
-                  layout.large
-                    ? 'absolute -inset-y-3 inset-x-0 will-change-transform'
-                    : 'absolute inset-0'
-                }
-                ref={parallaxRef}
-              >
-                <Image
-                  alt={image.alt?.trim() || photo.title}
-                  className="object-cover opacity-90 transition-[transform,opacity] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:scale-[1.02] group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none motion-reduce:will-change-auto"
-                  fill
-                  quality={75}
-                  sizes={
-                    layout.columns === 'md:col-span-12'
-                      ? '(max-width: 767px) calc(84vw - 3rem), (max-width: 1535px) 76vw, 64rem'
-                      : layout.columns === 'md:col-span-8'
-                        ? '(max-width: 767px) calc(84vw - 3rem), 47vw'
-                        : '(max-width: 767px) calc(90vw - 3rem), 45vw'
-                  }
-                  src={getMediaUrl(image.url, image.updatedAt)}
-                  style={{ objectPosition }}
-                />
-              </div>
-            </div>
-
-            <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/25 via-transparent to-black/10 opacity-60" />
-
-            <div className={`${styles.frameLabel} absolute top-[2.4%] left-3 z-30 md:left-4`}>
-              <span>{archiveContext || 'Field Study'}</span>
-              {photo.year && <span className="text-white/35"> / {photo.year}</span>}
-            </div>
-
-            <div
-              className={`${styles.frameLabel} absolute top-[2.1%] right-3 z-30 hidden items-center gap-1.5 sm:flex md:right-4`}
-            >
-              <Aperture aria-hidden="true" className="size-3.5" />
-              <span className="leading-[0.9]">
-                Erik
-                <br />
-                Ferreira
+            overlay={
+              <span className="absolute right-4 bottom-[14%] z-30 flex translate-y-2 items-center gap-1.5 font-mono text-[0.625rem] font-bold tracking-[0.18em] text-site-accent uppercase opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none md:right-5">
+                View <ArrowUpRight aria-hidden="true" className="size-3.5" />
               </span>
+            }
+            photoTitle={photo.title}
+            stageClassName={layout.presentation.stage}
+            technicalPrimary={layout.large ? technicalPrimary : undefined}
+            technicalSecondary={layout.large ? technicalSecondary : undefined}
+            year={photo.year}
+          >
+            <div
+              className={
+                layout.large
+                  ? 'absolute -inset-y-3 inset-x-0 will-change-transform'
+                  : 'absolute inset-0'
+              }
+              ref={parallaxRef}
+            >
+              <Image
+                alt={image.alt?.trim() || photo.title}
+                className="object-cover opacity-90 transition-[transform,opacity] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:scale-[1.02] group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none motion-reduce:will-change-auto"
+                fill
+                quality={75}
+                sizes={
+                  layout.columns === 'md:col-span-12'
+                    ? '(max-width: 767px) calc(84vw - 3rem), (max-width: 1535px) 76vw, 64rem'
+                    : layout.columns === 'md:col-span-8'
+                      ? '(max-width: 767px) calc(84vw - 3rem), 47vw'
+                      : '(max-width: 767px) calc(90vw - 3rem), 45vw'
+                }
+                src={getMediaUrl(image.url, image.updatedAt)}
+                style={{ objectPosition }}
+              />
             </div>
-
-            <div className={`${styles.frameLabel} absolute bottom-[2.7%] left-3 z-30 md:left-4`}>
-              {photo.title}
-            </div>
-
-            {layout.large && (technicalPrimary || technicalSecondary) && (
-              <div
-                className={`${styles.frameLabel} absolute right-3 bottom-[2.1%] z-30 hidden max-w-[55%] text-right sm:block md:right-4`}
-              >
-                {technicalPrimary && <div>{technicalPrimary}</div>}
-                {technicalSecondary && <div className="text-white/40">{technicalSecondary}</div>}
-              </div>
-            )}
-
-            <span className="absolute right-4 bottom-[14%] z-30 flex translate-y-2 items-center gap-1.5 font-mono text-[0.625rem] font-bold tracking-[0.18em] text-site-accent uppercase opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none md:right-5">
-              View <ArrowUpRight aria-hidden="true" className="size-3.5" />
-            </span>
-          </div>
+          </LensPhotoFrame>
         ) : (
           <div
             className={`relative w-full overflow-hidden bg-site-surface-elevated ${layout.presentation.aspect}`}
