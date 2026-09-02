@@ -1,8 +1,21 @@
 import styles from './ArchiveHeader.module.css'
 
-function ArchiveHeader({ title, subtitle }: { title: string; subtitle?: string }) {
+type ArchiveHeaderProps = {
+  detail?: string
+  subtitle?: string
+  title: string
+}
+
+function ArchiveHeader({ detail, title, subtitle }: ArchiveHeaderProps) {
   return (
     <header className="mb-16 flex w-full max-w-3xl flex-col items-start md:mb-24">
+      {detail && (
+        <p
+          className={`${styles.detail} mb-5 font-mono text-[0.6875rem] leading-none font-bold tracking-[0.18em] text-site-accent uppercase`}
+        >
+          {detail}
+        </p>
+      )}
       <h1
         className={`${styles.title} text-2xl leading-[1.08] font-bold tracking-tighter text-site-text-primary md:text-6xl`}
       >

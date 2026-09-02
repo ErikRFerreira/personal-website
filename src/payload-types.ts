@@ -241,6 +241,11 @@ export interface Page {
     | CapabilitiesBlock
     | LensBlock
     | AboutIntroBlock
+    | AboutHeroBlock
+    | AboutStoryBlock
+    | AboutDisciplinesBlock
+    | AboutProtocolBlock
+    | AboutTimelineBlock
     | InitiateProjectBlock
     | RevealTextBlock
     | HomeBioBlock
@@ -1110,6 +1115,108 @@ export interface AboutIntroBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutHeroBlock".
+ */
+export interface AboutHeroBlock {
+  name: string;
+  intro: string;
+  image: number | Media;
+  imageLabel?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutStoryBlock".
+ */
+export interface AboutStoryBlock {
+  eyebrow?: string | null;
+  heading: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutStory';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutDisciplinesBlock".
+ */
+export interface AboutDisciplinesBlock {
+  eyebrow?: string | null;
+  items: {
+    title: string;
+    description: string;
+    icon: number | Media;
+    tags?:
+      | {
+          tag: string;
+          id?: string | null;
+        }[]
+      | null;
+    image?: (number | null) | Media;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutDisciplines';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutProtocolBlock".
+ */
+export interface AboutProtocolBlock {
+  eyebrow?: string | null;
+  heading: string;
+  principles: {
+    text: string;
+    quote: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutProtocol';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutTimelineBlock".
+ */
+export interface AboutTimelineBlock {
+  eyebrow?: string | null;
+  milestones: {
+    year: string;
+    title?: string | null;
+    description: string;
+    image: number | Media;
+    metadata?:
+      | {
+          label: string;
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutTimeline';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "InitiateProjectBlock".
  */
 export interface InitiateProjectBlock {
@@ -1526,6 +1633,11 @@ export interface PagesSelect<T extends boolean = true> {
         capabilities?: T | CapabilitiesBlockSelect<T>;
         lensBlock?: T | LensBlockSelect<T>;
         aboutIntro?: T | AboutIntroBlockSelect<T>;
+        aboutHero?: T | AboutHeroBlockSelect<T>;
+        aboutStory?: T | AboutStoryBlockSelect<T>;
+        aboutDisciplines?: T | AboutDisciplinesBlockSelect<T>;
+        aboutProtocol?: T | AboutProtocolBlockSelect<T>;
+        aboutTimeline?: T | AboutTimelineBlockSelect<T>;
         initiateProject?: T | InitiateProjectBlockSelect<T>;
         revealText?: T | RevealTextBlockSelect<T>;
         homeBio?: T | HomeBioBlockSelect<T>;
@@ -1718,6 +1830,95 @@ export interface AboutIntroBlockSelect<T extends boolean = true> {
         id?: T;
       };
   portrait?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutHeroBlock_select".
+ */
+export interface AboutHeroBlockSelect<T extends boolean = true> {
+  name?: T;
+  intro?: T;
+  image?: T;
+  imageLabel?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutStoryBlock_select".
+ */
+export interface AboutStoryBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  body?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutDisciplinesBlock_select".
+ */
+export interface AboutDisciplinesBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        tags?:
+          | T
+          | {
+              tag?: T;
+              id?: T;
+            };
+        image?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutProtocolBlock_select".
+ */
+export interface AboutProtocolBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  principles?:
+    | T
+    | {
+        text?: T;
+        quote?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutTimelineBlock_select".
+ */
+export interface AboutTimelineBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  milestones?:
+    | T
+    | {
+        year?: T;
+        title?: T;
+        description?: T;
+        image?: T;
+        metadata?:
+          | T
+          | {
+              label?: T;
+              value?: T;
+              id?: T;
+            };
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

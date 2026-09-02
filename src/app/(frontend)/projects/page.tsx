@@ -5,6 +5,7 @@ import { getPayload } from 'payload'
 import ArchiveHeader from '@/components/ArchiveHeader'
 import { ProjectArchiveItem } from '@/components/ProjectArchiveItem'
 import LazyShapeGrid from '@/components/ShapeGrid/Lazy'
+import { formatProjectsArchiveDetail } from './formatArchiveDetail'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -28,6 +29,8 @@ export default async function Page() {
       year: true,
     },
   })
+  const projectCount = projects.docs.length
+  const archiveDetail = formatProjectsArchiveDetail(projectCount)
 
   return (
     <main className="site-section pt-28 md:pt-36 relative">
@@ -44,13 +47,19 @@ export default async function Page() {
       </div>
       <div className="site-container pbe-24 relative z-2">
         <ArchiveHeader
+          detail={archiveDetail}
           title="Projects"
           subtitle="A collection of digital products built with thoughtful design and robust engineering."
         />
 
-        <div className="flex flex-col gap-20 md:gap-28 lg:gap-32">
-          {projects.docs.map((project) => (
-            <ProjectArchiveItem key={project.id} project={project} />
+        <div className="flex flex-col">
+          {projects.docs.map((project, index) => (
+            <ProjectArchiveItem
+              index={index}
+              key={project.id}
+              project={project}
+              total={projectCount}
+            />
           ))}
         </div>
       </div>

@@ -12,6 +12,11 @@ import { SelectedProjects } from '../../blocks/SelectedProjects/config'
 import { Capabilities } from '../../blocks/Capabilities/config'
 import { LensBlock } from '../../blocks/LensBlock/config'
 import { AboutIntro } from '../../blocks/AboutIntro/config'
+import { AboutHero } from '../../blocks/AboutHero/config'
+import { AboutStory } from '../../blocks/AboutStory/config'
+import { AboutDisciplines } from '../../blocks/AboutDisciplines/config'
+import { AboutProtocol } from '../../blocks/AboutProtocol/config'
+import { AboutTimeline } from '../../blocks/AboutTimeline/config'
 import { InitiateProject } from '../../blocks/InitiateProject/config'
 import { RevealText } from '../../blocks/RevealText/config'
 import { HomeBio } from '../../blocks/HomeBio/config'
@@ -91,6 +96,11 @@ export const Pages: CollectionConfig<'pages'> = {
                 Capabilities,
                 LensBlock,
                 AboutIntro,
+                AboutHero,
+                AboutStory,
+                AboutDisciplines,
+                AboutProtocol,
+                AboutTimeline,
                 InitiateProject,
                 RevealText,
                 HomeBio,
