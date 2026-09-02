@@ -3,13 +3,17 @@ import {
   DefaultNodeTypes,
   SerializedBlockNode,
   SerializedLinkNode,
+  type SerializedTextNode,
   type DefaultTypedEditorState,
 } from '@payloadcms/richtext-lexical'
 import {
   JSXConvertersFunction,
+  type JSXConverter,
   LinkJSXConverter,
   RichText as ConvertRichText,
+  TextJSXConverter,
 } from '@payloadcms/richtext-lexical/react'
+import { cloneElement, isValidElement, type ReactNode } from 'react'
 
 import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
 
@@ -35,37 +39,82 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   return relationTo === 'posts' ? `/posts/${slug}` : `/${slug}`
 }
 
-const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
-  ...defaultConverters,
-  ...LinkJSXConverter({ internalDocToHref }),
-  blocks: {
-    banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
-    mediaBlock: ({ node }) => (
-      <MediaBlock
-        className="col-start-1 col-span-3"
-        imgClassName="m-0"
-        {...node.fields}
-        captionClassName="mx-auto max-w-[48rem]"
-        enableGutter={false}
-        disableInnerContainer={true}
-      />
-    ),
-    code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
-    cta: ({ node }) => <CallToActionBlock {...node.fields} />,
-  },
-})
+function addWordSpans(content: ReactNode, keyPrefix: string): ReactNode {
+  if (typeof content === 'string') {
+    return content.split(/(\s+)/).map((part, index) =>
+      /^\s+$/.test(part) ? (
+        part
+      ) : (
+        <span className="word scroll-reveal-word" key={`${keyPrefix}-${index}`}>
+          {part}
+        </span>
+      ),
+    )
+  }
+
+  if (Array.isArray(content)) {
+    return content.map((child, index) => addWordSpans(child, `${keyPrefix}-${index}`))
+  }
+
+  if (isValidElement<{ children?: ReactNode }>(content)) {
+    return cloneElement(
+      content,
+      undefined,
+      addWordSpans(content.props.children, `${keyPrefix}-formatted`),
+    )
+  }
+
+  return content
+}
+
+const wordSpanTextConverter: JSXConverter<SerializedTextNode> = (args) => {
+  const converter = TextJSXConverter.text
+  const convertedText = typeof converter === 'function' ? converter(args) : converter
+
+  return addWordSpans(convertedText, `text-${args.childIndex}`)
+}
+
+const createJSXConverters =
+  (enableWordSpans: boolean): JSXConvertersFunction<NodeTypes> =>
+  ({ defaultConverters }) => ({
+    ...defaultConverters,
+    ...LinkJSXConverter({ internalDocToHref }),
+    ...(enableWordSpans ? { text: wordSpanTextConverter } : {}),
+    blocks: {
+      banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
+      mediaBlock: ({ node }) => (
+        <MediaBlock
+          className="col-start-1 col-span-3"
+          imgClassName="m-0"
+          {...node.fields}
+          captionClassName="mx-auto max-w-[48rem]"
+          enableGutter={false}
+          disableInnerContainer={true}
+        />
+      ),
+      code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
+      cta: ({ node }) => <CallToActionBlock {...node.fields} />,
+    },
+  })
 
 type Props = {
   data: DefaultTypedEditorState
   enableGutter?: boolean
   enableProse?: boolean
+  enableWordSpans?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
 export default function RichText(props: Props) {
-  const { className, enableProse = true, enableGutter = true, ...rest } = props
+  const {
+    className,
+    enableProse = true,
+    enableGutter = true,
+    enableWordSpans = false,
+    ...rest
+  } = props
   return (
     <ConvertRichText
-      converters={jsxConverters}
+      converters={createJSXConverters(enableWordSpans)}
       className={cn(
         'payload-richtext',
         {

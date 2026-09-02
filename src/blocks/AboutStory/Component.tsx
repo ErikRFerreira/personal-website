@@ -12,6 +12,7 @@ export function AboutStoryBlock({ eyebrow, heading, body }: AboutStoryBlockProps
           data={body}
           enableGutter={false}
           enableProse={false}
+          enableWordSpans
         />
       }
       eyebrow={eyebrow}

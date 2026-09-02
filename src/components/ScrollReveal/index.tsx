@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 interface ScrollRevealProps {
   children: ReactNode
+  as?: 'div' | 'h3'
   scrollContainerRef?: RefObject<HTMLElement>
   enableBlur?: boolean
   baseOpacity?: number
@@ -22,6 +23,7 @@ interface ScrollRevealProps {
 
 const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
+  as = 'h3',
   scrollContainerRef,
   enableBlur = true,
   baseOpacity = 0.1,
@@ -32,14 +34,16 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   rotationEnd = 'bottom bottom',
   wordAnimationEnd = 'bottom bottom',
 }) => {
-  const containerRef = useRef<HTMLHeadingElement>(null)
+  const containerRef = useRef<HTMLElement>(null)
 
   const splitText = useMemo(() => {
-    const text = typeof children === 'string' ? children : ''
+    if (typeof children !== 'string') return children
+
+    const text = children
     return text.split(/(\s+)/).map((word, index) => {
       if (word.match(/^\s+$/)) return word
       return (
-        <span className="word" key={index}>
+        <span className="word scroll-reveal-word" key={index}>
           {word}
         </span>
       )
@@ -49,28 +53,31 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
 
     const context = gsap.context(() => {
       const scroller =
         scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window
 
-      gsap.fromTo(
-        el,
-        { transformOrigin: '0% 50%', rotate: baseRotation },
-        {
-          ease: 'none',
-          rotate: 0,
-          scrollTrigger: {
-            trigger: el,
-            scroller,
-            start: 'top bottom',
-            end: rotationEnd,
-            scrub: true,
+      if (baseRotation !== 0) {
+        gsap.fromTo(
+          el,
+          { transformOrigin: '0% 50%', rotate: baseRotation },
+          {
+            ease: 'none',
+            rotate: 0,
+            scrollTrigger: {
+              trigger: el,
+              scroller,
+              start: 'top bottom',
+              end: rotationEnd,
+              scrub: true,
+            },
           },
-        },
-      )
+        )
+      }
 
-      const wordElements = el.querySelectorAll<HTMLElement>('.word')
+      const wordElements = el.querySelectorAll<HTMLElement>('.scroll-reveal-word')
 
       gsap.fromTo(
         wordElements,
@@ -120,8 +127,24 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
     blurStrength,
   ])
 
+  if (as === 'div') {
+    return (
+      <div
+        ref={containerRef as React.RefObject<HTMLDivElement>}
+        className={`scroll-reveal ${containerClassName}`}
+        data-scroll-reveal="true"
+      >
+        <div className={`scroll-reveal-text ${textClassName}`}>{splitText}</div>
+      </div>
+    )
+  }
+
   return (
-    <h3 ref={containerRef} className={`scroll-reveal ${containerClassName}`}>
+    <h3
+      ref={containerRef as React.RefObject<HTMLHeadingElement>}
+      className={`scroll-reveal ${containerClassName}`}
+      data-scroll-reveal="true"
+    >
       <span className={`scroll-reveal-text ${textClassName}`}>{splitText}</span>
     </h3>
   )

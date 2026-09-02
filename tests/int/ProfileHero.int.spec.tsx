@@ -46,6 +46,8 @@ describe('ProfileHero', () => {
     expect(screen.getByTestId('profile-media')).not.toBeNull()
     expect(container.querySelector('section')?.getAttribute('data-has-image')).toBe('true')
     expect(container.querySelector('[data-reveal-name="profile-hero-image"]')).not.toBeNull()
+    expect(container.querySelector('[data-parallax-text]')).not.toBeNull()
+    expect(container.querySelector('[data-parallax-image]')).not.toBeNull()
   })
 
   it('renders the image fallback when the relationship is not populated', () => {

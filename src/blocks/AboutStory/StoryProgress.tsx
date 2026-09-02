@@ -1,6 +1,7 @@
 'use client'
 
 import { RevealOnScroll } from '@/components/RevealOnScroll'
+import ScrollReveal from '@/components/ScrollReveal'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
 import { useRef, type ReactNode } from 'react'
 
@@ -82,9 +83,16 @@ export function StoryProgress({ body, eyebrow, heading }: StoryProgressProps) {
             </div>
           </RevealOnScroll>
 
-          <RevealOnScroll delay={240} revealName="about-story-body">
+          <ScrollReveal
+            as="div"
+            baseOpacity={0.1}
+            baseRotation={0}
+            blurStrength={4}
+            containerClassName="about-story-body-reveal"
+            enableBlur
+          >
             {body}
-          </RevealOnScroll>
+          </ScrollReveal>
         </div>
       </div>
     </section>

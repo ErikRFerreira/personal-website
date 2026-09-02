@@ -12,6 +12,10 @@ vi.mock('@/components/RevealOnScroll', () => ({
   ),
 }))
 
+vi.mock('@/components/ScrollReveal', () => ({
+  default: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+}))
+
 vi.mock('@/components/BlurText', () => ({
   default: ({ text }: { text?: string }) => <span>{text}</span>,
 }))
