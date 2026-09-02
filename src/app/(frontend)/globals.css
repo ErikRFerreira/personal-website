@@ -351,7 +351,12 @@ html[data-theme='light'] {
 /* Keep the Lens atmosphere continuous with an immediately preceding RevealText block. */
 [data-block-type='lensBlock'] {
   --lens-ambient-feather-tail: clamp(3rem, 5vw, 5rem);
+  --lens-ambient-origin-y: var(--lens-transition-overlap);
   --lens-transition-overlap: clamp(10rem, 18vw, 18rem);
+}
+
+.lens-detail-page {
+  --lens-ambient-origin-y: clamp(8rem, 14vw, 14rem);
 }
 
 [data-block-type='lensBlock'][data-transition-from='revealText'] {
@@ -372,19 +377,24 @@ html[data-theme='light'] {
   pointer-events: none;
   background:
     radial-gradient(
-      ellipse 48% 52% at 50% var(--lens-transition-overlap),
+      ellipse 48% 52% at 50% var(--lens-ambient-origin-y),
       rgb(223 228 255 / 16%) 0,
       rgb(153 174 219 / 8%) 42%,
       transparent 74%
     ),
     radial-gradient(
-      ellipse 68% 38% at 50% var(--lens-transition-overlap),
+      ellipse 68% 38% at 50% var(--lens-ambient-origin-y),
       rgb(0 242 255 / 6%) 0,
       transparent 72%
     );
   opacity: 0.42;
   animation: lens-ambient-pulse 8s ease-in-out infinite;
   will-change: opacity;
+}
+
+.lens-ambient-layer--detail {
+  height: 100%;
+  min-height: 100svh;
 }
 
 [data-block-type='lensBlock'][data-transition-from='revealText'] .lens-ambient-layer {

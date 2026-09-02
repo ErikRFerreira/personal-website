@@ -12,7 +12,7 @@ export const LensRelatedPhotos: React.FC<Props> = ({ collection, photos }) => {
   if (photos.length === 0) return null
 
   return (
-    <section className="bg-site-surface-deep py-16 md:py-20">
+    <section className="py-16 md:py-20">
       <div className="site-container">
         <div className="mb-10 flex items-end justify-between gap-8">
           <div className="flex flex-col gap-2">

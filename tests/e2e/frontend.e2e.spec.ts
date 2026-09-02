@@ -143,6 +143,44 @@ test.describe('Frontend', () => {
         .poll(() => ambientLayer.evaluate((element) => getComputedStyle(element).animationName))
         .toBe('none')
       await page.emulateMedia({ reducedMotion: 'no-preference' })
+
+      const lensHref = await lensLink.getAttribute('href')
+      const detailPage = await page.context().newPage()
+      const detailErrors: string[] = []
+      detailPage.on('pageerror', (error) => detailErrors.push(error.message))
+
+      await detailPage.goto(new URL(lensHref!, page.url()).href, { waitUntil: 'networkidle' })
+
+      const detailRoot = detailPage.locator('.lens-detail-page')
+      const detailAmbientLayer = detailRoot.locator(':scope > .lens-ambient-layer--detail')
+      await expect(detailRoot).toBeVisible()
+      await expect(detailAmbientLayer).toHaveAttribute('aria-hidden', 'true')
+      await expect(detailRoot.locator('canvas')).toHaveCount(0)
+      await expect
+        .poll(() =>
+          detailAmbientLayer.evaluate((element) => getComputedStyle(element).animationName),
+        )
+        .toBe('lens-ambient-pulse')
+      await expect
+        .poll(() =>
+          detailRoot.evaluate((root) => {
+            const ambient = root.querySelector<HTMLElement>('.lens-ambient-layer--detail')
+            return ambient
+              ? Math.abs(ambient.getBoundingClientRect().height - root.scrollHeight)
+              : -1
+          }),
+        )
+        .toBeLessThanOrEqual(1)
+
+      await detailPage.emulateMedia({ reducedMotion: 'reduce' })
+      await expect
+        .poll(() =>
+          detailAmbientLayer.evaluate((element) => getComputedStyle(element).animationName),
+        )
+        .toBe('none')
+
+      expect(detailErrors).toEqual([])
+      await detailPage.close()
     }
 
     await expectReveal('[data-block-type="homeBio"] [data-reveal-name="home-bio"]')
