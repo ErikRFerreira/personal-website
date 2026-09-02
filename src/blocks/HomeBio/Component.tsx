@@ -10,7 +10,7 @@ export function HomeBio({ eyebrow, name, roles, bio, portrait, email, cta }: Hom
     <section
       className="site-section"
       data-theme="dark"
-      style={{ backgroundColor: 'var(--site-surface-deep)' }}
+      style={{ backgroundColor: 'var(--site-surface-base)' }}
     >
       <div className="site-container">
         <RevealOnScroll

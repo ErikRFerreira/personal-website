@@ -25,12 +25,12 @@ export function ProjectRow({ project, index }: Props) {
 
       <div className="grid items-center gap-10 md:grid-cols-[minmax(0,31.625rem)_minmax(0,1fr)] md:gap-12 lg:gap-16">
         <div className={['flex flex-col', !isEven ? 'md:order-2' : ''].join(' ')}>
-          <h3 className="mb-6 max-w-[27rem] text-[2.5rem] leading-[0.98] font-extrabold text-[#dfe4ff] md:text-[2.875rem]">
+          <h3 className="mb-6 max-w-[27rem] text-[2.5rem] leading-[0.98] font-extrabold text-site-text-primary md:text-[2.875rem]">
             {project.title}
           </h3>
 
           {project.description && (
-            <p className="mb-8 max-w-[27.25rem] text-lg leading-[1.6] text-[#a9b1c9]">
+            <p className="mb-8 max-w-[27.25rem] text-lg leading-[1.6] text-site-text-secondary">
               {project.description}
             </p>
           )}
@@ -39,13 +39,13 @@ export function ProjectRow({ project, index }: Props) {
             <div className="mb-7 grid max-w-[31.625rem] grid-cols-1 rounded-lg border border-site-border-subtle bg-transparent px-6 py-5 sm:grid-cols-2 sm:gap-8">
               {project.metrics.slice(0, 2).map((metric, i) => (
                 <div key={metric.id ?? i} className="flex min-w-0 flex-col gap-2 py-2">
-                  <span className="text-[0.6875rem] leading-[1.2] font-bold tracking-[0.18em] text-[#b3bbd3] uppercase">
+                  <span className="text-[0.6875rem] leading-[1.2] font-bold tracking-[0.18em] text-site-text-muted uppercase">
                     {metric.label}
                   </span>
                   <span
                     className={[
                       'text-[1.375rem] leading-[1.25] font-extrabold',
-                      i === 0 ? 'text-site-accent' : 'text-[#dfe4ff]',
+                      i === 0 ? 'text-site-accent' : 'text-site-text-primary',
                     ].join(' ')}
                   >
                     {metric.value}
@@ -60,7 +60,7 @@ export function ProjectRow({ project, index }: Props) {
               {project.tech.map((tech) => (
                 <Tag
                   key={tech.id}
-                  className="bg-[#182036] px-4 py-2 text-[0.6875rem] tracking-[0.08em] text-[#b8c0d6]"
+                  className="bg-site-surface-elevated px-4 py-2 text-[0.6875rem] tracking-[0.08em] text-site-text-secondary"
                 >
                   {tech.techName}
                 </Tag>

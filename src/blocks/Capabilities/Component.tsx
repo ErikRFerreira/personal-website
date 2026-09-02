@@ -25,11 +25,11 @@ function Capabilities({ eyebrow, label, intro, capabilities }: Props) {
       label={label}
       intro={intro}
       bgColor="var(--site-surface-elevated)"
-      className="capabilities-section border-b border-[rgb(46_52_71/30%)]"
+      className="capabilities-section border-b border-site-border-subtle"
       revealHeader
     >
       {Array.isArray(capabilities) && capabilities.length > 0 && (
-        <div className="border-t border-[rgb(46_52_71/30%)] pt-20">
+        <div className="border-t border-site-border-subtle pt-20">
           <div className="grid grid-cols-1 items-stretch gap-(--site-card-gap) md:grid-cols-2 lg:grid-cols-4">
             {capabilities.map((capability, i) => (
               <RevealOnScroll

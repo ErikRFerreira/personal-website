@@ -15,23 +15,25 @@
     --header-height: 3.8125rem; /* 61px */
 
     /* Shared dark site tokens: intentionally stable when the broader app theme changes. */
-    --site-surface-deep: #070d1f;
-    --site-surface-base: #0c1324;
-    --site-surface-elevated: #151d2d;
-    --site-surface-footer: #191f31;
-    --site-text-primary: #ffffff;
-    --site-text-secondary: #94a3b8;
-    --site-text-muted: #64748b;
+    --site-surface-deep: #050809;
+    --site-surface-base: #071214;
+    --site-surface-elevated: #0b171b;
+    --site-surface-photo: var(--site-surface-deep);
+    --site-surface-footer: var(--site-surface-deep);
+    --site-text-primary: #f2f2ef;
+    --site-text-secondary: #a7b0b2;
+    --site-text-muted: #798487;
     --site-accent: #00f2ff;
     --site-accent-hover: #70fbff;
-    --site-accent-foreground: #05070b;
-    --site-border-subtle: rgb(148 163 184 / 18%);
+    --site-accent-foreground: #050809;
+    --site-border-subtle: rgb(121 132 135 / 22%);
+    --site-border-control: #5f7073;
     --site-border-active: rgb(0 242 255 / 72%);
-    --site-overlay-image-dark: rgb(5 7 11 / 72%);
+    --site-overlay-image-dark: rgb(5 8 9 / 72%);
     --site-overlay-image-readable: linear-gradient(
       180deg,
-      rgb(5 7 11 / 10%) 0%,
-      rgb(5 7 11 / 88%) 100%
+      rgb(5 8 9 / 10%) 0%,
+      rgb(5 8 9 / 88%) 100%
     );
     --site-glow-accent: rgb(0 242 255 / 18%);
     --site-container-max: 90rem;
@@ -241,6 +243,8 @@
   --color-site-surface-deep: var(--site-surface-deep);
   --color-site-surface-base: var(--site-surface-base);
   --color-site-surface-elevated: var(--site-surface-elevated);
+  --color-site-surface-photo: var(--site-surface-photo);
+  --color-site-surface-footer: var(--site-surface-footer);
   --color-site-text-primary: var(--site-text-primary);
   --color-site-text-secondary: var(--site-text-secondary);
   --color-site-text-muted: var(--site-text-muted);
@@ -248,6 +252,7 @@
   --color-site-accent-hover: var(--site-accent-hover);
   --color-site-accent-foreground: var(--site-accent-foreground);
   --color-site-border-subtle: var(--site-border-subtle);
+  --color-site-border-control: var(--site-border-control);
   --color-site-border-active: var(--site-border-active);
   --color-site-overlay-dark: var(--site-overlay-image-dark);
   --color-site-glow-accent: var(--site-glow-accent);
@@ -266,8 +271,26 @@
 
 @layer utilities {
   .site-page {
+    --background: var(--site-surface-deep);
+    --foreground: var(--site-text-primary);
+    --card: var(--site-surface-elevated);
+    --card-foreground: var(--site-text-primary);
+    --popover: var(--site-surface-elevated);
+    --popover-foreground: var(--site-text-primary);
+    --primary: var(--site-accent);
+    --primary-foreground: var(--site-accent-foreground);
+    --secondary: var(--site-surface-base);
+    --secondary-foreground: var(--site-text-primary);
+    --muted: var(--site-surface-elevated);
+    --muted-foreground: var(--site-text-secondary);
+    --accent: var(--site-surface-elevated);
+    --accent-foreground: var(--site-text-primary);
+    --border: var(--site-border-subtle);
+    --input: var(--site-border-control);
+    --ring: var(--site-accent);
+
     flex: 1;
-    background: var(--site-surface-base);
+    background: var(--site-surface-deep);
     color: var(--site-text-primary);
   }
 
@@ -279,13 +302,22 @@
   }
 
   .site-section {
+    --background: var(--site-surface-base);
+    --foreground: var(--site-text-primary);
+    --card: var(--site-surface-elevated);
+    --card-foreground: var(--site-text-primary);
+    --popover: var(--site-surface-elevated);
+    --popover-foreground: var(--site-text-primary);
     --primary: var(--site-accent);
     --primary-foreground: var(--site-accent-foreground);
     --secondary: var(--site-surface-elevated);
     --secondary-foreground: var(--site-text-primary);
     --accent: var(--site-surface-elevated);
     --accent-foreground: var(--site-text-primary);
+    --muted: var(--site-surface-elevated);
+    --muted-foreground: var(--site-text-secondary);
     --border: var(--site-border-subtle);
+    --input: var(--site-border-control);
     --ring: var(--site-accent);
 
     background: var(--site-surface-base);
@@ -378,8 +410,8 @@ html[data-theme='light'] {
   background:
     radial-gradient(
       ellipse 48% 52% at 50% var(--lens-ambient-origin-y),
-      rgb(223 228 255 / 16%) 0,
-      rgb(153 174 219 / 8%) 42%,
+      rgb(167 176 178 / 12%) 0,
+      rgb(41 111 116 / 8%) 42%,
       transparent 74%
     ),
     radial-gradient(

@@ -11,6 +11,7 @@ import {
   type Ref,
 } from 'react'
 import { Renderer, Program, Mesh, Triangle, Color } from 'ogl'
+import { resolveCSSColor } from '@/utilities/resolveCSSColor'
 import './SpecularButton.css'
 
 export type ButtonSize = 'sm' | 'md' | 'lg'
@@ -288,6 +289,15 @@ const SpecularButton = ({
 
     const lineC = new Color()
     const baseC = new Color()
+    const resolvedColors = new Map<string, string>()
+    const resolveColor = (color: string) => {
+      const cached = resolvedColors.get(color)
+      if (cached) return cached
+
+      const resolved = resolveCSSColor(btn, color)
+      resolvedColors.set(color, resolved)
+      return resolved
+    }
 
     const update = (now: number) => {
       raf = requestAnimationFrame(update)
@@ -312,8 +322,8 @@ const SpecularButton = ({
       const brightTarget = prefersReducedMotion ? 0 : p.autoAnimate ? 1 : proximityT
       bright += (brightTarget - bright) * (1 - Math.exp(-dt * 8))
 
-      lineC.set(p.lineColor)
-      baseC.set(p.baseColor)
+      lineC.set(resolveColor(p.lineColor))
+      baseC.set(resolveColor(p.baseColor))
       program.uniforms.uAngle.value = angle
       program.uniforms.uRadius.value = Math.min(p.radius, Math.min(sizeRef.w, sizeRef.h) / 2) * dpr
       program.uniforms.uLineColor.value = [lineC.r, lineC.g, lineC.b]

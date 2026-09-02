@@ -1,9 +1,9 @@
 .portfolio-hero {
-  --portfolio-hero-bg: #050607;
-  --portfolio-hero-panel: #080b0c;
-  --portfolio-hero-accent: #11d9e8;
-  --portfolio-hero-text: #f2f2ef;
-  --portfolio-hero-muted: rgb(242 242 239 / 72%);
+  --portfolio-hero-bg: var(--site-surface-deep);
+  --portfolio-hero-panel: var(--site-surface-base);
+  --portfolio-hero-accent: var(--site-accent);
+  --portfolio-hero-text: var(--site-text-primary);
+  --portfolio-hero-muted: color-mix(in srgb, var(--site-text-primary) 72%, transparent);
   --portfolio-hero-split: 50%;
   --portfolio-hero-tilt: 0rem;
   --portfolio-hero-divider-width: 0.35rem;
@@ -29,7 +29,11 @@
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(circle at 45% 20%, rgb(17 217 232 / 10%), transparent 26rem),
+    radial-gradient(
+      circle at 45% 20%,
+      color-mix(in srgb, var(--site-accent) 10%, transparent),
+      transparent 26rem
+    ),
     linear-gradient(180deg, rgb(255 255 255 / 4%), transparent 8rem);
   content: '';
   pointer-events: none;
@@ -72,7 +76,12 @@
 .portfolio-hero__panel--lens {
   background:
     linear-gradient(180deg, rgb(5 11 12 / 12%) 0%, rgb(5 11 12 / 84%) 100%),
-    radial-gradient(circle at 25% 26%, rgb(17 217 232 / 20%), transparent 23rem), #071719;
+    radial-gradient(
+      circle at 25% 26%,
+      color-mix(in srgb, var(--site-accent) 20%, transparent),
+      transparent 23rem
+    ),
+    var(--site-surface-base);
 }
 
 .portfolio-hero__panel--lens::before {
@@ -99,9 +108,13 @@
 
 .portfolio-hero__panel--dev {
   background:
-    radial-gradient(circle at 58% 66%, rgb(17 217 232 / 14%), transparent 25rem),
-    linear-gradient(180deg, #090909 0%, #050606 100%);
-  box-shadow: inset 0 0 4.5rem rgb(17 217 232 / 5%);
+    radial-gradient(
+      circle at 58% 66%,
+      color-mix(in srgb, var(--site-accent) 14%, transparent),
+      transparent 25rem
+    ),
+    linear-gradient(180deg, var(--site-surface-base) 0%, var(--site-surface-deep) 100%);
+  box-shadow: inset 0 0 4.5rem color-mix(in srgb, var(--site-accent) 5%, transparent);
   transition: box-shadow 720ms var(--portfolio-hero-ease);
 }
 
@@ -125,8 +138,16 @@
   opacity: 1;
   background:
     linear-gradient(90deg, rgb(4 5 6 / 86%), rgb(4 6 7 / 57%) 46%, rgb(4 5 6 / 82%)),
-    radial-gradient(circle at 42% 68%, rgb(17 217 232 / 18%), transparent 23rem),
-    radial-gradient(circle at 70% 34%, rgb(92 180 255 / 12%), transparent 20rem),
+    radial-gradient(
+      circle at 42% 68%,
+      color-mix(in srgb, var(--site-accent) 18%, transparent),
+      transparent 23rem
+    ),
+    radial-gradient(
+      circle at 70% 34%,
+      color-mix(in srgb, var(--site-accent) 8%, transparent),
+      transparent 20rem
+    ),
     linear-gradient(180deg, rgb(255 255 255 / 3%), transparent 20%, rgb(0 0 0 / 58%));
   transition:
     left 720ms var(--portfolio-hero-ease),
@@ -135,8 +156,8 @@
 
 .portfolio-hero__panel--dev:is(:hover, :focus-within) {
   box-shadow:
-    inset 0 0 8rem rgb(17 217 232 / 12%),
-    inset 0 0 1px rgb(142 239 248 / 18%);
+    inset 0 0 8rem color-mix(in srgb, var(--site-accent) 12%, transparent),
+    inset 0 0 1px color-mix(in srgb, var(--site-accent) 18%, transparent);
 }
 
 .portfolio-hero__panel--dev:is(:hover, :focus-within)::before {
@@ -232,7 +253,7 @@
 
 .portfolio-hero__description {
   margin: 0;
-  color: rgb(242 252 252 / 82%);
+  color: color-mix(in srgb, var(--site-text-primary) 82%, transparent);
   font-size: clamp(0.95rem, 1.1vw, 1.1rem);
   line-height: 1.7;
 }
@@ -257,8 +278,8 @@
   z-index: 4;
   background: rgb(0 0 0 / 38%);
   box-shadow:
-    0 0 1.2rem rgb(17 217 232 / 18%),
-    inset 0.12rem 0 0 rgb(17 217 232 / 24%),
+    0 0 1.2rem color-mix(in srgb, var(--site-accent) 18%, transparent),
+    inset 0.12rem 0 0 color-mix(in srgb, var(--site-accent) 24%, transparent),
     inset -0.08rem 0 0 rgb(255 255 255 / 5%);
   clip-path: polygon(
     calc(
@@ -318,7 +339,7 @@
   z-index: 6;
   max-width: 58rem;
   margin: 0 auto;
-  color: rgb(242 242 239 / 55%);
+  color: color-mix(in srgb, var(--site-text-primary) 55%, transparent);
   font-size: clamp(0.6rem, 0.72vw, 0.7rem);
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -442,7 +463,7 @@
   .portfolio-hero {
     height: auto;
     min-height: auto;
-    background: #050606;
+    background: var(--site-surface-deep);
   }
 
   .portfolio-hero__stage {

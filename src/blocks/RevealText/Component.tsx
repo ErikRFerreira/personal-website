@@ -7,7 +7,7 @@ export function RevealText({ text, supportingText }: RevealTextBlockProps) {
   if (!text) return null
 
   return (
-    <section className="relative flex w-full items-center justify-center bg-site-surface-base px-6 py-64 text-center lg:py-80">
+    <section className="relative flex w-full items-center justify-center bg-site-surface-deep px-6 py-64 text-center lg:py-80">
       <div className="mx-auto flex max-w-4xl flex-col items-center gap-12">
         <ScrollReveal
           baseOpacity={0.1}

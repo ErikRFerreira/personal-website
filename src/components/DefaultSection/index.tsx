@@ -28,7 +28,7 @@ function DefaultSection({
       {intro && (
         <p
           className={cn(
-            'border-l-2 border-site-accent pl-6 text-base leading-[1.75] text-[#b7c0d5] md:text-lg',
+            'border-l-2 border-site-accent pl-6 text-base leading-[1.75] text-site-text-secondary md:text-lg',
             (eyebrow || label) && 'mt-8',
           )}
         >

@@ -26,10 +26,7 @@ export const ContactCard: React.FC<QuickAccessCard> = ({
     : '?'
 
   return (
-    <SpotlightCard
-      className="rounded-site-card! border! border-site-border-subtle! bg-site-surface-elevated! p-(--site-card-padding)! backdrop-blur-sm"
-      spotlightColor="rgba(59, 130, 246, 0.25)"
-    >
+    <SpotlightCard className="rounded-site-card! border! border-site-border-subtle! bg-site-surface-elevated! p-(--site-card-padding)! backdrop-blur-sm">
       {/* Avatar + name */}
       <div className="mb-6 flex items-center gap-4">
         <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-full">

@@ -1,10 +1,14 @@
 .technicalFrame {
   isolation: isolate;
-  background: #181a1e;
-  border: 1px solid rgb(255 255 255 / 6%);
+  background: var(--site-surface-elevated);
+  border: 1px solid var(--site-border-subtle);
   box-shadow:
     inset 0 0 0 1px rgb(0 0 0 / 24%),
     0 1rem 3rem rgb(0 0 0 / 10%);
+}
+
+.technicalFrame[data-detail-frame='true'] {
+  background: #181a1e;
 }
 
 .technicalFrame::before {
@@ -28,7 +32,7 @@
   inset: 7px;
   pointer-events: none;
   content: '';
-  border: 1px solid rgb(255 255 255 / 3%);
+  border: 1px solid var(--site-border-subtle);
 }
 
 .imageStage {
@@ -40,7 +44,7 @@
 .frameLabel {
   max-width: 58%;
   overflow: hidden;
-  color: rgb(255 255 255 / 58%);
+  color: var(--site-text-muted);
   font-family: var(--font-geist-mono), monospace;
   font-size: clamp(0.4rem, 0.52vw, 0.58rem);
   font-weight: 650;

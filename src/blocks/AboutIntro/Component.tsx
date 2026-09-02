@@ -18,7 +18,7 @@ export function AboutIntroBlock({
       data-theme="dark"
       style={{
         background:
-          'radial-gradient(ellipse 70% 60% at 5% 15%, rgb(0 120 255 / 0.05) 0%, transparent 55%), var(--site-surface-deep)',
+          'radial-gradient(ellipse 70% 60% at 5% 15%, color-mix(in srgb, var(--site-accent) 5%, transparent) 0%, transparent 55%), var(--site-surface-deep)',
       }}
     >
       <div className="site-container">

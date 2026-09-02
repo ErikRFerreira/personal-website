@@ -59,7 +59,7 @@ export default async function LensPage({ params: paramsPromise }: Args) {
   const hasLongForm = Boolean(lens.fullStory || lens.licensingText)
 
   return (
-    <main className="lens-detail-page relative isolate overflow-hidden bg-site-surface-deep pt-[var(--header-height)] text-site-text-primary">
+    <main className="lens-detail-page relative isolate overflow-hidden bg-site-surface-photo pt-[var(--header-height)] text-site-text-primary">
       <div aria-hidden="true" className="lens-ambient-layer lens-ambient-layer--detail" />
 
       <div className="relative z-10">

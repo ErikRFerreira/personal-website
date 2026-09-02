@@ -1,18 +1,33 @@
 .card-spotlight {
   position: relative;
   border-radius: 1.5rem;
-  border: 1px solid rgb(46 52 71 / 30%);
-  background-color: rgb(12 19 36 / 30%);
+  border: 1px solid var(--site-border-subtle);
+  background-color: color-mix(in srgb, var(--site-surface-elevated) 72%, transparent);
   padding: 2rem;
   overflow: hidden;
   transition: background-color 200ms ease-out;
   --mouse-x: 50%;
   --mouse-y: 50%;
-  --spotlight-color: rgba(255, 255, 255, 0.05);
+  --spotlight-color: var(--site-glow-accent);
 }
 
 .card-spotlight:hover {
-  background-color: rgb(12 19 36 / 50%);
+  background-color: var(--site-surface-elevated);
+}
+
+.custom-spotlight-card {
+  border-color: color-mix(in srgb, var(--site-border-control) 55%, transparent);
+  background-color: color-mix(in srgb, var(--site-surface-elevated) 95%, var(--site-accent) 5%);
+  padding: clamp(2.25rem, 3vw, 2.75rem);
+  transition:
+    background-color 200ms ease-out,
+    border-color 200ms ease-out;
+}
+
+.custom-spotlight-card:hover,
+.custom-spotlight-card:focus-within {
+  border-color: color-mix(in srgb, var(--site-border-control) 85%, var(--site-accent) 15%);
+  background-color: color-mix(in srgb, var(--site-surface-elevated) 92%, var(--site-accent) 8%);
 }
 
 @media (prefers-reduced-motion: reduce) {

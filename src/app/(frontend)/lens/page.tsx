@@ -37,7 +37,7 @@ async function Page() {
   })
 
   return (
-    <main className="site-section pt-28 md:pt-36">
+    <main className="site-section bg-site-surface-photo pt-28 md:pt-36">
       <div className="site-container pb-24">
         <ArchiveHeader
           title="Lens"

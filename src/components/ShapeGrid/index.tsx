@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useRef, useEffect } from 'react'
+import { resolveCSSColor } from '@/utilities/resolveCSSColor'
 import './ShapeGrid.css'
 
 type CanvasStrokeStyle = string | CanvasGradient | CanvasPattern
@@ -23,9 +24,9 @@ interface ShapeGridProps {
 const ShapeGrid: React.FC<ShapeGridProps> = ({
   direction = 'right',
   speed = 1,
-  borderColor = '#999',
+  borderColor = 'var(--site-border-subtle)',
   squareSize = 40,
-  hoverFillColor = '#222',
+  hoverFillColor = 'var(--site-surface-elevated)',
   shape = 'square',
   hoverTrailAmount = 0,
 }) => {
@@ -42,6 +43,11 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
+    const resolvedBorderColor =
+      typeof borderColor === 'string' ? resolveCSSColor(canvas, borderColor) : borderColor
+    const resolvedHoverFillColor =
+      typeof hoverFillColor === 'string' ? resolveCSSColor(canvas, hoverFillColor) : hoverFillColor
+    const edgeFadeColor = resolveCSSColor(canvas, 'var(--site-surface-deep, #050809)')
 
     const isHex = shape === 'hexagon'
     const isTri = shape === 'triangle'
@@ -115,13 +121,13 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
             if (alpha) {
               ctx.globalAlpha = alpha
               drawHex(cx, cy, squareSize)
-              ctx.fillStyle = hoverFillColor
+              ctx.fillStyle = resolvedHoverFillColor
               ctx.fill()
               ctx.globalAlpha = 1
             }
 
             drawHex(cx, cy, squareSize)
-            ctx.strokeStyle = borderColor
+            ctx.strokeStyle = resolvedBorderColor
             ctx.stroke()
           }
         }
@@ -146,13 +152,13 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
             if (alpha) {
               ctx.globalAlpha = alpha
               drawTriangle(cx, cy, squareSize, flip)
-              ctx.fillStyle = hoverFillColor
+              ctx.fillStyle = resolvedHoverFillColor
               ctx.fill()
               ctx.globalAlpha = 1
             }
 
             drawTriangle(cx, cy, squareSize, flip)
-            ctx.strokeStyle = borderColor
+            ctx.strokeStyle = resolvedBorderColor
             ctx.stroke()
           }
         }
@@ -173,13 +179,13 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
             if (alpha) {
               ctx.globalAlpha = alpha
               drawCircle(cx, cy, squareSize)
-              ctx.fillStyle = hoverFillColor
+              ctx.fillStyle = resolvedHoverFillColor
               ctx.fill()
               ctx.globalAlpha = 1
             }
 
             drawCircle(cx, cy, squareSize)
-            ctx.strokeStyle = borderColor
+            ctx.strokeStyle = resolvedBorderColor
             ctx.stroke()
           }
         }
@@ -199,12 +205,12 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
             const alpha = cellOpacities.current.get(cellKey)
             if (alpha) {
               ctx.globalAlpha = alpha
-              ctx.fillStyle = hoverFillColor
+              ctx.fillStyle = resolvedHoverFillColor
               ctx.fillRect(sx, sy, squareSize, squareSize)
               ctx.globalAlpha = 1
             }
 
-            ctx.strokeStyle = borderColor
+            ctx.strokeStyle = resolvedBorderColor
             ctx.strokeRect(sx, sy, squareSize, squareSize)
           }
         }
@@ -219,7 +225,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
         Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2,
       )
       gradient.addColorStop(0, 'rgba(0, 0, 0, 0)')
-      gradient.addColorStop(1, '#120F17')
+      gradient.addColorStop(1, edgeFadeColor)
 
       ctx.fillStyle = gradient
       ctx.fillRect(0, 0, canvas.width, canvas.height)

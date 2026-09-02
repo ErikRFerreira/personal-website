@@ -24,7 +24,7 @@ export function SelectedProjectsBlock({ eyebrow, label, intro, projects }: Selec
       eyebrow={eyebrow}
       label={label}
       intro={intro}
-      bgColor="var(--site-surface-deep)"
+      bgColor="var(--site-surface-base)"
       className="relative overflow-hidden"
       revealHeader
     >
@@ -32,8 +32,8 @@ export function SelectedProjectsBlock({ eyebrow, label, intro, projects }: Selec
         speed={0.3}
         squareSize={40}
         direction="diagonal"
-        borderColor="#2F293A"
-        hoverFillColor="#222"
+        borderColor="var(--site-border-subtle)"
+        hoverFillColor="var(--site-surface-elevated)"
         shape="square"
         hoverTrailAmount={0}
       />

@@ -12,7 +12,7 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
 
   return (
     <section
-      className="lens-block-section relative overflow-hidden bg-[#0C1324] py-[var(--site-section-space-mobile)] text-site-text-primary md:py-[var(--site-section-space-tablet)] lg:py-[var(--site-section-space-desktop)]"
+      className="lens-block-section relative overflow-hidden bg-site-surface-photo py-[var(--site-section-space-mobile)] text-site-text-primary md:py-[var(--site-section-space-tablet)] lg:py-[var(--site-section-space-desktop)]"
       data-theme="dark"
     >
       <div aria-hidden="true" className="lens-ambient-layer" />
@@ -27,13 +27,13 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
             )}
 
             {label && (
-              <h2 className="text-[3rem] leading-[0.95] font-extrabold tracking-normal text-[#dfe4ff] md:text-[4.5rem]">
+              <h2 className="text-[3rem] leading-[0.95] font-extrabold tracking-normal text-site-text-primary md:text-[4.5rem]">
                 {label}
               </h2>
             )}
 
             {intro && (
-              <p className="mt-8 border-l-2 border-site-accent pl-6 text-base leading-[1.75] text-[#b7c0d5] md:text-lg">
+              <p className="mt-8 border-l-2 border-site-accent pl-6 text-base leading-[1.75] text-site-text-secondary md:text-lg">
                 {intro}
               </p>
             )}
@@ -76,7 +76,7 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
                   </div>
 
                   <div className="mt-4 flex min-w-0 items-start justify-between gap-4">
-                    <h3 className="min-w-0 text-base leading-[1.25] font-extrabold text-[#dfe4ff] transition-colors duration-200 group-hover:text-site-accent">
+                    <h3 className="min-w-0 text-base leading-[1.25] font-extrabold text-site-text-primary transition-colors duration-200 group-hover:text-site-accent">
                       {item.title}
                     </h3>
 
