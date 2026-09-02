@@ -8,6 +8,8 @@ import * as migration_20260606_131310 from './20260606_131310'
 import * as migration_20260830_122849_add_lens_archive_format from './20260830_122849_add_lens_archive_format'
 import * as migration_20260901_081202_lens_taxonomies_and_detail from './20260901_081202_lens_taxonomies_and_detail'
 import * as migration_20260902_023959_add_about_page_blocks from './20260902_023959_add_about_page_blocks'
+import * as migration_20260902_072343 from './20260902_072343'
+import * as migration_20260902_075703 from './20260902_075703'
 
 export const migrations = [
   {
@@ -59,5 +61,15 @@ export const migrations = [
     up: migration_20260902_023959_add_about_page_blocks.up,
     down: migration_20260902_023959_add_about_page_blocks.down,
     name: '20260902_023959_add_about_page_blocks',
+  },
+  {
+    up: migration_20260902_072343.up,
+    down: migration_20260902_072343.down,
+    name: '20260902_072343',
+  },
+  {
+    up: migration_20260902_075703.up,
+    down: migration_20260902_075703.down,
+    name: '20260902_075703',
   },
 ]

@@ -1,106 +1,118 @@
 import type { Project } from '@/payload-types'
-import { Tag } from '@/components/Tag'
-import { CtaButton } from '@/components/CtaButton'
-import Image from 'next/image'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
+import Image from 'next/image'
+import Link from 'next/link'
 
 type Props = {
   project: Project
   index: number
 }
 
+const projectTypeLabels: Partial<Record<NonNullable<Project['type']>, string>> = {
+  design: 'Design',
+  'mobile-app': 'Mobile App',
+  'open-source': 'Open Source',
+  other: 'Other',
+  'web-app': 'Web App',
+}
+
 export function ProjectRow({ project, index }: Props) {
   const image = typeof project.image === 'object' && project.image !== null ? project.image : null
   const isEven = index % 2 === 0
-  const indexLabel = String(index + 1).padStart(2, '0')
+  const metadata = [project.type ? projectTypeLabels[project.type] : null, project.year]
+    .filter(Boolean)
+    .join(' // ')
 
   return (
-    <div className={index > 0 ? 'border-t border-site-border-subtle pt-12 md:pt-16' : ''}>
-      <div className="mb-7 flex max-w-[31.625rem] items-center gap-4">
-        <span className="font-mono text-[0.6875rem] leading-none font-bold tracking-[0.18em] text-site-accent uppercase">
-          {indexLabel}
-        </span>
-        <div className="h-px w-full max-w-[25.125rem] bg-site-accent/40" />
+    <article
+      className="group grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10"
+      data-project-card="true"
+    >
+      <div
+        className={[
+          'relative order-2 flex flex-col gap-6 overflow-hidden border border-site-border-subtle bg-site-surface-elevated p-6 md:p-8 lg:col-span-5',
+          isEven ? 'lg:order-1' : 'lg:order-2',
+        ].join(' ')}
+        data-project-content="true"
+      >
+        <div
+          aria-hidden="true"
+          className={[
+            'absolute inset-y-0 w-2 origin-top scale-y-0 bg-site-accent transition-transform duration-500 group-hover:scale-y-100 group-focus-within:scale-y-100 motion-reduce:transition-none',
+            isEven ? 'left-0' : 'right-0',
+          ].join(' ')}
+          data-project-accent={isEven ? 'left' : 'right'}
+        />
+
+        {metadata && (
+          <p className="font-mono text-[0.6875rem] leading-none font-bold tracking-[0.18em] text-site-accent uppercase">
+            {metadata}
+          </p>
+        )}
+
+        <h3 className="text-[2.5rem] leading-[0.98] font-extrabold tracking-[-0.035em] text-site-text-primary md:text-[2.875rem]">
+          {project.title}
+        </h3>
+
+        {project.description && (
+          <p className="text-base leading-[1.7] text-site-text-secondary md:text-lg">
+            {project.description}
+          </p>
+        )}
+
+        {Array.isArray(project.tech) && project.tech.length > 0 && (
+          <div className="mt-1 grid grid-cols-2 gap-2" data-project-technologies="true">
+            {project.tech.map((tech, techIndex) => (
+              <span
+                className="border border-site-border-subtle p-2 text-center font-mono text-[0.6875rem] leading-tight font-semibold tracking-[0.08em] text-site-text-primary uppercase"
+                key={tech.id ?? `${tech.techName}-${techIndex}`}
+              >
+                {tech.techName}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <Link
+          className="mt-2 inline-flex w-max items-center gap-2 font-mono text-sm font-semibold tracking-[0.08em] text-site-accent uppercase transition-colors duration-200 hover:text-site-text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active motion-reduce:transition-none"
+          href={`/projects/${project.slug}`}
+        >
+          Read Case Study
+          <span aria-hidden="true">&rarr;</span>
+        </Link>
       </div>
 
-      <div className="grid items-center gap-10 md:grid-cols-[minmax(0,31.625rem)_minmax(0,1fr)] md:gap-12 lg:gap-16">
-        <div className={['flex flex-col', !isEven ? 'md:order-2' : ''].join(' ')}>
-          <h3 className="mb-6 max-w-[27rem] text-[2.5rem] leading-[0.98] font-extrabold text-site-text-primary md:text-[2.875rem]">
-            {project.title}
-          </h3>
-
-          {project.description && (
-            <p className="mb-8 max-w-[27.25rem] text-lg leading-[1.6] text-site-text-secondary">
-              {project.description}
-            </p>
-          )}
-
-          {Array.isArray(project.metrics) && project.metrics.length > 0 && (
-            <div className="mb-7 grid max-w-[31.625rem] grid-cols-1 rounded-lg border border-site-border-subtle bg-transparent px-6 py-5 sm:grid-cols-2 sm:gap-8">
-              {project.metrics.slice(0, 2).map((metric, i) => (
-                <div key={metric.id ?? i} className="flex min-w-0 flex-col gap-2 py-2">
-                  <span className="text-[0.6875rem] leading-[1.2] font-bold tracking-[0.18em] text-site-text-muted uppercase">
-                    {metric.label}
-                  </span>
-                  <span
-                    className={[
-                      'text-[1.375rem] leading-[1.25] font-extrabold',
-                      i === 0 ? 'text-site-accent' : 'text-site-text-primary',
-                    ].join(' ')}
-                  >
-                    {metric.value}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {Array.isArray(project.tech) && project.tech.length > 0 && (
-            <div className="mb-9 flex flex-wrap gap-2.5">
-              {project.tech.map((tech) => (
-                <Tag
-                  key={tech.id}
-                  className="bg-site-surface-elevated px-4 py-2 text-[0.6875rem] tracking-[0.08em] text-site-text-secondary"
-                >
-                  {tech.techName}
-                </Tag>
-              ))}
-            </div>
-          )}
-
-          <CtaButton
-            className="self-start"
-            size="md"
-            type="custom"
-            url={`/projects/${project.slug}`}
-          >
-            Read Case Study
-            <span className="ml-2" aria-hidden="true">
-              &rarr;
-            </span>
-          </CtaButton>
-        </div>
-
-        <div
-          className={[
-            'relative aspect-[16/10] min-h-64 overflow-hidden rounded-lg bg-site-surface-elevated md:min-h-0',
-            !isEven ? 'md:order-1' : '',
-          ].join(' ')}
-        >
-          {image?.url && (
+      <div
+        className={[
+          'order-1 border border-site-border-subtle bg-site-surface-base p-3 md:p-4 lg:col-span-7',
+          isEven ? 'lg:order-2' : 'lg:order-1',
+        ].join(' ')}
+        data-project-frame="true"
+      >
+        <div className="relative aspect-[16/10] overflow-hidden border border-site-border-subtle bg-site-surface-elevated">
+          {image?.url ? (
             <Image
               alt={image.alt ?? project.title}
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transform-none motion-reduce:transition-none"
               decoding="async"
               fill
               loading="lazy"
               quality={75}
               sizes="(max-width: 767px) 100vw, 50vw"
               src={getMediaUrl(image.url, image.updatedAt)}
-              className="h-full w-full object-cover transition-transform duration-200 ease-out hover:scale-[1.02] motion-reduce:transition-none"
             />
+          ) : (
+            <div
+              aria-label={`${project.title} preview unavailable`}
+              className="flex h-full w-full items-center justify-center px-6 text-center font-mono text-[0.6875rem] font-semibold tracking-[0.16em] text-site-text-muted uppercase"
+              data-project-image-placeholder="true"
+              role="img"
+            >
+              Preview unavailable
+            </div>
           )}
         </div>
       </div>
-    </div>
+    </article>
   )
 }

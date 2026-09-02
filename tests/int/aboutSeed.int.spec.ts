@@ -11,21 +11,25 @@ describe('about page seed', () => {
 
     expect(page.slug).toBe('about')
     expect(page._status).toBe('published')
-    expect(page.hero).toEqual({ type: 'none' })
+    expect(page.hero).toEqual({
+      type: 'profileHero',
+      name: 'Erik Ferreira',
+      intro:
+        'Developer, diver, and photographer building digital products and documenting life underwater.',
+      media: 10,
+      imageLabel: 'Profile image',
+    })
     expect(page.layout.map(({ blockType }) => blockType)).toEqual([
-      'aboutHero',
       'aboutStory',
-      'aboutDisciplines',
+      'capabilities',
       'aboutProtocol',
       'aboutTimeline',
       'cta',
     ])
 
-    const hero = page.layout[0]
-    const timeline = page.layout[4]
-    const cta = page.layout[5]
+    const timeline = page.layout[3]
+    const cta = page.layout[4]
 
-    expect(hero).toMatchObject({ blockType: 'aboutHero', image: 10 })
     expect(timeline).toMatchObject({
       blockType: 'aboutTimeline',
       milestones: [{ image: 20 }, { image: 21 }, { image: 22 }],

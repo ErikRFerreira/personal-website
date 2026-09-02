@@ -1,4 +1,9 @@
-import type { Field, TextFieldSingleValidation, UploadFieldSingleValidation } from 'payload'
+import type {
+  Field,
+  TextareaFieldValidation,
+  TextFieldSingleValidation,
+  UploadFieldSingleValidation,
+} from 'payload'
 
 import {
   FixedToolbarFeature,
@@ -9,33 +14,26 @@ import {
 
 import { linkGroup } from '@/fields/linkGroup'
 
-const validateHTTPSVideoURL = (value?: null | string): string | true => {
-  if (!value) return true
+const requiredForProfileHero = (label: string): TextFieldSingleValidation =>
+  (value, { siblingData }) => {
+    if ((siblingData as { type?: string })?.type === 'profileHero' && !value?.trim()) {
+      return `${label} is required for Profile Hero`
+    }
 
-  try {
-    return new URL(value).protocol === 'https:' ? true : 'Video URL must use HTTPS'
-  } catch {
-    return 'Video URL must be an absolute HTTPS URL'
+    return true
   }
-}
 
-const validateVideoURL: TextFieldSingleValidation = (value) => validateHTTPSVideoURL(value)
-
-const validateRightVideoURL: TextFieldSingleValidation = (value, { siblingData }) => {
-  const urlValidation = validateHTTPSVideoURL(value)
-
-  if (urlValidation !== true) return urlValidation
-
-  if (value && !(siblingData as { rightMedia?: unknown })?.rightMedia) {
-    return 'Select right media to use as the video fallback'
+const profileIntroRequired: TextareaFieldValidation = (value, { siblingData }) => {
+  if ((siblingData as { type?: string })?.type === 'profileHero' && !value?.trim()) {
+    return 'Introduction is required for Profile Hero'
   }
 
   return true
 }
 
-const validateRightMedia: UploadFieldSingleValidation = (value, { siblingData }) => {
-  if ((siblingData as { rightVideoUrl?: unknown })?.rightVideoUrl && !value) {
-    return 'Select right media to use as the video fallback'
+const profileImageRequired: UploadFieldSingleValidation = (value, { siblingData }) => {
+  if ((siblingData as { type?: string })?.type === 'profileHero' && !value) {
+    return 'Image is required for Profile Hero'
   }
 
   return true
@@ -51,111 +49,62 @@ export const hero: Field = {
       defaultValue: 'lowImpact',
       label: 'Type',
       options: [
-        {
-          label: 'None',
-          value: 'none',
-        },
-        {
-          label: 'High Impact',
-          value: 'highImpact',
-        },
-        {
-          label: 'Medium Impact',
-          value: 'mediumImpact',
-        },
-        {
-          label: 'Low Impact',
-          value: 'lowImpact',
-        },
-        {
-          label: 'Portfolio Hero',
-          value: 'portfolioHero',
-        },
+        { label: 'None', value: 'none' },
+        { label: 'High Impact', value: 'highImpact' },
+        { label: 'Medium Impact', value: 'mediumImpact' },
+        { label: 'Low Impact', value: 'lowImpact' },
+        { label: 'Profile Hero', value: 'profileHero' },
       ],
       required: true,
     },
     {
-      name: 'eyebrow',
+      name: 'name',
       type: 'text',
       admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
+        condition: (_, { type } = {}) => type === 'profileHero',
       },
-      label: 'Eyebrow',
+      label: 'Name',
+      validate: requiredForProfileHero('Name'),
     },
     {
-      name: 'headline',
-      type: 'text',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-      },
-      label: 'Headline',
-      required: true,
-    },
-    {
-      name: 'description',
+      name: 'intro',
       type: 'textarea',
       admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
+        condition: (_, { type } = {}) => type === 'profileHero',
       },
-      label: 'Description',
+      label: 'Introduction',
+      validate: profileIntroRequired,
     },
     {
-      name: 'rightEyebrow',
+      name: 'imageLabel',
       type: 'text',
       admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
+        condition: (_, { type } = {}) => type === 'profileHero',
       },
-      defaultValue: 'Software Engineer',
-      label: 'Right eyebrow',
-    },
-    {
-      name: 'rightHeadline',
-      type: 'text',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-      },
-      defaultValue: 'Engineering Scale.',
-      label: 'Right headline',
-    },
-    {
-      name: 'rightDescription',
-      type: 'textarea',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-      },
-      label: 'Right description',
-    },
-    {
-      name: 'positioningLine',
-      type: 'textarea',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-      },
-      defaultValue:
-        'Software engineering and visual storytelling shaped by depth, precision, and perspective.',
-      label: 'Positioning line',
+      label: 'Image label',
     },
     {
       name: 'richText',
       type: 'richText',
       editor: lexicalEditor({
-        features: ({ rootFeatures }) => {
-          return [
-            ...rootFeatures,
-            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-            FixedToolbarFeature(),
-            InlineToolbarFeature(),
-          ]
-        },
+        features: ({ rootFeatures }) => [
+          ...rootFeatures,
+          HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+          FixedToolbarFeature(),
+          InlineToolbarFeature(),
+        ],
       }),
-      // Only show the rich text editor for non-portfolio hero types
       admin: {
-        condition: (_, { type } = {}) => type !== 'portfolioHero',
+        condition: (_, { type } = {}) => type !== 'profileHero',
       },
       label: false,
     },
     linkGroup({
       overrides: {
+        admin: {
+          condition: (_, { type } = {}) => type !== 'profileHero',
+          initCollapsed: true,
+        },
         maxRows: 2,
       },
     }),
@@ -164,52 +113,10 @@ export const hero: Field = {
       type: 'upload',
       admin: {
         condition: (_, { type } = {}) =>
-          ['highImpact', 'mediumImpact', 'portfolioHero'].includes(type),
-        description:
-          'For Portfolio Hero CDN videos, select an image to use as the poster and fallback.',
+          ['highImpact', 'mediumImpact', 'profileHero'].includes(type),
       },
       relationTo: 'media',
-      required: false,
-    },
-    {
-      name: 'videoUrl',
-      type: 'text',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-        description: 'Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.',
-      },
-      label: 'Video URL',
-      validate: validateVideoURL,
-    },
-    {
-      name: 'rightMedia',
-      type: 'upload',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-        description:
-          'Select an image to use as the poster and fallback for a right-panel CDN video.',
-      },
-      label: 'Right media',
-      relationTo: 'media',
-      validate: validateRightMedia,
-    },
-    {
-      name: 'rightVideoUrl',
-      type: 'text',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-        description: 'Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.',
-      },
-      label: 'Right video URL',
-      validate: validateRightVideoURL,
-    },
-    {
-      name: 'scrollLabel',
-      type: 'text',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-      },
-      label: 'Scroll label',
+      validate: profileImageRequired,
     },
   ],
   label: false,

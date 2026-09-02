@@ -16,8 +16,10 @@ vi.mock('@/components/BlurText', () => ({
   default: ({ text }: { text?: string }) => <span>{text}</span>,
 }))
 
-import { AboutDisciplinesBlock } from '@/blocks/AboutDisciplines/Component'
-import { AboutHeroBlock } from '@/blocks/AboutHero/Component'
+vi.mock('@/components/Media', () => ({
+  Media: () => <span aria-hidden="true" data-testid="discipline-icon" />,
+}))
+
 import { AboutProtocolBlock } from '@/blocks/AboutProtocol/Component'
 import { AboutStoryBlock } from '@/blocks/AboutStory/Component'
 import { AboutTimelineBlock } from '@/blocks/AboutTimeline/Component'
@@ -47,24 +49,11 @@ describe('About block placeholders', () => {
   it('renders CMS-backed headings and collection content', () => {
     render(
       <>
-        <AboutHeroBlock
-          blockType="aboutHero"
-          image={1}
-          imageLabel="Profile image"
-          intro="Developer and diver"
-          name="Erik Ferreira"
-        />
-        <AboutStoryBlock blockType="aboutStory" body={storyBody} heading="Calculated Descent" />
-        <AboutDisciplinesBlock
-          blockType="aboutDisciplines"
-          items={[
-            {
-              title: 'Digital Products',
-              description: 'Product systems',
-              icon: 2,
-              tags: [{ tag: 'TypeScript' }],
-            },
-          ]}
+        <AboutStoryBlock
+          blockType="aboutStory"
+          body={storyBody}
+          eyebrow="Background"
+          heading="Calculated Descent"
         />
         <AboutProtocolBlock
           blockType="aboutProtocol"
@@ -86,9 +75,12 @@ describe('About block placeholders', () => {
       </>,
     )
 
-    expect(screen.getByRole('heading', { name: 'Erik Ferreira' })).not.toBeNull()
     expect(screen.getByRole('heading', { name: 'Calculated Descent' })).not.toBeNull()
-    expect(screen.getByRole('heading', { name: 'Digital Products' })).not.toBeNull()
+    expect(screen.getByText('Background')).not.toBeNull()
+    expect(screen.getByText('Story body')).not.toBeNull()
+    expect(screen.getByTestId('about-story-horizontal-progress')).not.toBeNull()
+    expect(screen.getByTestId('about-story-vertical-progress')).not.toBeNull()
+    expect(screen.getByTestId('about-story-progress-marker')).not.toBeNull()
     expect(screen.getByRole('heading', { name: 'The Protocol' })).not.toBeNull()
     expect(screen.getByRole('heading', { name: 'Current chapter' })).not.toBeNull()
     expect(screen.getByText('Active')).not.toBeNull()

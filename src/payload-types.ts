@@ -165,14 +165,10 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'portfolioHero';
-    eyebrow?: string | null;
-    headline?: string | null;
-    description?: string | null;
-    rightEyebrow?: string | null;
-    rightHeadline?: string | null;
-    rightDescription?: string | null;
-    positioningLine?: string | null;
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'profileHero';
+    name?: string | null;
+    intro?: string | null;
+    imageLabel?: string | null;
     richText?: {
       root: {
         type: string;
@@ -212,23 +208,7 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
-    /**
-     * For Portfolio Hero CDN videos, select an image to use as the poster and fallback.
-     */
     media?: (number | null) | Media;
-    /**
-     * Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.
-     */
-    videoUrl?: string | null;
-    /**
-     * Select an image to use as the poster and fallback for a right-panel CDN video.
-     */
-    rightMedia?: (number | null) | Media;
-    /**
-     * Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.
-     */
-    rightVideoUrl?: string | null;
-    scrollLabel?: string | null;
   };
   layout: (
     | CallToActionBlock
@@ -241,9 +221,7 @@ export interface Page {
     | CapabilitiesBlock
     | LensBlock
     | AboutIntroBlock
-    | AboutHeroBlock
     | AboutStoryBlock
-    | AboutDisciplinesBlock
     | AboutProtocolBlock
     | AboutTimelineBlock
     | InitiateProjectBlock
@@ -958,16 +936,18 @@ export interface Project {
  */
 export interface CapabilitiesBlock {
   eyebrow?: string | null;
-  label?: string | null;
-  intro?: string | null;
-  capabilities?:
-    | {
-        name: string;
-        description: string;
-        icon: number | Media;
-        id?: string | null;
-      }[]
-    | null;
+  items: {
+    title: string;
+    description: string;
+    icon: number | Media;
+    tags?:
+      | {
+          tag: string;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
   id?: string | null;
   blockName?: string | null;
   blockType: 'capabilities';
@@ -1115,19 +1095,6 @@ export interface AboutIntroBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutHeroBlock".
- */
-export interface AboutHeroBlock {
-  name: string;
-  intro: string;
-  image: number | Media;
-  imageLabel?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'aboutHero';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "AboutStoryBlock".
  */
 export interface AboutStoryBlock {
@@ -1151,29 +1118,6 @@ export interface AboutStoryBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'aboutStory';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutDisciplinesBlock".
- */
-export interface AboutDisciplinesBlock {
-  eyebrow?: string | null;
-  items: {
-    title: string;
-    description: string;
-    icon: number | Media;
-    tags?:
-      | {
-          tag: string;
-          id?: string | null;
-        }[]
-      | null;
-    image?: (number | null) | Media;
-    id?: string | null;
-  }[];
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'aboutDisciplines';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1591,13 +1535,9 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
-        eyebrow?: T;
-        headline?: T;
-        description?: T;
-        rightEyebrow?: T;
-        rightHeadline?: T;
-        rightDescription?: T;
-        positioningLine?: T;
+        name?: T;
+        intro?: T;
+        imageLabel?: T;
         richText?: T;
         links?:
           | T
@@ -1615,10 +1555,6 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
-        videoUrl?: T;
-        rightMedia?: T;
-        rightVideoUrl?: T;
-        scrollLabel?: T;
       };
   layout?:
     | T
@@ -1633,9 +1569,7 @@ export interface PagesSelect<T extends boolean = true> {
         capabilities?: T | CapabilitiesBlockSelect<T>;
         lensBlock?: T | LensBlockSelect<T>;
         aboutIntro?: T | AboutIntroBlockSelect<T>;
-        aboutHero?: T | AboutHeroBlockSelect<T>;
         aboutStory?: T | AboutStoryBlockSelect<T>;
-        aboutDisciplines?: T | AboutDisciplinesBlockSelect<T>;
         aboutProtocol?: T | AboutProtocolBlockSelect<T>;
         aboutTimeline?: T | AboutTimelineBlockSelect<T>;
         initiateProject?: T | InitiateProjectBlockSelect<T>;
@@ -1787,14 +1721,18 @@ export interface SelectedProjectsBlockSelect<T extends boolean = true> {
  */
 export interface CapabilitiesBlockSelect<T extends boolean = true> {
   eyebrow?: T;
-  label?: T;
-  intro?: T;
-  capabilities?:
+  items?:
     | T
     | {
-        name?: T;
+        title?: T;
         description?: T;
         icon?: T;
+        tags?:
+          | T
+          | {
+              tag?: T;
+              id?: T;
+            };
         id?: T;
       };
   id?: T;
@@ -1835,48 +1773,12 @@ export interface AboutIntroBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutHeroBlock_select".
- */
-export interface AboutHeroBlockSelect<T extends boolean = true> {
-  name?: T;
-  intro?: T;
-  image?: T;
-  imageLabel?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "AboutStoryBlock_select".
  */
 export interface AboutStoryBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   heading?: T;
   body?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutDisciplinesBlock_select".
- */
-export interface AboutDisciplinesBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  items?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        icon?: T;
-        tags?:
-          | T
-          | {
-              tag?: T;
-              id?: T;
-            };
-        image?: T;
-        id?: T;
-      };
   id?: T;
   blockName?: T;
 }

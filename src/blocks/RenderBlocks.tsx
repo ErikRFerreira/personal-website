@@ -10,12 +10,10 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { SimpleTextBlock } from '@/blocks/SimpleText/Component'
 import { SelectedProjectsBlock } from '@/blocks/SelectedProjects/Component'
 import { InitiateProjectBlock } from '@/blocks/InitiateProject/Component'
-import Capabilities from './Capabilities/Component'
+import { CapabilitiesBlock } from './Capabilities/Component'
 import { LensBlockComponent } from './LensBlock/Component'
 import { AboutIntroBlock } from './AboutIntro/Component'
-import { AboutHeroBlock } from './AboutHero/Component'
 import { AboutStoryBlock } from './AboutStory/Component'
-import { AboutDisciplinesBlock } from './AboutDisciplines/Component'
 import { AboutProtocolBlock } from './AboutProtocol/Component'
 import { AboutTimelineBlock } from './AboutTimeline/Component'
 import { RevealText } from './RevealText/Component'
@@ -30,12 +28,10 @@ const blockComponents = {
   simpleText: SimpleTextBlock,
   selectedProjects: SelectedProjectsBlock,
   initiateProject: InitiateProjectBlock,
-  capabilities: Capabilities,
+  capabilities: CapabilitiesBlock,
   lensBlock: LensBlockComponent,
   aboutIntro: AboutIntroBlock,
-  aboutHero: AboutHeroBlock,
   aboutStory: AboutStoryBlock,
-  aboutDisciplines: AboutDisciplinesBlock,
   aboutProtocol: AboutProtocolBlock,
   aboutTimeline: AboutTimelineBlock,
   revealText: RevealText,

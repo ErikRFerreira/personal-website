@@ -65,11 +65,11 @@ test.describe('Frontend', () => {
       await projectLink.hover()
     }
 
-    await expectReveal('[data-block-type="capabilities"] [data-reveal-name="section-heading"]')
+    await expectReveal('[data-block-type="capabilities"] [data-reveal-name="capabilities-heading"]')
     await expectReveal('[data-block-type="capabilities"] [data-reveal-name="capability-card"]')
 
     const capabilityCard = page
-      .locator('[data-block-type="capabilities"] .custom-spotlight-card')
+      .locator('[data-block-type="capabilities"] .capability-card')
       .first()
     if (await capabilityCard.count()) {
       await capabilityCard.hover()

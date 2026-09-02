@@ -45,16 +45,13 @@ export const about = ({
   _status: 'published',
   title: 'About',
   hero: {
-    type: 'none',
+    type: 'profileHero',
+    name: 'Erik Ferreira',
+    intro: 'Developer, diver, and photographer building digital products and documenting life underwater.',
+    media: heroImage.id,
+    imageLabel: 'Profile image',
   },
   layout: [
-    {
-      blockType: 'aboutHero',
-      name: 'Erik Ferreira',
-      intro: 'Developer, diver, and photographer building digital products and documenting life underwater.',
-      image: heroImage.id,
-      imageLabel: 'Profile image',
-    },
     {
       blockType: 'aboutStory',
       eyebrow: 'Background',
@@ -64,7 +61,7 @@ export const about = ({
       ),
     },
     {
-      blockType: 'aboutDisciplines',
+      blockType: 'capabilities',
       eyebrow: 'Operating system',
       items: [
         {

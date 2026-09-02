@@ -5,7 +5,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { Header } from '@/payload-types'
 import { CtaButton } from '@/components/CtaButton'
 import { HeaderNav } from '@/Header/Nav'
-import { HeroPanel } from '@/heros/PortfolioHero/HeroPanel'
 
 vi.mock('ogl', () => ({
   Color: class {},
@@ -88,30 +87,4 @@ describe('shared CTA', () => {
     expect(ctaLink.getAttribute('rel')).toBe('noopener noreferrer')
   })
 
-  it('renders both hero CTA variants as medium specular links', () => {
-    const handlers = {
-      onPanelFocus: vi.fn(),
-      onPanelLeave: vi.fn(),
-    }
-    const { getByRole, rerender } = render(
-      <HeroPanel
-        {...handlers}
-        headingLevel="h1"
-        link={{ label: 'Explore Lens', type: 'custom', url: '/lens' }}
-        playbackActive={false}
-        side="lens"
-      />,
-    )
-
-    const lensCta = getByRole('link', { name: 'Explore Lens' })
-    expect(lensCta.classList.contains('specular-button--md')).toBe(true)
-    expect(lensCta.getAttribute('href')).toBe('/lens')
-    expect(lensCta.querySelector('svg')).not.toBeNull()
-
-    rerender(<HeroPanel {...handlers} headingLevel="h2" playbackActive={false} side="dev" />)
-
-    const devCta = getByRole('link', { name: 'See Dev Work' })
-    expect(devCta.classList.contains('specular-button--md')).toBe(true)
-    expect(devCta.getAttribute('href')).toBe('/projects')
-  })
 })

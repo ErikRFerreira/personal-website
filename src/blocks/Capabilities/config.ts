@@ -1,4 +1,4 @@
-import { Block } from 'payload'
+import type { Block } from 'payload'
 
 export const Capabilities: Block = {
   slug: 'capabilities',
@@ -11,25 +11,16 @@ export const Capabilities: Block = {
     {
       name: 'eyebrow',
       type: 'text',
-      defaultValue: '03 - Capabilities',
     },
     {
-      name: 'label',
-      type: 'text',
-      defaultValue: 'What I Do',
-    },
-    {
-      name: 'intro',
-      type: 'textarea',
-      defaultValue:
-        'From polished interfaces to robust backend systems, I build thoughtful, reliable digital products from end to end.',
-    },
-    {
-      name: 'capabilities',
+      name: 'items',
       type: 'array',
+      minRows: 1,
+      maxRows: 3,
+      required: true,
       fields: [
         {
-          name: 'name',
+          name: 'title',
           type: 'text',
           required: true,
         },
@@ -48,6 +39,17 @@ export const Capabilities: Block = {
               equals: 'image/svg+xml',
             },
           },
+        },
+        {
+          name: 'tags',
+          type: 'array',
+          fields: [
+            {
+              name: 'tag',
+              type: 'text',
+              required: true,
+            },
+          ],
         },
       ],
     },

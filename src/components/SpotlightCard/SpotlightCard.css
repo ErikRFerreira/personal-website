@@ -15,19 +15,23 @@
   background-color: var(--site-surface-elevated);
 }
 
-.custom-spotlight-card {
-  border-color: color-mix(in srgb, var(--site-border-control) 55%, transparent);
-  background-color: color-mix(in srgb, var(--site-surface-elevated) 95%, var(--site-accent) 5%);
-  padding: clamp(2.25rem, 3vw, 2.75rem);
+.capability-card {
+  min-height: 100%;
+  border-radius: 0;
+  border-color: var(--site-border-subtle);
+  background-color: color-mix(in srgb, var(--site-surface-elevated) 92%, transparent);
+  padding: clamp(2rem, 4vw, 3rem);
   transition:
-    background-color 200ms ease-out,
-    border-color 200ms ease-out;
+    background-color 300ms ease-out,
+    border-color 300ms ease-out,
+    box-shadow 300ms ease-out;
 }
 
-.custom-spotlight-card:hover,
-.custom-spotlight-card:focus-within {
-  border-color: color-mix(in srgb, var(--site-border-control) 85%, var(--site-accent) 15%);
-  background-color: color-mix(in srgb, var(--site-surface-elevated) 92%, var(--site-accent) 8%);
+.capability-card:hover,
+.capability-card:focus-within {
+  border-color: var(--site-border-active);
+  background-color: var(--site-surface-elevated);
+  box-shadow: 0 0 2rem var(--site-glow-accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
