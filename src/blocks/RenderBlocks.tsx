@@ -11,6 +11,7 @@ import { SimpleTextBlock } from '@/blocks/SimpleText/Component'
 import { SelectedProjectsBlock } from '@/blocks/SelectedProjects/Component'
 import { InitiateProjectBlock } from '@/blocks/InitiateProject/Component'
 import { CapabilitiesBlock } from './Capabilities/Component'
+import { DisciplinesBlock } from './Disciplines/Component'
 import { LensBlockComponent } from './LensBlock/Component'
 import { AboutIntroBlock } from './AboutIntro/Component'
 import { AboutStoryBlock } from './AboutStory/Component'
@@ -29,6 +30,7 @@ const blockComponents = {
   selectedProjects: SelectedProjectsBlock,
   initiateProject: InitiateProjectBlock,
   capabilities: CapabilitiesBlock,
+  disciplines: DisciplinesBlock,
   lensBlock: LensBlockComponent,
   aboutIntro: AboutIntroBlock,
   aboutStory: AboutStoryBlock,

@@ -15,7 +15,8 @@
   background-color: var(--site-surface-elevated);
 }
 
-.capability-card {
+.capability-card,
+.discipline-card {
   min-height: 100%;
   border-radius: 0;
   border-color: var(--site-border-subtle);
@@ -28,7 +29,9 @@
 }
 
 .capability-card:hover,
-.capability-card:focus-within {
+.capability-card:focus-within,
+.discipline-card:hover,
+.discipline-card:focus-within {
   border-color: var(--site-border-active);
   background-color: var(--site-surface-elevated);
   box-shadow: 0 0 2rem var(--site-glow-accent);

@@ -233,6 +233,64 @@ test.describe('Frontend', () => {
     )
   })
 
+  test('renders the editorial About hero responsively', async ({ page }) => {
+    await page.setViewportSize({ height: 900, width: 1440 })
+    await page.goto('http://localhost:3000/about', { waitUntil: 'networkidle' })
+
+    const hero = page.getByTestId('about-hero')
+    const imageFrame = page.getByTestId('about-hero-image-frame')
+
+    await expect(hero.getByRole('heading', { name: 'ABOUT ME' })).toBeVisible()
+    await expect(hero.locator('img')).toHaveCount(1)
+    await expect(hero.getByTestId('hero-image-stack-control')).toHaveCount(0)
+
+    const desktopGeometry = await hero.evaluate((element) => {
+      const container = element.querySelector<HTMLElement>('.site-container')
+      const text = element.querySelector<HTMLElement>('[data-about-hero-text]')
+      const image = element.querySelector<HTMLElement>('[data-about-hero-image-layer]')
+
+      if (!container || !text || !image) return null
+
+      const containerBounds = container.getBoundingClientRect()
+      const textBounds = text.getBoundingClientRect()
+      const imageBounds = image.getBoundingClientRect()
+      const containerStyles = getComputedStyle(container)
+      const paddingLeft = Number.parseFloat(containerStyles.paddingLeft)
+      const paddingRight = Number.parseFloat(containerStyles.paddingRight)
+      const contentWidth = containerBounds.width - paddingLeft - paddingRight
+
+      return {
+        imageStartsBelowText: imageBounds.top > textBounds.bottom,
+        rightGap: Math.abs(containerBounds.right - paddingRight - imageBounds.right),
+        widthRatio: imageBounds.width / contentWidth,
+      }
+    })
+
+    expect(desktopGeometry).not.toBeNull()
+    expect(desktopGeometry?.imageStartsBelowText).toBe(true)
+    expect(desktopGeometry?.rightGap).toBeLessThanOrEqual(1)
+    expect(desktopGeometry?.widthRatio).toBeGreaterThanOrEqual(0.7)
+    expect(desktopGeometry?.widthRatio).toBeLessThanOrEqual(0.74)
+
+    await page.setViewportSize({ height: 844, width: 390 })
+    await page.reload({ waitUntil: 'networkidle' })
+
+    await expect(hero.getByRole('heading', { name: 'ABOUT ME' })).toBeVisible()
+    expect(
+      await imageFrame.evaluate((element) => element.getBoundingClientRect().height),
+    ).toBeGreaterThan(220)
+    expect(
+      await hero.evaluate((element) => {
+        const viewportWidth = document.documentElement.clientWidth
+
+        return [...element.querySelectorAll('*')].every((child) => {
+          const bounds = child.getBoundingClientRect()
+          return bounds.left >= -0.5 && bounds.right <= viewportWidth + 0.5
+        })
+      }),
+    ).toBe(true)
+  })
+
   test('keeps Payload Admin on native scrolling', async ({ page }) => {
     await page.goto('http://localhost:3000/admin', { waitUntil: 'networkidle' })
 

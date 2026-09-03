@@ -223,7 +223,7 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
             >
               <Image
                 alt={image.alt?.trim() || photo.title}
-                className="object-cover opacity-90 transition-[transform,opacity] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:scale-[1.02] group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none motion-reduce:will-change-auto"
+                className="object-cover opacity-90 transition-[scale,opacity] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:scale-[1.05] group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none motion-reduce:will-change-auto"
                 fill
                 quality={75}
                 sizes={
@@ -240,7 +240,7 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
           </LensPhotoFrame>
         ) : (
           <div
-            className={`relative w-full overflow-hidden bg-site-surface-elevated ${layout.presentation.aspect}`}
+            className={`relative w-full overflow-hidden bg-site-surface-frame ${layout.presentation.aspect}`}
             data-archive-format={format}
           >
             <div
@@ -253,7 +253,7 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
             >
               <Image
                 alt={image.alt?.trim() || photo.title}
-                className="object-cover opacity-90 transition-[transform,opacity] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:scale-[1.02] group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none motion-reduce:will-change-auto"
+                className="object-cover opacity-90 transition-[scale,opacity] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:scale-[1.05] group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none motion-reduce:will-change-auto"
                 fill
                 quality={75}
                 sizes={

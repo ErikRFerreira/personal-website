@@ -10,6 +10,7 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { SimpleText } from '../../blocks/SimpleText/config'
 import { SelectedProjects } from '../../blocks/SelectedProjects/config'
 import { Capabilities } from '../../blocks/Capabilities/config'
+import { Disciplines } from '../../blocks/Disciplines/config'
 import { LensBlock } from '../../blocks/LensBlock/config'
 import { AboutIntro } from '../../blocks/AboutIntro/config'
 import { AboutStory } from '../../blocks/AboutStory/config'
@@ -92,6 +93,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 SimpleText,
                 SelectedProjects,
                 Capabilities,
+                Disciplines,
                 LensBlock,
                 AboutIntro,
                 AboutStory,

@@ -45,11 +45,12 @@ export const about = ({
   _status: 'published',
   title: 'About',
   hero: {
-    type: 'profileHero',
-    name: 'Erik Ferreira',
-    intro: 'Developer, diver, and photographer building digital products and documenting life underwater.',
+    type: 'aboutHero',
+    name: 'ABOUT ME',
+    intro:
+      'Developer, diver and photographer working across software, underwater environments and visual documentation.',
     media: heroImage.id,
-    imageLabel: 'Profile image',
+    imageLabel: 'PROFILE / 01',
   },
   layout: [
     {

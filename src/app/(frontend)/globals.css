@@ -18,6 +18,7 @@
     --site-surface-deep: #050809;
     --site-surface-base: #071214;
     --site-surface-elevated: #0b171b;
+    --site-surface-frame: #181a1e;
     --site-surface-photo: var(--site-surface-deep);
     --site-surface-footer: var(--site-surface-deep);
     --site-text-primary: #f2f2ef;
@@ -243,6 +244,7 @@
   --color-site-surface-deep: var(--site-surface-deep);
   --color-site-surface-base: var(--site-surface-base);
   --color-site-surface-elevated: var(--site-surface-elevated);
+  --color-site-surface-frame: var(--site-surface-frame);
   --color-site-surface-photo: var(--site-surface-photo);
   --color-site-surface-footer: var(--site-surface-footer);
   --color-site-text-primary: var(--site-text-primary);

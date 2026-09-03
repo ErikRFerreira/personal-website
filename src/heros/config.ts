@@ -14,27 +14,32 @@ import {
 
 import { linkGroup } from '@/fields/linkGroup'
 
-const requiredForProfileHero =
+const specializedHeroTypes = ['profileHero', 'aboutHero'] as const
+
+const isSpecializedHero = (type?: string) =>
+  specializedHeroTypes.includes(type as (typeof specializedHeroTypes)[number])
+
+const requiredForSpecializedHero =
   (label: string): TextFieldSingleValidation =>
   (value, { siblingData }) => {
-    if ((siblingData as { type?: string })?.type === 'profileHero' && !value?.trim()) {
-      return `${label} is required for Profile Hero`
+    if (isSpecializedHero((siblingData as { type?: string })?.type) && !value?.trim()) {
+      return `${label} is required for this hero type`
     }
 
     return true
   }
 
 const profileIntroRequired: TextareaFieldValidation = (value, { siblingData }) => {
-  if ((siblingData as { type?: string })?.type === 'profileHero' && !value?.trim()) {
-    return 'Introduction is required for Profile Hero'
+  if (isSpecializedHero((siblingData as { type?: string })?.type) && !value?.trim()) {
+    return 'Introduction is required for this hero type'
   }
 
   return true
 }
 
 const profileImageRequired: UploadFieldSingleValidation = (value, { siblingData }) => {
-  if ((siblingData as { type?: string })?.type === 'profileHero' && !value) {
-    return 'Image is required for Profile Hero'
+  if (isSpecializedHero((siblingData as { type?: string })?.type) && !value) {
+    return 'Image is required for this hero type'
   }
 
   return true
@@ -67,6 +72,7 @@ export const hero: Field = {
         { label: 'Medium Impact', value: 'mediumImpact' },
         { label: 'Low Impact', value: 'lowImpact' },
         { label: 'Profile Hero', value: 'profileHero' },
+        { label: 'About Hero', value: 'aboutHero' },
       ],
       required: true,
     },
@@ -74,16 +80,16 @@ export const hero: Field = {
       name: 'name',
       type: 'text',
       admin: {
-        condition: (_, { type } = {}) => type === 'profileHero',
+        condition: (_, { type } = {}) => isSpecializedHero(type),
       },
-      label: 'Name',
-      validate: requiredForProfileHero('Name'),
+      label: 'Heading / name',
+      validate: requiredForSpecializedHero('Heading / name'),
     },
     {
       name: 'intro',
       type: 'textarea',
       admin: {
-        condition: (_, { type } = {}) => type === 'profileHero',
+        condition: (_, { type } = {}) => isSpecializedHero(type),
       },
       label: 'Introduction',
       validate: profileIntroRequired,
@@ -93,7 +99,7 @@ export const hero: Field = {
       type: 'upload',
       admin: {
         condition: (_, { type } = {}) =>
-          ['highImpact', 'mediumImpact', 'profileHero'].includes(type),
+          ['highImpact', 'mediumImpact', 'profileHero', 'aboutHero'].includes(type),
         description:
           'Main hero image. When the Profile Hero image stack is enabled, this is the Diver card.',
       },
@@ -106,7 +112,7 @@ export const hero: Field = {
       type: 'text',
       admin: {
         condition: (_, { enableImageStack, type } = {}) =>
-          type === 'profileHero' && !enableImageStack,
+          type === 'aboutHero' || (type === 'profileHero' && !enableImageStack),
       },
       label: 'Image label',
     },
@@ -165,14 +171,14 @@ export const hero: Field = {
         ],
       }),
       admin: {
-        condition: (_, { type } = {}) => type !== 'profileHero',
+        condition: (_, { type } = {}) => !isSpecializedHero(type),
       },
       label: false,
     },
     linkGroup({
       overrides: {
         admin: {
-          condition: (_, { type } = {}) => type !== 'profileHero',
+          condition: (_, { type } = {}) => !isSpecializedHero(type),
           initCollapsed: true,
         },
         maxRows: 2,

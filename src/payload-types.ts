@@ -165,7 +165,7 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'profileHero';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'profileHero' | 'aboutHero';
     name?: string | null;
     intro?: string | null;
     /**
@@ -232,6 +232,7 @@ export interface Page {
     | SimpleTextBlock
     | SelectedProjectsBlock
     | CapabilitiesBlock
+    | DisciplinesBlock
     | LensBlock
     | AboutIntroBlock
     | AboutStoryBlock
@@ -967,6 +968,28 @@ export interface CapabilitiesBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DisciplinesBlock".
+ */
+export interface DisciplinesBlock {
+  eyebrow?: string | null;
+  items: {
+    title: string;
+    description: string;
+    icon: number | Media;
+    tags?:
+      | {
+          tag: string;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'disciplines';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "LensBlock".
  */
 export interface LensBlock {
@@ -1584,6 +1607,7 @@ export interface PagesSelect<T extends boolean = true> {
         simpleText?: T | SimpleTextBlockSelect<T>;
         selectedProjects?: T | SelectedProjectsBlockSelect<T>;
         capabilities?: T | CapabilitiesBlockSelect<T>;
+        disciplines?: T | DisciplinesBlockSelect<T>;
         lensBlock?: T | LensBlockSelect<T>;
         aboutIntro?: T | AboutIntroBlockSelect<T>;
         aboutStory?: T | AboutStoryBlockSelect<T>;
@@ -1737,6 +1761,29 @@ export interface SelectedProjectsBlockSelect<T extends boolean = true> {
  * via the `definition` "CapabilitiesBlock_select".
  */
 export interface CapabilitiesBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        tags?:
+          | T
+          | {
+              tag?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DisciplinesBlock_select".
+ */
+export interface DisciplinesBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   items?:
     | T

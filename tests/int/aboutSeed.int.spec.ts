@@ -12,12 +12,12 @@ describe('about page seed', () => {
     expect(page.slug).toBe('about')
     expect(page._status).toBe('published')
     expect(page.hero).toEqual({
-      type: 'profileHero',
-      name: 'Erik Ferreira',
+      type: 'aboutHero',
+      name: 'ABOUT ME',
       intro:
-        'Developer, diver, and photographer building digital products and documenting life underwater.',
+        'Developer, diver and photographer working across software, underwater environments and visual documentation.',
       media: 10,
-      imageLabel: 'Profile image',
+      imageLabel: 'PROFILE / 01',
     })
     expect(page.layout.map(({ blockType }) => blockType)).toEqual([
       'aboutStory',

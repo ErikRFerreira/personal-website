@@ -11,6 +11,7 @@ import * as migration_20260902_023959_add_about_page_blocks from './20260902_023
 import * as migration_20260902_072343 from './20260902_072343'
 import * as migration_20260902_075703 from './20260902_075703'
 import * as migration_20260903_000000_add_home_hero_image_stack from './20260903_000000_add_home_hero_image_stack'
+import * as migration_20260903_140000_add_about_hero from './20260903_140000_add_about_hero'
 
 export const migrations = [
   {
@@ -77,5 +78,10 @@ export const migrations = [
     up: migration_20260903_000000_add_home_hero_image_stack.up,
     down: migration_20260903_000000_add_home_hero_image_stack.down,
     name: '20260903_000000_add_home_hero_image_stack',
+  },
+  {
+    up: migration_20260903_140000_add_about_hero.up,
+    down: migration_20260903_140000_add_about_hero.down,
+    name: '20260903_140000_add_about_hero',
   },
 ]

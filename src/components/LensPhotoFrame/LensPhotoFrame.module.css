@@ -7,8 +7,9 @@
     0 1rem 3rem rgb(0 0 0 / 10%);
 }
 
-.technicalFrame[data-detail-frame='true'] {
-  background: #181a1e;
+.technicalFrame[data-detail-frame='true'],
+.technicalFrame[data-archive-frame='true'] {
+  background: var(--site-surface-frame);
 }
 
 .technicalFrame::before {
