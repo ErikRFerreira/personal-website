@@ -1,4 +1,5 @@
 import type { LensBlock, Len } from '@/payload-types'
+import { AccentHexagon } from '@/components/AccentHexagon'
 import Link from 'next/link'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { getRevealDelay } from '@/utilities/getRevealDelay'
@@ -21,10 +22,15 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
         <RevealOnScroll revealName="section-heading">
           <header className="mb-16 max-w-[42rem] md:mb-24">
             {eyebrow && (
-              <p className="mb-5 font-mono text-[0.6875rem] leading-[1.2] font-bold tracking-[0.24em] text-site-accent uppercase">
-                {eyebrow}
-              </p>
+              <div className="mb-5 flex items-center gap-4">
+                <AccentHexagon />
+                <p className="font-mono text-[0.6875rem] leading-[1.2] font-bold tracking-[0.24em] text-site-accent uppercase">
+                  {eyebrow}
+                </p>
+              </div>
             )}
+
+            {!eyebrow && label && <AccentHexagon className="mb-5" />}
 
             {label && (
               <h2 className="text-[3rem] leading-[0.95] font-extrabold tracking-normal text-site-text-primary md:text-[4.5rem]">

@@ -1,9 +1,9 @@
+import { AccentHexagon } from '@/components/AccentHexagon'
 import { Media } from '@/components/Media'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import SpotlightCard from '@/components/SpotlightCard'
 import type { CapabilitiesBlock as CapabilitiesBlockProps } from '@/payload-types'
 import { getRevealDelay } from '@/utilities/getRevealDelay'
-import { Hexagon } from 'lucide-react'
 import { CapabilitiesParallax } from './CapabilitiesParallax'
 
 type CapabilitiesProps = CapabilitiesBlockProps & {
@@ -44,11 +44,7 @@ export function CapabilitiesBlock({
       <div className="site-container">
         <RevealOnScroll revealName="capabilities-heading">
           <div className="mb-16 flex items-center gap-4 md:mb-24">
-            <Hexagon
-              aria-hidden="true"
-              className="h-4 w-4 shrink-0 fill-current text-site-accent"
-              strokeWidth={1.5}
-            />
+            <AccentHexagon />
             <h2
               className="shrink-0 font-mono text-[0.6875rem] leading-none font-bold tracking-[0.2em] text-site-accent uppercase"
               id="capabilities-heading"
@@ -104,7 +100,10 @@ export function CapabilitiesBlock({
                     </p>
 
                     {tags && tags.length > 0 && (
-                      <ul aria-label={`${title} tags`} className="mt-auto flex flex-wrap gap-2 pt-10">
+                      <ul
+                        aria-label={`${title} tags`}
+                        className="mt-auto flex flex-wrap gap-2 pt-10"
+                      >
                         {tags.map(({ tag }, tagIndex) => (
                           <li
                             className="border border-site-border-subtle bg-site-surface-base/60 px-3 py-2 font-mono text-[0.625rem] leading-none font-semibold tracking-[0.08em] text-site-text-primary"

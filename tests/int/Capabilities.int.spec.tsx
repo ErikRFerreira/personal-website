@@ -59,6 +59,7 @@ describe('CapabilitiesBlock', () => {
     )
 
     expect(screen.getByRole('heading', { name: 'Operational Vectors' })).not.toBeNull()
+    expect(document.querySelector('[data-accent-hexagon="true"]')).not.toBeNull()
     expect(screen.getByRole('heading', { name: 'Digital Products' })).not.toBeNull()
     expect(screen.getByRole('heading', { name: 'Diving' })).not.toBeNull()
     expect(screen.getByRole('heading', { name: 'Photography' })).not.toBeNull()
