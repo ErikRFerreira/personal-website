@@ -168,7 +168,21 @@ export interface Page {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'profileHero';
     name?: string | null;
     intro?: string | null;
+    /**
+     * Main hero image. When the Profile Hero image stack is enabled, this is the Diver card.
+     */
+    media?: (number | null) | Media;
     imageLabel?: string | null;
+    /**
+     * Show the interactive Diver / Developer image stack.
+     */
+    enableImageStack?: boolean | null;
+    stackPrimaryLabel?: string | null;
+    /**
+     * Uses the built-in developer artwork when left empty.
+     */
+    secondaryMedia?: (number | null) | Media;
+    stackSecondaryLabel?: string | null;
     richText?: {
       root: {
         type: string;
@@ -208,7 +222,6 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
-    media?: (number | null) | Media;
   };
   layout: (
     | CallToActionBlock
@@ -233,52 +246,6 @@ export interface Page {
     description?: string | null;
   };
   publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: number;
-  title: string;
-  heroImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -406,6 +373,52 @@ export interface FolderInterface {
   folderType?: 'media'[] | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  heroImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  relatedPosts?: (number | Post)[] | null;
+  categories?: (number | Category)[] | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  authors?: (number | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1537,7 +1550,12 @@ export interface PagesSelect<T extends boolean = true> {
         type?: T;
         name?: T;
         intro?: T;
+        media?: T;
         imageLabel?: T;
+        enableImageStack?: T;
+        stackPrimaryLabel?: T;
+        secondaryMedia?: T;
+        stackSecondaryLabel?: T;
         richText?: T;
         links?:
           | T
@@ -1554,7 +1572,6 @@ export interface PagesSelect<T extends boolean = true> {
                   };
               id?: T;
             };
-        media?: T;
       };
   layout?:
     | T

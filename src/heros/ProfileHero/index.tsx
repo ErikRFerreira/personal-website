@@ -3,12 +3,26 @@ import { Media } from '@/components/Media'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 
 import { ProfileHeroParallax } from './ProfileHeroParallax'
+import { HeroImageStack } from './HeroImageStack'
 
 import type { Page } from '@/payload-types'
 
-export function ProfileHero({ name, intro, media, imageLabel }: Page['hero']) {
+export function ProfileHero({
+  name,
+  intro,
+  media,
+  imageLabel,
+  enableImageStack,
+  stackPrimaryLabel,
+  secondaryMedia,
+  stackSecondaryLabel,
+}: Page['hero']) {
   const nameParts = name?.trim().split(/\s+/).filter(Boolean) ?? []
-  const hasPopulatedImage = typeof media === 'object' && media !== null
+  const populatedImage = typeof media === 'object' && media !== null ? media : null
+  const populatedSecondaryImage =
+    typeof secondaryMedia === 'object' && secondaryMedia !== null ? secondaryMedia : null
+  const hasPopulatedImage = Boolean(populatedImage)
+  const shouldRenderImageStack = Boolean(enableImageStack && populatedImage)
 
   if (!name || !intro) return null
 
@@ -33,21 +47,30 @@ export function ProfileHero({ name, intro, media, imageLabel }: Page['hero']) {
                   aria-hidden="true"
                   className="absolute -inset-3 border border-site-border-active/25"
                 />
-                <div className="relative aspect-4/5 w-full overflow-hidden bg-site-surface-elevated md:h-[min(43rem,68svh)] md:aspect-auto">
-                  {hasPopulatedImage ? (
-                    <Media
-                      fill
-                      imgClassName="object-cover [filter:grayscale(1)] transition-[filter,scale] duration-700 ease-out group-hover:scale-[1.015] group-hover:[filter:grayscale(0)] motion-reduce:scale-100 motion-reduce:transition-none"
-                      pictureClassName="block h-full w-full"
-                      resource={media}
-                      size="(max-width: 767px) calc(100vw - 3rem), 67vw"
-                    />
-                  ) : (
-                    <div className="h-full w-full bg-site-surface-elevated" />
-                  )}
-                </div>
+                {enableImageStack && populatedImage ? (
+                  <HeroImageStack
+                    developerMedia={populatedSecondaryImage}
+                    diverMedia={populatedImage}
+                    primaryLabel={stackPrimaryLabel}
+                    secondaryLabel={stackSecondaryLabel}
+                  />
+                ) : (
+                  <div className="relative aspect-4/5 w-full overflow-hidden bg-site-surface-elevated md:h-[min(43rem,68svh)] md:aspect-auto">
+                    {hasPopulatedImage ? (
+                      <Media
+                        fill
+                        imgClassName="object-cover [filter:grayscale(1)] transition-[filter,scale] duration-700 ease-out group-hover:scale-[1.015] group-hover:[filter:grayscale(0)] motion-reduce:scale-100 motion-reduce:transition-none"
+                        pictureClassName="block h-full w-full"
+                        resource={media}
+                        size="(max-width: 767px) calc(100vw - 3rem), 67vw"
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-site-surface-elevated" />
+                    )}
+                  </div>
+                )}
 
-                {imageLabel && (
+                {!shouldRenderImageStack && imageLabel && (
                   <RevealOnScroll
                     className="absolute right-3 bottom-3 z-20 md:right-4 md:bottom-4"
                     delay={1140}

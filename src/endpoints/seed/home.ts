@@ -19,7 +19,9 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       intro:
         'Developer, diver, and photographer building digital products and documenting life underwater.',
       media: heroImage.id,
-      imageLabel: 'Profile image',
+      enableImageStack: true,
+      stackPrimaryLabel: '01 / DIVER',
+      stackSecondaryLabel: '02 / DEVELOPER',
     },
     layout: [
       {

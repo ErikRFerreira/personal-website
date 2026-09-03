@@ -10,6 +10,7 @@ import * as migration_20260901_081202_lens_taxonomies_and_detail from './2026090
 import * as migration_20260902_023959_add_about_page_blocks from './20260902_023959_add_about_page_blocks'
 import * as migration_20260902_072343 from './20260902_072343'
 import * as migration_20260902_075703 from './20260902_075703'
+import * as migration_20260903_000000_add_home_hero_image_stack from './20260903_000000_add_home_hero_image_stack'
 
 export const migrations = [
   {
@@ -71,5 +72,10 @@ export const migrations = [
     up: migration_20260902_075703.up,
     down: migration_20260902_075703.down,
     name: '20260902_075703',
+  },
+  {
+    up: migration_20260903_000000_add_home_hero_image_stack.up,
+    down: migration_20260903_000000_add_home_hero_image_stack.down,
+    name: '20260903_000000_add_home_hero_image_stack',
   },
 ]

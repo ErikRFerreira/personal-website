@@ -68,9 +68,7 @@ test.describe('Frontend', () => {
     await expectReveal('[data-block-type="capabilities"] [data-reveal-name="capabilities-heading"]')
     await expectReveal('[data-block-type="capabilities"] [data-reveal-name="capability-card"]')
 
-    const capabilityCard = page
-      .locator('[data-block-type="capabilities"] .capability-card')
-      .first()
+    const capabilityCard = page.locator('[data-block-type="capabilities"] .capability-card').first()
     if (await capabilityCard.count()) {
       await capabilityCard.hover()
       await expect(capabilityCard).toBeVisible()
@@ -186,6 +184,53 @@ test.describe('Frontend', () => {
     await expectReveal('[data-block-type="homeBio"] [data-reveal-name="home-bio"]')
 
     expect(browserErrors).toEqual([])
+  })
+
+  test('supports the homepage hero image stack interactions', async ({ page }) => {
+    const heroTestBaseURL = process.env.HERO_TEST_BASE_URL || 'http://localhost:3000'
+
+    await page.setViewportSize({ height: 844, width: 390 })
+    await page.goto(heroTestBaseURL, { waitUntil: 'networkidle' })
+
+    const stack = page.getByTestId('hero-image-stack')
+    const diverCard = stack.locator('[data-card-identity="diver"]')
+    const developerCard = stack.locator('[data-card-identity="developer"]')
+
+    const control = page.getByTestId('hero-image-stack-control')
+    await expect(stack).toHaveAttribute('data-active-card', 'diver')
+    await expect(control).toHaveAccessibleName(/Show Developer image/i)
+    await expect(diverCard).toContainText('01 / DIVER')
+    await expect(diverCard.getByRole('img')).toHaveAccessibleName(/diver/i)
+    await expect(developerCard).toContainText('02 / DEVELOPER')
+    await expect(developerCard.getByRole('img')).toHaveAccessibleName(
+      /developer|programmer|software/i,
+    )
+
+    await control.click()
+    await expect(stack).toHaveAttribute('data-active-card', 'developer')
+
+    await control.focus()
+    await control.press('Enter')
+    await expect(stack).toHaveAttribute('data-active-card', 'diver')
+
+    await control.press('Space')
+    await expect(stack).toHaveAttribute('data-active-card', 'developer')
+
+    expect(
+      await stack.evaluate((element) =>
+        [...element.querySelectorAll('[data-card-identity]')].every((card) => {
+          const bounds = card.getBoundingClientRect()
+          return bounds.left >= 0 && bounds.right <= document.documentElement.clientWidth
+        }),
+      ),
+    ).toBe(true)
+
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.reload({ waitUntil: 'networkidle' })
+    await expect(page.getByTestId('hero-image-stack')).toHaveAttribute(
+      'data-reduced-motion',
+      'true',
+    )
   })
 
   test('keeps Payload Admin on native scrolling', async ({ page }) => {

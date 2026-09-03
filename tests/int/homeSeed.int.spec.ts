@@ -14,7 +14,9 @@ describe('home page seed', () => {
       intro:
         'Developer, diver, and photographer building digital products and documenting life underwater.',
       media: 10,
-      imageLabel: 'Profile image',
+      enableImageStack: true,
+      stackPrimaryLabel: '01 / DIVER',
+      stackSecondaryLabel: '02 / DEVELOPER',
     })
   })
 })

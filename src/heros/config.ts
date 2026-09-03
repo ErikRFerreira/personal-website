@@ -14,7 +14,8 @@ import {
 
 import { linkGroup } from '@/fields/linkGroup'
 
-const requiredForProfileHero = (label: string): TextFieldSingleValidation =>
+const requiredForProfileHero =
+  (label: string): TextFieldSingleValidation =>
   (value, { siblingData }) => {
     if ((siblingData as { type?: string })?.type === 'profileHero' && !value?.trim()) {
       return `${label} is required for Profile Hero`
@@ -38,6 +39,18 @@ const profileImageRequired: UploadFieldSingleValidation = (value, { siblingData 
 
   return true
 }
+
+const requiredForProfileImageStack =
+  (label: string): TextFieldSingleValidation =>
+  (value, { siblingData }) => {
+    const data = siblingData as { enableImageStack?: boolean; type?: string }
+
+    if (data?.type === 'profileHero' && data.enableImageStack && !value?.trim()) {
+      return `${label} is required when the image stack is enabled`
+    }
+
+    return true
+  }
 
 export const hero: Field = {
   name: 'hero',
@@ -76,12 +89,69 @@ export const hero: Field = {
       validate: profileIntroRequired,
     },
     {
+      name: 'media',
+      type: 'upload',
+      admin: {
+        condition: (_, { type } = {}) =>
+          ['highImpact', 'mediumImpact', 'profileHero'].includes(type),
+        description:
+          'Main hero image. When the Profile Hero image stack is enabled, this is the Diver card.',
+      },
+      label: 'Primary hero image',
+      relationTo: 'media',
+      validate: profileImageRequired,
+    },
+    {
       name: 'imageLabel',
       type: 'text',
       admin: {
-        condition: (_, { type } = {}) => type === 'profileHero',
+        condition: (_, { enableImageStack, type } = {}) =>
+          type === 'profileHero' && !enableImageStack,
       },
       label: 'Image label',
+    },
+    {
+      name: 'enableImageStack',
+      type: 'checkbox',
+      admin: {
+        condition: (_, { type } = {}) => type === 'profileHero',
+        description: 'Show the interactive Diver / Developer image stack.',
+      },
+      defaultValue: false,
+      label: 'Enable image stack',
+    },
+    {
+      name: 'stackPrimaryLabel',
+      type: 'text',
+      admin: {
+        condition: (_, { enableImageStack, type } = {}) =>
+          type === 'profileHero' && Boolean(enableImageStack),
+      },
+      defaultValue: '01 / DIVER',
+      label: 'Primary image label',
+      validate: requiredForProfileImageStack('Primary image label'),
+    },
+    {
+      name: 'secondaryMedia',
+      type: 'upload',
+      admin: {
+        condition: (_, { enableImageStack, type } = {}) =>
+          type === 'profileHero' && Boolean(enableImageStack),
+        description: 'Uses the built-in developer artwork when left empty.',
+      },
+      label: 'Developer image',
+      relationTo: 'media',
+    },
+    {
+      name: 'stackSecondaryLabel',
+      type: 'text',
+      admin: {
+        condition: (_, { enableImageStack, type } = {}) =>
+          type === 'profileHero' && Boolean(enableImageStack),
+      },
+      defaultValue: '02 / DEVELOPER',
+      label: 'Secondary image label',
+      validate: requiredForProfileImageStack('Secondary image label'),
     },
     {
       name: 'richText',
@@ -108,16 +178,6 @@ export const hero: Field = {
         maxRows: 2,
       },
     }),
-    {
-      name: 'media',
-      type: 'upload',
-      admin: {
-        condition: (_, { type } = {}) =>
-          ['highImpact', 'mediumImpact', 'profileHero'].includes(type),
-      },
-      relationTo: 'media',
-      validate: profileImageRequired,
-    },
   ],
   label: false,
 }

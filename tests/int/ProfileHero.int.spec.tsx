@@ -16,6 +16,28 @@ vi.mock('@/components/Media', () => ({
   Media: () => <span aria-hidden="true" data-testid="profile-media" />,
 }))
 
+vi.mock('@/heros/ProfileHero/HeroImageStack', () => ({
+  HeroImageStack: ({
+    developerMedia,
+    diverMedia,
+    primaryLabel,
+    secondaryLabel,
+  }: {
+    developerMedia?: Media | null
+    diverMedia: Media
+    primaryLabel?: string | null
+    secondaryLabel?: string | null
+  }) => (
+    <div
+      data-developer-id={developerMedia?.id}
+      data-diver-id={diverMedia.id}
+      data-testid="hero-image-stack"
+    >
+      {primaryLabel} {secondaryLabel}
+    </div>
+  ),
+}))
+
 import { ProfileHero } from '@/heros/ProfileHero'
 import type { Media } from '@/payload-types'
 
@@ -24,6 +46,13 @@ afterEach(cleanup)
 const profileImage = {
   id: 10,
   alt: 'Erik Ferreira',
+  createdAt: '2026-09-02T00:00:00.000Z',
+  updatedAt: '2026-09-02T00:00:00.000Z',
+} as Media
+
+const developerImage = {
+  id: 11,
+  alt: 'Erik writing software',
   createdAt: '2026-09-02T00:00:00.000Z',
   updatedAt: '2026-09-02T00:00:00.000Z',
 } as Media
@@ -62,5 +91,38 @@ describe('ProfileHero', () => {
 
     expect(screen.queryByTestId('profile-media')).toBeNull()
     expect(container.querySelector('section')?.getAttribute('data-has-image')).toBe('false')
+  })
+
+  it('renders the image stack only when explicitly enabled with a populated primary image', () => {
+    const { rerender } = render(
+      <ProfileHero
+        enableImageStack
+        intro="Developer and diver"
+        media={profileImage}
+        name="Erik Ferreira"
+        secondaryMedia={developerImage}
+        stackPrimaryLabel="01 / DIVER"
+        stackSecondaryLabel="02 / DEVELOPER"
+        type="profileHero"
+      />,
+    )
+
+    const stack = screen.getByTestId('hero-image-stack')
+    expect(stack.getAttribute('data-diver-id')).toBe('10')
+    expect(stack.getAttribute('data-developer-id')).toBe('11')
+    expect(screen.getByText(/01 \/ DIVER/)).not.toBeNull()
+    expect(screen.queryByTestId('profile-media')).toBeNull()
+
+    rerender(
+      <ProfileHero
+        enableImageStack
+        intro="Developer and diver"
+        media={10}
+        name="Erik Ferreira"
+        type="profileHero"
+      />,
+    )
+
+    expect(screen.queryByTestId('hero-image-stack')).toBeNull()
   })
 })
