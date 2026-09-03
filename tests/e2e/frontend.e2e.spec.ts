@@ -291,6 +291,72 @@ test.describe('Frontend', () => {
     ).toBe(true)
   })
 
+  test('renders the About protocol responsively with accessible motion and hover states', async ({
+    page,
+  }) => {
+    test.setTimeout(60_000)
+
+    await page.setViewportSize({ height: 900, width: 1440 })
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
+    await page.goto('http://localhost:3000/about', { waitUntil: 'networkidle' })
+
+    const protocol = page.getByTestId('about-protocol')
+    const content = page.getByTestId('about-protocol-content')
+    const principles = page.getByTestId('about-protocol-principles')
+    const quote = page.getByTestId('about-protocol-quote')
+
+    await protocol.scrollIntoViewIfNeeded()
+    await expect(protocol.getByRole('heading', { level: 2 })).toBeVisible()
+    expect(await principles.locator('li').count()).toBeGreaterThan(0)
+    await expect(protocol.getByRole('blockquote')).toHaveCount(1)
+    await expect(quote).toBeVisible()
+    expect(
+      await content.evaluate(
+        (element) => getComputedStyle(element).gridTemplateColumns.split(' ').length,
+      ),
+    ).toBe(2)
+
+    const firstMarker = principles.locator('li').first().locator('span[aria-hidden="true"]')
+    await principles.locator('li').first().hover()
+    await expect
+      .poll(() => firstMarker.evaluate((element) => getComputedStyle(element).backgroundColor))
+      .toBe('rgb(0, 242, 255)')
+
+    await quote.hover()
+    await expect
+      .poll(() => quote.evaluate((element) => getComputedStyle(element).borderTopColor))
+      .toBe('rgba(0, 242, 255, 0.72)')
+    await expect
+      .poll(() => quote.locator('p').evaluate((element) => getComputedStyle(element).color))
+      .toBe('rgb(0, 242, 255)')
+
+    await page.setViewportSize({ height: 844, width: 390 })
+    await protocol.scrollIntoViewIfNeeded()
+
+    expect(
+      await content.evaluate(
+        (element) => getComputedStyle(element).gridTemplateColumns.split(' ').length,
+      ),
+    ).toBe(1)
+    expect(
+      await protocol.evaluate((element) => {
+        const viewportWidth = document.documentElement.clientWidth
+
+        return [...element.querySelectorAll('*')].every((child) => {
+          const bounds = child.getBoundingClientRect()
+          return bounds.left >= -0.5 && bounds.right <= viewportWidth + 0.5
+        })
+      }),
+    ).toBe(true)
+
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await protocol.scrollIntoViewIfNeeded()
+    await expect(content).toHaveAttribute('data-reduced-motion', 'true')
+    await expect
+      .poll(() => quote.evaluate((element) => getComputedStyle(element).transitionProperty))
+      .toBe('none')
+  })
+
   test('keeps Payload Admin on native scrolling', async ({ page }) => {
     await page.goto('http://localhost:3000/admin', { waitUntil: 'networkidle' })
 

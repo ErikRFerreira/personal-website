@@ -1160,13 +1160,15 @@ export interface AboutStoryBlock {
  * via the `definition` "AboutProtocolBlock".
  */
 export interface AboutProtocolBlock {
-  eyebrow?: string | null;
   heading: string;
   principles: {
     text: string;
-    quote: string;
     id?: string | null;
   }[];
+  /**
+   * Enter the quote without surrounding quotation marks.
+   */
+  quote: string;
   id?: string | null;
   blockName?: string | null;
   blockType: 'aboutProtocol';
@@ -1851,15 +1853,14 @@ export interface AboutStoryBlockSelect<T extends boolean = true> {
  * via the `definition` "AboutProtocolBlock_select".
  */
 export interface AboutProtocolBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
   heading?: T;
   principles?:
     | T
     | {
         text?: T;
-        quote?: T;
         id?: T;
       };
+  quote?: T;
   id?: T;
   blockName?: T;
 }

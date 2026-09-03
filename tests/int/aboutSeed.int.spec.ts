@@ -28,8 +28,21 @@ describe('about page seed', () => {
     ])
 
     const timeline = page.layout[3]
+    const protocol = page.layout[2]
     const cta = page.layout[4]
 
+    expect(protocol).toMatchObject({
+      blockType: 'aboutProtocol',
+      heading: 'The Protocol',
+      principles: [
+        { text: 'Build things that actually get used.' },
+        { text: 'Understand the system, not just the interface.' },
+        { text: 'Know when convention can be challenged.' },
+      ],
+      quote: 'Follow protocol when protocol matters.',
+    })
+    expect(protocol).not.toHaveProperty('eyebrow')
+    expect(protocol).not.toHaveProperty('principles.0.quote')
     expect(timeline).toMatchObject({
       blockType: 'aboutTimeline',
       milestones: [{ image: 20 }, { image: 21 }, { image: 22 }],

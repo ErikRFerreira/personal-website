@@ -7,8 +7,18 @@ vi.mock('@/components/RichText', () => ({
 }))
 
 vi.mock('@/components/RevealOnScroll', () => ({
-  RevealOnScroll: ({ children, revealName }: { children: ReactNode; revealName?: string }) => (
-    <div data-reveal-name={revealName}>{children}</div>
+  RevealOnScroll: ({
+    children,
+    delay,
+    revealName,
+  }: {
+    children: ReactNode
+    delay?: number
+    revealName?: string
+  }) => (
+    <div data-reveal-delay={delay ?? 0} data-reveal-name={revealName}>
+      {children}
+    </div>
   ),
 }))
 
@@ -22,6 +32,15 @@ vi.mock('@/components/BlurText', () => ({
 
 vi.mock('@/components/Media', () => ({
   Media: () => <span aria-hidden="true" data-testid="discipline-icon" />,
+}))
+
+vi.mock('@/blocks/AboutProtocol/ProtocolParallax', () => ({
+  ProtocolParallax: ({ principles, quote }: { principles: ReactNode; quote: ReactNode }) => (
+    <div data-testid="about-protocol-content">
+      {principles}
+      {quote}
+    </div>
+  ),
 }))
 
 import { AboutProtocolBlock } from '@/blocks/AboutProtocol/Component'
@@ -62,7 +81,12 @@ describe('About block placeholders', () => {
         <AboutProtocolBlock
           blockType="aboutProtocol"
           heading="The Protocol"
-          principles={[{ text: 'Build useful things', quote: 'Utility first.' }]}
+          principles={[
+            { text: 'Build things that actually get used.' },
+            { text: 'Understand the system, not just the interface.' },
+            { text: 'Know when convention can be challenged.' },
+          ]}
+          quote="Follow protocol when protocol matters."
         />
         <AboutTimelineBlock
           blockType="aboutTimeline"
@@ -86,6 +110,19 @@ describe('About block placeholders', () => {
     expect(screen.getByTestId('about-story-vertical-progress')).not.toBeNull()
     expect(screen.getByTestId('about-story-progress-marker')).not.toBeNull()
     expect(screen.getByRole('heading', { name: 'The Protocol' })).not.toBeNull()
+    expect(screen.getByTestId('about-protocol-principles').children).toHaveLength(3)
+    expect(screen.getAllByRole('blockquote')).toHaveLength(1)
+    expect(screen.getByText('\u201cFollow protocol when protocol matters.\u201d')).not.toBeNull()
+    expect(
+      [...document.querySelectorAll('[data-reveal-name="about-protocol-principle"]')].map(
+        (element) => element.getAttribute('data-reveal-delay'),
+      ),
+    ).toEqual(['0', '100', '200'])
+    expect(
+      document
+        .querySelector('[data-reveal-name="about-protocol-quote"]')
+        ?.getAttribute('data-reveal-delay'),
+    ).toBe('180')
     expect(screen.getByRole('heading', { name: 'Current chapter' })).not.toBeNull()
     expect(screen.getByText('Active')).not.toBeNull()
   })

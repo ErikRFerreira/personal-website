@@ -87,13 +87,13 @@ export const about = ({
     },
     {
       blockType: 'aboutProtocol',
-      eyebrow: 'Principles',
       heading: 'The Protocol',
       principles: [
-        { text: 'Build things that actually get used.', quote: 'Utility is the first measure.' },
-        { text: 'Understand the system, not just the interface.', quote: 'Context shapes every decision.' },
-        { text: 'Know when convention can be challenged.', quote: 'Follow protocol when protocol matters.' },
+        { text: 'Build things that actually get used.' },
+        { text: 'Understand the system, not just the interface.' },
+        { text: 'Know when convention can be challenged.' },
       ],
+      quote: 'Follow protocol when protocol matters.',
     },
     {
       blockType: 'aboutTimeline',
