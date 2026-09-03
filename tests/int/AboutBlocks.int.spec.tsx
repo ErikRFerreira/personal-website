@@ -123,7 +123,7 @@ describe('About block placeholders', () => {
         .querySelector('[data-reveal-name="about-protocol-quote"]')
         ?.getAttribute('data-reveal-delay'),
     ).toBe('180')
-    expect(screen.getByRole('heading', { name: 'Current chapter' })).not.toBeNull()
+    expect(screen.getByRole('button', { name: /Current chapter/ })).not.toBeNull()
     expect(screen.getByText('Active')).not.toBeNull()
   })
 })
