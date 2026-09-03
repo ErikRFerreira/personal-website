@@ -1209,7 +1209,7 @@ export interface RevealTextBlock {
 export interface HomeBioBlock {
   eyebrow?: string | null;
   name: string;
-  roles: string;
+  roles?: string | null;
   /**
    * Keep this concise — ideally 2–3 sentences.
    */

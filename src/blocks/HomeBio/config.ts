@@ -25,7 +25,7 @@ export const HomeBio: Block = {
       name: 'roles',
       type: 'text',
       label: 'Roles',
-      required: true,
+      required: false,
       defaultValue: 'Software Engineer · Scuba Instructor · Underwater Photographer',
     },
     {

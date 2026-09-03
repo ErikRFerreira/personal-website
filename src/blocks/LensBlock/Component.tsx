@@ -67,7 +67,7 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
                   href={`/lens/${slug}`}
                   className="group block focus-visible:outline-2 focus-visible:outline-offset-[6px] focus-visible:outline-site-border-active"
                 >
-                  <div className="overflow-hidden rounded-lg bg-site-surface-elevated">
+                  <div className="relative overflow-hidden rounded-lg bg-site-surface-elevated">
                     <Image
                       alt={photoAlt}
                       className="h-auto w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transition-none"
@@ -78,6 +78,10 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
                       sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
                       src={getMediaUrl(photoUrl, photo.updatedAt)}
                       width={photo.width ?? 1200}
+                    />
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/0 opacity-100 transition-opacity duration-300 ease-out group-hover:opacity-0"
                     />
                   </div>
 

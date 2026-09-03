@@ -8,62 +8,86 @@ import { RevealOnScroll } from '@/components/RevealOnScroll'
 export function HomeBio({ eyebrow, name, roles, bio, portrait, email, cta }: HomeBioBlockProps) {
   return (
     <section
-      className="site-section"
+      className="site-section relative overflow-hidden text-site-text-primary"
       data-theme="dark"
-      style={{ backgroundColor: 'var(--site-surface-base)' }}
+      style={{ backgroundColor: 'var(--site-surface-deep)' }}
     >
       <div className="site-container">
-        <RevealOnScroll
-          className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12"
-          revealName="home-bio"
-        >
-          {/* ── Text column ── */}
-          <div className="order-2 flex flex-col items-start lg:order-1 lg:col-span-7">
-            {eyebrow && (
-              <h2 className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-site-accent">
-                {eyebrow}
-              </h2>
-            )}
+        <RevealOnScroll revealName="home-bio">
+          <div className="relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-site-border-subtle bg-[color-mix(in_srgb,var(--site-surface-elevated)_88%,transparent)] p-8 sm:p-10 md:p-12 lg:p-14">
+            {/* Ambient top-right teal blur glow */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-site-accent/5 blur-3xl"
+            />
 
-            <h3 className="mb-10 text-4xl font-black leading-tight tracking-tight text-site-text-primary lg:text-6xl">
-              {name}
-            </h3>
-
-            <div className="mb-12 space-y-6">
-              <p className="text-sm font-semibold uppercase tracking-widest text-site-accent">
-                {roles}
-              </p>
-              <p className="max-w-2xl text-xl font-light leading-relaxed text-site-text-secondary">
-                {bio}
-              </p>
-            </div>
-
-            <div className="flex flex-col items-start gap-8 sm:flex-row sm:items-center">
-              <div className="flex flex-wrap items-center gap-8">
-                <CtaButton type="custom" url={cta.url} label={cta.label} />
-                <a
-                  href={`mailto:${email}`}
-                  className="text-sm font-medium uppercase tracking-widest text-site-text-primary transition-colors hover:text-site-accent"
-                >
-                  {email}
-                </a>
+            <div className="relative z-10 flex flex-col items-center gap-8 md:flex-row md:items-center md:gap-10 lg:gap-12">
+              {/* Portrait column */}
+              <div className="flex shrink-0 justify-center">
+                <div className="relative flex items-center justify-center">
+                  {/* Rotating dashed ring */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -inset-2.5 rounded-full border border-dashed border-site-accent/40 opacity-60 animate-[spin_20s_linear_infinite] motion-reduce:animate-none"
+                  />
+                  {/* Avatar border ring */}
+                  <div className="relative h-44 w-44 shrink-0 rounded-full border-2 border-site-accent/70 p-1.5 shadow-[0_0_2rem_var(--site-glow-accent)] sm:h-52 sm:w-52 md:h-56 md:w-56">
+                    <div className="relative h-full w-full overflow-hidden rounded-full bg-site-surface-deep">
+                      {portrait ? (
+                        <Media
+                          resource={portrait as MediaType}
+                          fill
+                          imgClassName="object-cover object-top filter grayscale contrast-125 transition-[filter] duration-300"
+                          size="(max-width: 768px) 208px, 224px"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-site-surface-deep" />
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          {/* ── Image column ── */}
-          <div className="order-1 lg:order-2 lg:col-span-5">
-            <div className="relative aspect-3/4 w-full overflow-hidden rounded-(--site-radius-card) border border-site-border-subtle bg-site-surface-elevated">
-              {portrait ? (
-                <Media
-                  resource={portrait as MediaType}
-                  fill
-                  imgClassName="object-cover object-top"
-                  size="(max-width: 1023px) 384px, 40vw"
-                />
-              ) : (
-                <div className="h-full w-full bg-site-surface-elevated" />
-              )}
+              {/* Text & action column */}
+              <div className="flex flex-1 flex-col items-start justify-center gap-5 text-left">
+                <div>
+                  {eyebrow && (
+                    <span className="mb-2 block font-mono text-xs font-bold uppercase tracking-[0.2em] text-site-accent md:text-sm">
+                      {eyebrow}
+                    </span>
+                  )}
+
+                  <h2 className="text-3xl font-black tracking-tight text-site-text-primary sm:text-4xl md:text-5xl">
+                    {name}
+                  </h2>
+
+                  {roles && (
+                    <p className="mt-2 text-xs font-semibold uppercase tracking-widest text-site-text-muted md:text-sm">
+                      {roles}
+                    </p>
+                  )}
+                </div>
+
+                {bio && (
+                  <p className="text-base font-light leading-relaxed text-site-text-secondary md:text-lg">
+                    {bio}
+                  </p>
+                )}
+
+                <div className="mt-1 flex flex-wrap items-center gap-6 sm:gap-8">
+                  {cta?.url && cta?.label && (
+                    <CtaButton type="custom" url={cta.url} label={cta.label} />
+                  )}
+                  {email && (
+                    <a
+                      href={`mailto:${email}`}
+                      className="font-mono text-xs font-medium uppercase tracking-widest text-site-accent border-b border-site-accent/30 pb-0.5 transition-colors duration-200 hover:border-site-accent hover:text-site-accent-hover md:text-sm"
+                    >
+                      {email}
+                    </a>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </RevealOnScroll>

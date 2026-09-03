@@ -37,7 +37,7 @@ export function ProfileHero({ name, intro, media, imageLabel }: Page['hero']) {
                   {hasPopulatedImage ? (
                     <Media
                       fill
-                      imgClassName="object-cover [filter:grayscale(1)] transition-[filter,transform] duration-700 ease-out group-hover:scale-[1.015] group-hover:[filter:grayscale(0)] motion-reduce:transform-none motion-reduce:transition-none"
+                      imgClassName="object-cover [filter:grayscale(1)] transition-[filter,scale] duration-700 ease-out group-hover:scale-[1.015] group-hover:[filter:grayscale(0)] motion-reduce:scale-100 motion-reduce:transition-none"
                       pictureClassName="block h-full w-full"
                       resource={media}
                       size="(max-width: 767px) calc(100vw - 3rem), 67vw"
