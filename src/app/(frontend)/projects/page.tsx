@@ -18,7 +18,7 @@ export default async function Page() {
     depth: 1,
     limit: 100,
     overrideAccess: false,
-    sort: '-year',
+    sort: ['-year', '-createdAt'],
     select: {
       description: true,
       image: true,

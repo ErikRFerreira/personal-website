@@ -57,6 +57,14 @@ const milestones: AboutTimelineBlockType['milestones'] = [
       { label: 'Focus', value: 'Teaching' },
     ],
   },
+  ...Array.from({ length: 8 }, (_, index) => ({
+    id: `chapter-${index + 3}`,
+    year: String(2023 + index),
+    title: `Chapter ${index + 3}`,
+    description: `Timeline chapter ${index + 3}.`,
+    image: media(40 + index, `Timeline chapter ${index + 3}`),
+    metadata: [{ label: 'Focus', value: `Chapter ${index + 3}` }],
+  })),
   {
     id: 'latest',
     year: 'Now',
@@ -72,6 +80,7 @@ const milestones: AboutTimelineBlockType['milestones'] = [
 
 describe('AboutTimelineBlock', () => {
   beforeEach(() => {
+    vi.spyOn(HTMLElement.prototype, 'scrollHeight', 'get').mockReturnValue(880)
     vi.stubGlobal(
       'matchMedia',
       vi.fn().mockImplementation((query: string) => ({
@@ -89,10 +98,11 @@ describe('AboutTimelineBlock', () => {
 
   afterEach(() => {
     cleanup()
+    vi.restoreAllMocks()
     vi.unstubAllGlobals()
   })
 
-  it('starts on the latest milestone and renders its dossier', () => {
+  it('starts on the latest milestone and renders its dossier', async () => {
     render(
       <AboutTimelineBlock
         blockType="aboutTimeline"
@@ -105,14 +115,16 @@ describe('AboutTimelineBlock', () => {
     const scrollRegion = screen.getByRole('region', { name: 'Timeline milestones' })
 
     expect(latestButton.getAttribute('aria-pressed')).toBe('true')
-    expect(latestButton.getAttribute('data-state')).toBe('active')
     expect(screen.getByTestId('about-timeline-media').getAttribute('data-media-id')).toBe('30')
     expect(
       screen.getByText('Active').closest('[data-highlighted]')?.getAttribute('data-highlighted'),
     ).toBe('true')
     expect(screen.getByTestId('about-timeline-status-icon')).not.toBeNull()
     expect(scrollRegion.getAttribute('tabindex')).toBe('0')
-    expect(screen.getByTestId('about-timeline-progress')).not.toBeNull()
+    expect(scrollRegion.hasAttribute('data-lenis-prevent')).toBe(true)
+    expect(scrollRegion.classList.contains('about-timeline-scroll-region')).toBe(true)
+    expect(scrollRegion.querySelector('[data-scroll-reveal="true"]')).toBeNull()
+    await waitFor(() => expect((scrollRegion as HTMLElement).scrollTop).toBe(880))
   })
 
   it('updates the active image and metadata when a milestone is selected', async () => {
@@ -136,9 +148,7 @@ describe('AboutTimelineBlock', () => {
       screen.getByText('Teaching').closest('[data-highlighted]')?.getAttribute('data-highlighted'),
     ).toBe('true')
     expect(screen.queryByTestId('about-timeline-status-icon')).toBeNull()
-    expect(middleButton.textContent).toContain(
-      'Instructor Certification. Formalizing pedagogical frameworks.',
-    )
+    expect(middleButton.textContent).toBe('2022Instructor Certification')
   })
 
   it('falls back safely when a media relationship is not populated', () => {
@@ -161,20 +171,18 @@ describe('AboutTimelineBlock', () => {
     expect(screen.queryByTestId('about-timeline-status-icon')).toBeNull()
   })
 
-  it('staggers entry reveals and keeps every milestone keyboard reachable', () => {
-    const { container } = render(
-      <AboutTimelineBlock blockType="aboutTimeline" milestones={milestones} />,
-    )
+  it('renders every milestone as keyboard-reachable LineSidebar navigation', () => {
+    render(<AboutTimelineBlock blockType="aboutTimeline" milestones={milestones} />)
 
-    const milestoneReveals = [
-      ...container.querySelectorAll('[data-reveal-name="about-timeline-milestone"]'),
-    ]
+    const navigation = screen.getByRole('navigation', {
+      name: 'Timeline milestone navigation',
+    })
+    const buttons = within(navigation).getAllByRole('button')
 
-    expect(milestoneReveals.map((element) => element.getAttribute('data-reveal-delay'))).toEqual([
-      '0',
-      '90',
-      '180',
-    ])
-    expect(within(screen.getByRole('list')).getAllByRole('button')).toHaveLength(3)
+    expect(buttons).toHaveLength(11)
+    expect(buttons.every((button) => button.tabIndex === 0)).toBe(true)
+    expect(buttons[0].id).toMatch(/-milestone-0$/)
+    expect(buttons[10].getAttribute('aria-pressed')).toBe('true')
+    expect(within(navigation).getAllByText(/Chapter|Current chapter/)).toHaveLength(9)
   })
 })

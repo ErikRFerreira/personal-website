@@ -1,0 +1,28 @@
+.about-timeline-scroll-region {
+  direction: rtl;
+  overflow-anchor: none;
+  scrollbar-color: var(--site-accent) var(--site-surface-elevated);
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+.about-timeline-scroll-region > * {
+  direction: ltr;
+}
+
+.about-timeline-scroll-region .line-sidebar__text {
+  font-weight: 500;
+}
+
+.about-timeline-scroll-region::-webkit-scrollbar {
+  width: 8px;
+}
+
+.about-timeline-scroll-region::-webkit-scrollbar-track {
+  background: var(--site-surface-elevated);
+}
+
+.about-timeline-scroll-region::-webkit-scrollbar-thumb {
+  border: 2px solid var(--site-surface-elevated);
+  background: var(--site-accent);
+}
