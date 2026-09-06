@@ -12,7 +12,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const pathname = usePathname()
 
   return (
-    <nav className="flex gap-10 items-center">
+    <nav className="flex items-center gap-3 sm:gap-6 lg:gap-10">
       {navItems.map(({ link, isCta }, i) => {
         if (isCta) return <CtaButton key={i} {...link} size="sm" />
 

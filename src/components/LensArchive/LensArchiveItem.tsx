@@ -22,7 +22,7 @@ export type LensArchivePhoto = Pick<
   | 'year'
 >
 
-export type ResolvedLensFormat = Exclude<Len['archiveFormat'], 'auto'>
+export type ResolvedLensFormat = Exclude<NonNullable<Len['archiveFormat']>, 'auto'>
 
 type LensArchiveItemProps = {
   format: ResolvedLensFormat

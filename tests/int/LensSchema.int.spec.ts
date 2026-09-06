@@ -32,6 +32,45 @@ describe('Lens taxonomy schema', () => {
     ).toBeUndefined()
   })
 
+  it('keeps commerce optional and separates digital downloads from print variants', () => {
+    const fields = getLensContentFields()
+    const printOptions = fields.find((field) => 'name' in field && field.name === 'printOptions')
+    const digitalDownload = fields.find(
+      (field) => 'name' in field && field.name === 'digitalDownload',
+    )
+    const archiveFormat = Lens.fields.find(
+      (field) => 'name' in field && field.name === 'archiveFormat',
+    )
+
+    expect(printOptions).toMatchObject({ type: 'array' })
+    expect(digitalDownload).toMatchObject({
+      fields: [
+        { defaultValue: false, name: 'available', type: 'checkbox' },
+        { admin: { condition: expect.any(Function) }, name: 'price', type: 'number' },
+      ],
+      type: 'group',
+    })
+    expect(archiveFormat).toMatchObject({ defaultValue: 'auto', type: 'select' })
+    expect(archiveFormat).not.toHaveProperty('required')
+
+    for (const name of ['title', 'photo', 'status']) {
+      expect(Lens.fields.find((field) => 'name' in field && field.name === name)).toMatchObject({
+        required: true,
+      })
+    }
+
+    const slugRow = Lens.fields.find(
+      (field) =>
+        field.type === 'row' &&
+        field.fields.some((child) => 'name' in child && child.name === 'slug'),
+    )
+    expect(
+      slugRow?.type === 'row'
+        ? slugRow.fields.find((field) => 'name' in field && field.name === 'slug')
+        : undefined,
+    ).toMatchObject({ required: true, type: 'text' })
+  })
+
   it('exposes Lens collections publicly while protecting mutations', async () => {
     expect(Series.labels).toEqual({ plural: 'Lens Collections', singular: 'Lens Collection' })
     expect(

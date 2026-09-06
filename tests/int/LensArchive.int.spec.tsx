@@ -136,6 +136,14 @@ describe('LensArchive', () => {
         }),
       ),
     ).toBe('square')
+    expect(
+      resolveLensArchiveFormat(
+        makePhoto(4, {
+          archiveFormat: null,
+          photo: makeMedia(4, { height: 1200, width: 800 }),
+        }),
+      ),
+    ).toBe('portrait')
   })
 
   it('swaps the first pair layout when portrait and landscape order is reversed', () => {

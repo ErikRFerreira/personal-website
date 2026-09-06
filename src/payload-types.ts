@@ -1100,6 +1100,13 @@ export interface Len {
       }[]
     | null;
   /**
+   * Optional availability and pricing for a digital download
+   */
+  digitalDownload?: {
+    available?: boolean | null;
+    price?: number | null;
+  };
+  /**
    * Usage rights, licensing terms, or copyright notice
    */
   licensingText?: string | null;
@@ -1115,7 +1122,7 @@ export interface Len {
   /**
    * Override the archive crop and frame shape, or use the uploaded image dimensions.
    */
-  archiveFormat: 'auto' | 'portrait' | 'landscape' | 'square' | 'panorama';
+  archiveFormat?: ('auto' | 'portrait' | 'landscape' | 'square' | 'panorama') | null;
   status: 'draft' | 'published';
   updatedAt: string;
   createdAt: string;
@@ -2225,6 +2232,12 @@ export interface LensSelect<T extends boolean = true> {
         material?: T;
         price?: T;
         id?: T;
+      };
+  digitalDownload?:
+    | T
+    | {
+        available?: T;
+        price?: T;
       };
   licensingText?: T;
   meta?:

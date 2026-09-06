@@ -1,13 +1,6 @@
-import { test, expect, Page } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 
 test.describe('Frontend', () => {
-  let page: Page
-
-  test.beforeAll(async ({ browser }, testInfo) => {
-    const context = await browser.newContext()
-    page = await context.newPage()
-  })
-
   test('can load homepage', async ({ page }) => {
     const browserErrors: string[] = []
     page.on('pageerror', (error) => browserErrors.push(error.message))
@@ -182,6 +175,55 @@ test.describe('Frontend', () => {
     }
 
     await expectReveal('[data-block-type="homeBio"] [data-reveal-name="home-bio"]')
+
+    expect(browserErrors).toEqual([])
+  })
+
+  test('renders the Lens detail layout without nested or horizontal scrolling', async ({
+    page,
+  }) => {
+    const browserErrors: string[] = []
+    page.on('pageerror', (error) => browserErrors.push(error.message))
+
+    await page.setViewportSize({ height: 900, width: 1440 })
+    await page.goto('http://localhost:3000/lens/dubai-skyline', {
+      waitUntil: 'domcontentloaded',
+    })
+
+    const detailRoot = page.locator('.lens-detail-page')
+    const primaryInfo = detailRoot.getByTestId('lens-primary-info')
+    const detailFrame = detailRoot.locator('[data-detail-frame="true"]')
+
+    await expect(detailRoot).toBeVisible()
+    await expect(primaryInfo).toBeVisible()
+    await expect
+      .poll(() => primaryInfo.evaluate((element) => getComputedStyle(element).overflowY))
+      .not.toMatch(/auto|scroll/)
+    await expect
+      .poll(async () => {
+        const frameBounds = await detailFrame.boundingBox()
+        const infoBounds = await primaryInfo.boundingBox()
+        return frameBounds && infoBounds ? frameBounds.width > infoBounds.width : false
+      })
+      .toBe(true)
+
+    await page.setViewportSize({ height: 844, width: 390 })
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1,
+        ),
+      )
+      .toBe(true)
+    await expect
+      .poll(async () => {
+        const frameBounds = await detailFrame.boundingBox()
+        const infoBounds = await primaryInfo.boundingBox()
+        return frameBounds && infoBounds
+          ? infoBounds.y >= frameBounds.y + frameBounds.height
+          : false
+      })
+      .toBe(true)
 
     expect(browserErrors).toEqual([])
   })

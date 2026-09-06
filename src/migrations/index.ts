@@ -16,6 +16,7 @@ import * as migration_20260903_160000_about_protocol_shared_quote from './202609
 import * as migration_20260906_013829_add_project_showcase_fields from './20260906_013829_add_project_showcase_fields'
 import * as migration_20260906_021047_simplify_project_showcase_fields from './20260906_021047_simplify_project_showcase_fields'
 import * as migration_20260906_030845_add_project_gallery from './20260906_030845_add_project_gallery'
+import * as migration_20260906_053737_add_lens_digital_download from './20260906_053737_add_lens_digital_download'
 
 export const migrations = [
   {
@@ -107,5 +108,10 @@ export const migrations = [
     up: migration_20260906_030845_add_project_gallery.up,
     down: migration_20260906_030845_add_project_gallery.down,
     name: '20260906_030845_add_project_gallery',
+  },
+  {
+    up: migration_20260906_053737_add_lens_digital_download.up,
+    down: migration_20260906_053737_add_lens_digital_download.down,
+    name: '20260906_053737_add_lens_digital_download',
   },
 ]

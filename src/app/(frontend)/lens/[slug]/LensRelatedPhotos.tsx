@@ -12,14 +12,14 @@ export const LensRelatedPhotos: React.FC<Props> = ({ collection, photos }) => {
   if (photos.length === 0) return null
 
   return (
-    <section className="py-16 md:py-20">
-      <div className="site-container">
+    <section className="pb-20 md:pb-24">
+      <div className="mx-auto max-w-7xl border-t border-site-border-subtle px-6 pt-10 md:px-10">
         <div className="mb-10 flex items-end justify-between gap-8">
           <div className="flex flex-col gap-2">
-            <span className="font-mono text-[0.6875rem] leading-[1.2] font-semibold tracking-[0.12em] text-site-accent uppercase">
-              From the same collection
+            <span className="font-mono text-[0.625rem] leading-[1.2] font-semibold tracking-[0.14em] text-site-accent uppercase">
+              Related Lens photographs
             </span>
-            <h2 className="text-3xl leading-tight font-bold text-site-text-primary">
+            <h2 className="text-2xl leading-tight font-bold text-site-text-primary">
               {collection.name}
             </h2>
           </div>
@@ -49,7 +49,7 @@ function RelatedPhotoCard({ collectionName, photo }: { collectionName: string; p
       className="group block focus-visible:outline-2 focus-visible:outline-offset-[6px] focus-visible:outline-site-border-active"
       href={`/lens/${photo.slug}`}
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-site-surface-elevated">
+      <div className="relative aspect-[16/10] overflow-hidden border border-site-border-subtle bg-site-surface-elevated transition-colors duration-300 group-hover:border-site-border-active">
         {photoMedia && (
           <Media
             fill
@@ -62,7 +62,7 @@ function RelatedPhotoCard({ collectionName, photo }: { collectionName: string; p
         )}
         <div className="absolute inset-0 bg-site-overlay-dark opacity-25 transition-opacity duration-700 ease-out group-hover:opacity-0 motion-reduce:transition-none" />
       </div>
-      <div className="mt-3 flex flex-col gap-1">
+      <div className="flex flex-col gap-1 border-x border-b border-site-border-subtle bg-site-surface-elevated/55 px-4 py-3 transition-colors duration-300 group-hover:border-site-border-active">
         <span className="font-mono text-[0.625rem] leading-[1.2] font-semibold tracking-[0.12em] text-site-accent uppercase">
           {collectionName}
         </span>

@@ -1,15 +1,16 @@
 import configPromise from '@payload-config'
-import { Layers3 } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { draftMode } from 'next/headers'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import { cache } from 'react'
 
 import type { Category, Media, Series } from '@/payload-types'
-import { LensAccordion } from './LensAccordion'
 import { LensCategoryChips } from './LensCategoryChips'
+import { LensEditorial } from './LensEditorial'
 import { LensHero } from './LensHero'
-import { LensPrintOptions } from './LensPrintOptions'
+import { LensPurchaseOptions } from './LensPurchaseOptions'
 import { LensRelatedPhotos } from './LensRelatedPhotos'
 import { LensTechnicalMeta } from './LensTechnicalMeta'
 import { findRelatedLensPhotos } from './queries'
@@ -59,61 +60,72 @@ export default async function LensPage({ params: paramsPromise }: Args) {
   const hasLongForm = Boolean(lens.fullStory || lens.licensingText)
 
   return (
-    <main className="lens-detail-page relative isolate overflow-hidden bg-site-surface-photo pt-[var(--header-height)] text-site-text-primary">
+    <main className="lens-detail-page relative isolate overflow-hidden bg-site-surface-base pt-[var(--header-height)] text-site-text-primary">
       <div aria-hidden="true" className="lens-ambient-layer lens-ambient-layer--detail" />
 
       <div className="relative z-10">
-        <section className="md:grid md:min-h-[calc(100svh-var(--header-height))] md:grid-cols-[minmax(0,3fr)_minmax(22rem,2fr)]">
-          <div className="relative flex h-[62svh] min-h-[28rem] items-center justify-center overflow-hidden p-4 sm:p-6 md:h-[calc(100svh-var(--header-height))] md:p-8 xl:p-12">
-            <LensHero
-              collectionName={collection?.name}
-              location={lens.location}
-              metadata={lens.technicalMetadata}
-              photo={photo}
-              title={lens.title}
-              year={lens.year}
-            />
-          </div>
+        <section className="mx-auto max-w-7xl px-6 pt-8 pb-6 md:px-10 md:pt-12 md:pb-10">
+          <Link
+            className="inline-flex items-center gap-2 font-mono text-[0.625rem] font-semibold tracking-[0.12em] text-site-text-muted uppercase transition-colors hover:text-site-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
+            href="/lens"
+          >
+            <ArrowLeft aria-hidden="true" className="size-3.5" />
+            Back to Lens archive
+          </Link>
 
-          <aside className="mx-4 mt-4 mb-6 overflow-hidden border border-site-border-subtle bg-site-surface-base/80 shadow-[0_1.5rem_4rem_rgba(0,0,0,0.16)] backdrop-blur-xl sm:mx-6 md:mx-0 md:my-6 md:h-[calc(100svh-var(--header-height)-3rem)] md:overflow-y-auto md:rounded-r-none md:border-r-0 md:shadow-[-1.5rem_0_4rem_rgba(0,0,0,0.14)]">
-            <div className="mx-auto max-w-2xl space-y-8 px-6 py-10 sm:px-8 md:px-9 md:py-12 xl:px-12">
+          <div className="mt-6 grid items-start gap-10 lg:grid-cols-12 lg:gap-12">
+            <div className="lg:col-span-8">
+              <LensHero
+                collectionName={collection?.name}
+                location={lens.location}
+                metadata={lens.technicalMetadata}
+                photo={photo}
+                title={lens.title}
+                year={lens.year}
+              />
+            </div>
+
+            <aside className="space-y-6 lg:col-span-4 lg:pt-1" data-testid="lens-primary-info">
               <header>
                 {collection && (
-                  <div className="mb-4 flex items-center gap-2 font-mono text-[0.6875rem] font-bold tracking-[0.14em] text-site-accent uppercase">
-                    <Layers3 aria-hidden="true" className="size-4" />
-                    <span>{collection.name}</span>
+                  <div className="mb-5 flex items-center gap-3">
+                    <span aria-hidden="true" className="h-px w-6 bg-site-accent" />
+                    <p className="font-mono text-[0.625rem] font-semibold tracking-[0.16em] text-site-accent uppercase">
+                      {collection.name}
+                    </p>
                   </div>
                 )}
 
-                <h1 className="text-4xl leading-[1.02] font-extrabold tracking-[-0.03em] text-site-text-primary lg:text-5xl">
+                <h1 className="text-4xl leading-[1.02] font-extrabold tracking-[-0.04em] text-site-text-primary xl:text-5xl">
                   {lens.title}
                 </h1>
 
                 {context && (
-                  <p className="mt-4 font-mono text-[0.6875rem] font-semibold tracking-[0.1em] text-site-text-muted uppercase">
+                  <p className="mt-4 font-mono text-[0.625rem] font-semibold tracking-[0.1em] text-site-text-muted uppercase">
                     {context}
                   </p>
                 )}
 
                 {lens.intro && (
-                  <p className="mt-6 text-base leading-[1.75] text-site-text-secondary">
+                  <p className="mt-6 text-sm leading-[1.75] text-site-text-secondary xl:text-base">
                     {lens.intro}
                   </p>
                 )}
               </header>
 
-              <LensTechnicalMeta metadata={lens.technicalMetadata} location={lens.location} />
-              <LensPrintOptions printOptions={lens.printOptions} />
-
+              <LensTechnicalMeta metadata={lens.technicalMetadata} />
               <LensCategoryChips categories={categories} />
-            </div>
-          </aside>
+            </aside>
+          </div>
+
+          <LensPurchaseOptions
+            digitalDownload={lens.digitalDownload}
+            printOptions={lens.printOptions}
+          />
         </section>
 
         {hasLongForm && (
-          <section className="site-container py-14 md:py-20">
-            <LensAccordion fullStory={lens.fullStory} licensingText={lens.licensingText} />
-          </section>
+          <LensEditorial fullStory={lens.fullStory} licensingText={lens.licensingText} />
         )}
 
         {collection && <LensRelatedPhotos collection={collection} photos={relatedPhotos} />}

@@ -1,11 +1,11 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import type { CSSProperties } from 'react'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Payload } from 'payload'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { LensAccordion } from '@/app/(frontend)/lens/[slug]/LensAccordion'
 import { LensCategoryChips } from '@/app/(frontend)/lens/[slug]/LensCategoryChips'
-import { LensPrintOptions } from '@/app/(frontend)/lens/[slug]/LensPrintOptions'
+import { LensEditorial } from '@/app/(frontend)/lens/[slug]/LensEditorial'
+import { LensPurchaseOptions } from '@/app/(frontend)/lens/[slug]/LensPurchaseOptions'
 import { LensRelatedPhotos } from '@/app/(frontend)/lens/[slug]/LensRelatedPhotos'
 import { LensTechnicalMeta } from '@/app/(frontend)/lens/[slug]/LensTechnicalMeta'
 import { LensZoomImage } from '@/app/(frontend)/lens/[slug]/LensZoomImage'
@@ -81,19 +81,14 @@ describe('Lens detail components', () => {
     vi.unstubAllGlobals()
   })
 
-  it('shows only the compact disabled CTA when print variants are absent', () => {
-    render(<LensPrintOptions />)
-
-    expect(
-      screen.getByRole('button', { name: 'Print purchases coming soon' }).hasAttribute('disabled'),
-    ).toBe(true)
-    expect(screen.queryByText('Standard Collector')).toBeNull()
-    expect(screen.queryByText('Authenticity guaranteed')).toBeNull()
+  it('omits purchasing when neither format is offered', () => {
+    const { container } = render(<LensPurchaseOptions />)
+    expect(container.innerHTML).toBe('')
   })
 
-  it('updates material and EUR price when a print variant is selected', () => {
+  it('lists real print variants and prices without purchase actions', () => {
     render(
-      <LensPrintOptions
+      <LensPurchaseOptions
         printOptions={[
           { id: 'small', material: 'Fine art paper', price: 750, size: '40 × 60 cm' },
           { id: 'large', material: 'Aluminium', price: 1250, size: '60 × 90 cm' },
@@ -102,9 +97,37 @@ describe('Lens detail components', () => {
     )
 
     expect(screen.getByText('€750.00')).not.toBeNull()
-    fireEvent.click(screen.getByRole('button', { name: '60 × 90 cm, Aluminium' }))
     expect(screen.getByText('€1,250.00')).not.toBeNull()
     expect(screen.getByText('Aluminium')).not.toBeNull()
+    expect(screen.queryByRole('button')).toBeNull()
+  })
+
+  it('shows an available digital download with an optional EUR price', () => {
+    const { rerender } = render(
+      <LensPurchaseOptions digitalDownload={{ available: false, price: 95 }} />,
+    )
+
+    expect(screen.queryByTestId('lens-purchase-options')).toBeNull()
+
+    rerender(<LensPurchaseOptions digitalDownload={{ available: true, price: 95 }} />)
+    expect(screen.getByTestId('lens-digital-download')).not.toBeNull()
+    expect(screen.getByText('€95.00')).not.toBeNull()
+
+    rerender(<LensPurchaseOptions digitalDownload={{ available: true }} />)
+    expect(screen.getByText('Available')).not.toBeNull()
+    expect(screen.queryByText('€95.00')).toBeNull()
+  })
+
+  it('renders print and digital formats together when both are offered', () => {
+    render(
+      <LensPurchaseOptions
+        digitalDownload={{ available: true, price: 45 }}
+        printOptions={[{ size: '30 × 40 cm' }]}
+      />,
+    )
+
+    expect(screen.getByTestId('lens-print-options')).not.toBeNull()
+    expect(screen.getByTestId('lens-digital-download')).not.toBeNull()
   })
 
   it('renders only populated technical cells and preserves numeric zero', () => {
@@ -138,19 +161,27 @@ describe('Lens detail components', () => {
   })
 
   it('omits empty long-form and related sections without placeholders', () => {
-    const { container, rerender } = render(<LensAccordion />)
+    const { container, rerender } = render(<LensEditorial />)
     expect(container.innerHTML).toBe('')
 
     rerender(<LensRelatedPhotos collection={makeSeries()} photos={[]} />)
     expect(container.innerHTML).toBe('')
   })
 
-  it('renders only populated long-form rows and no shipping copy', () => {
-    render(<LensAccordion licensingText="Editorial use only." />)
+  it('renders licensing without empty story or marketplace copy', () => {
+    render(<LensEditorial licensingText="Editorial use only." />)
 
-    expect(screen.getByRole('button', { name: 'Licensing' })).not.toBeNull()
+    expect(screen.getByRole('heading', { name: 'Licensing' })).not.toBeNull()
     expect(screen.queryByText('Shipping & Returns')).toBeNull()
     expect(screen.queryByText('Story Behind the Shot')).toBeNull()
+  })
+
+  it('shows the story as expanded editorial content', () => {
+    render(<LensEditorial fullStory={{ root: {} } as Len['fullStory']} />)
+
+    expect(screen.getByRole('heading', { name: 'Story Behind the Shot' })).not.toBeNull()
+    expect(screen.getByText('Rich story content')).not.toBeNull()
+    expect(screen.queryByRole('button', { name: 'Story Behind the Shot' })).toBeNull()
   })
 
   it('zooms around the pointer and resets on pointer leave', () => {

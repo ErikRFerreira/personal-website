@@ -21,7 +21,7 @@ type LensArchiveProps = LensArchivePage
 export function resolveLensArchiveFormat(
   photo: Pick<LensArchivePhoto, 'archiveFormat' | 'photo'>,
 ): ResolvedLensFormat {
-  if (photo.archiveFormat !== 'auto') return photo.archiveFormat
+  if (photo.archiveFormat && photo.archiveFormat !== 'auto') return photo.archiveFormat
 
   const image = typeof photo.photo === 'object' && photo.photo !== null ? photo.photo : null
   const width = image?.width ?? 0

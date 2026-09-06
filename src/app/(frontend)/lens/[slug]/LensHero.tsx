@@ -26,7 +26,7 @@ export const LensHero: React.FC<Props> = ({
 
   return (
     <LensPhotoFrame
-      className="h-full w-full max-w-5xl"
+      className="aspect-[4/3] w-full"
       context={context}
       data-detail-frame="true"
       photoTitle={title}

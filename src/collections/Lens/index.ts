@@ -119,6 +119,30 @@ export const Lens: CollectionConfig = {
               ],
             },
             {
+              name: 'digitalDownload',
+              type: 'group',
+              label: 'Digital Download',
+              admin: {
+                description: 'Optional availability and pricing for a digital download',
+              },
+              fields: [
+                {
+                  name: 'available',
+                  type: 'checkbox',
+                  label: 'Available',
+                  defaultValue: false,
+                },
+                {
+                  name: 'price',
+                  type: 'number',
+                  label: 'Price (EUR)',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.available === true,
+                  },
+                },
+              ],
+            },
+            {
               name: 'licensingText',
               type: 'textarea',
               label: 'Licensing / Usage Text',
@@ -166,7 +190,6 @@ export const Lens: CollectionConfig = {
         { label: 'Panorama', value: 'panorama' },
       ],
       defaultValue: 'auto',
-      required: true,
       admin: {
         description:
           'Override the archive crop and frame shape, or use the uploaded image dimensions.',
