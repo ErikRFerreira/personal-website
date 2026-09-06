@@ -101,7 +101,6 @@ function makeProject(overrides: Partial<Project> = {}): Project {
     },
     createdAt: '2026-01-01T00:00:00.000Z',
     description: 'A focused description of the project.',
-    gallery: [{ caption: 'Interface detail', id: 'gallery-1', image: makeMedia(2) }],
     id: 1,
     image: makeMedia(1),
     links: [
@@ -109,6 +108,8 @@ function makeProject(overrides: Partial<Project> = {}): Project {
       { id: 'unsafe', label: 'Unsafe Site', url: 'javascript:alert(1)' },
     ],
     role: 'Product Engineer',
+    showcaseCaption: 'Interface detail',
+    showcaseImage: makeMedia(2),
     slug: 'project-one',
     status: 'published',
     tech: [
@@ -142,13 +143,12 @@ describe('ProjectDetail', () => {
     expect(screen.getByText(/Next\.js/)).not.toBeNull()
     expect(screen.getByText(/Payload/)).not.toBeNull()
     expect(screen.getByText('Rendered case study content')).not.toBeNull()
-    expect(screen.getByRole('heading', { level: 2, name: 'Project Gallery' })).not.toBeNull()
     expect(screen.getByText('Interface detail')).not.toBeNull()
 
     const featuredImage = screen.getByRole('img', { name: 'Project One' })
-    const galleryImage = screen.getByRole('img', { name: 'Interface detail' })
+    const showcaseImage = screen.getByRole('img', { name: 'Interface detail' })
     expect(featuredImage).not.toBeNull()
-    expect(galleryImage).not.toBeNull()
+    expect(showcaseImage).not.toBeNull()
 
     const externalLink = screen.getByRole('link', { name: /Live Site/i })
     expect(externalLink.getAttribute('href')).toBe('https://example.com')
@@ -176,10 +176,10 @@ describe('ProjectDetail', () => {
             },
           },
           description: null,
-          gallery: [{ caption: 'Unresolved', image: 42 }],
           image: 41,
           links: [],
           role: null,
+          showcaseImage: 42,
           tech: [],
           type: null,
           year: null,
@@ -189,7 +189,6 @@ describe('ProjectDetail', () => {
 
     expect(screen.queryByRole('complementary', { name: 'Project metadata' })).toBeNull()
     expect(screen.queryByTestId('project-featured-image')).toBeNull()
-    expect(screen.queryByRole('heading', { name: 'Project Gallery' })).toBeNull()
     expect(screen.queryByText('Rendered case study content')).toBeNull()
     expect(screen.queryByText('Next Project')).toBeNull()
     expect(screen.getAllByRole('link', { name: /Back|All Projects/i })).toHaveLength(2)

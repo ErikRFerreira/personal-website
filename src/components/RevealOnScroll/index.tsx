@@ -2,6 +2,7 @@
 
 import { cn } from '@/utilities/ui'
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import './fade.css'
 
 type RevealOnScrollProps = {
   children: ReactNode
@@ -17,7 +18,8 @@ export function RevealOnScroll({
   revealName,
 }: RevealOnScrollProps) {
   const elementRef = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  // Keep server-rendered content readable before JavaScript is available.
+  const [isVisible, setIsVisible] = useState(true)
   const revealStyle = {
     '--reveal-delay': `${Math.max(0, delay)}ms`,
   } as CSSProperties
@@ -31,6 +33,7 @@ export function RevealOnScroll({
       return
     }
 
+    setIsVisible(false)
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -38,7 +41,7 @@ export function RevealOnScroll({
           observer.disconnect()
         }
       },
-      { rootMargin: '0px 0px -8%', threshold: 0.08 },
+      { rootMargin: '0px 0px -8%', threshold: 0 },
     )
 
     observer.observe(element)
@@ -47,11 +50,7 @@ export function RevealOnScroll({
 
   return (
     <div
-      className={cn(
-        'transition-[opacity,transform] duration-700 delay-[var(--reveal-delay)] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none',
-        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0',
-        className,
-      )}
+      className={cn('reveal-on-scroll', className)}
       data-reveal-name={revealName}
       data-reveal-state={isVisible ? 'visible' : 'hidden'}
       ref={elementRef}

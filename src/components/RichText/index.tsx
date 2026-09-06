@@ -25,6 +25,7 @@ import type {
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { cn } from '@/utilities/ui'
+import { richTextProseClassName } from '@/utilities/richTextProseClassName'
 
 type NodeTypes =
   | DefaultNodeTypes
@@ -120,8 +121,9 @@ export default function RichText(props: Props) {
         {
           container: enableGutter,
           'max-w-none': !enableGutter,
-          'mx-auto prose md:prose-md dark:prose-invert': enableProse,
+          'mx-auto': enableProse,
         },
+        enableProse && richTextProseClassName,
         className,
       )}
       {...rest}

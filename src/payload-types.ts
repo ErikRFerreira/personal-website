@@ -913,10 +913,46 @@ export interface Project {
       }[]
     | null;
   image?: (number | null) | Media;
+  /**
+   * Heading shown above the showcase image (e.g., "MOD Calc").
+   */
+  showcaseTitle?: string | null;
+  /**
+   * Small caption under the showcase title (e.g., "Maximum Operating Depth").
+   */
+  showcaseSubtitle?: string | null;
+  /**
+   * Main image shown in the showcase section.
+   */
+  showcaseImage?: (number | null) | Media;
+  /**
+   * Optional small caption shown under the showcase image.
+   */
+  showcaseCaption?: string | null;
+  gallerySubtitle?: string | null;
+  /**
+   * Drag screens to reorder them. Consecutive half-width screens share a row on desktop.
+   */
   gallery?:
     | {
         image: number | Media;
-        caption?: string | null;
+        title: string;
+        description: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        layout: 'full' | 'half' | 'split';
         id?: string | null;
       }[]
     | null;
@@ -2138,11 +2174,18 @@ export interface ProjectsSelect<T extends boolean = true> {
         id?: T;
       };
   image?: T;
+  showcaseTitle?: T;
+  showcaseSubtitle?: T;
+  showcaseImage?: T;
+  showcaseCaption?: T;
+  gallerySubtitle?: T;
   gallery?:
     | T
     | {
         image?: T;
-        caption?: T;
+        title?: T;
+        description?: T;
+        layout?: T;
         id?: T;
       };
   content?: T;

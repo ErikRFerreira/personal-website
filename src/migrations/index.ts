@@ -13,6 +13,9 @@ import * as migration_20260902_075703 from './20260902_075703'
 import * as migration_20260903_000000_add_home_hero_image_stack from './20260903_000000_add_home_hero_image_stack'
 import * as migration_20260903_140000_add_about_hero from './20260903_140000_add_about_hero'
 import * as migration_20260903_160000_about_protocol_shared_quote from './20260903_160000_about_protocol_shared_quote'
+import * as migration_20260906_013829_add_project_showcase_fields from './20260906_013829_add_project_showcase_fields'
+import * as migration_20260906_021047_simplify_project_showcase_fields from './20260906_021047_simplify_project_showcase_fields'
+import * as migration_20260906_030845_add_project_gallery from './20260906_030845_add_project_gallery'
 
 export const migrations = [
   {
@@ -89,5 +92,20 @@ export const migrations = [
     up: migration_20260903_160000_about_protocol_shared_quote.up,
     down: migration_20260903_160000_about_protocol_shared_quote.down,
     name: '20260903_160000_about_protocol_shared_quote',
+  },
+  {
+    up: migration_20260906_013829_add_project_showcase_fields.up,
+    down: migration_20260906_013829_add_project_showcase_fields.down,
+    name: '20260906_013829_add_project_showcase_fields',
+  },
+  {
+    up: migration_20260906_021047_simplify_project_showcase_fields.up,
+    down: migration_20260906_021047_simplify_project_showcase_fields.down,
+    name: '20260906_021047_simplify_project_showcase_fields',
+  },
+  {
+    up: migration_20260906_030845_add_project_gallery.up,
+    down: migration_20260906_030845_add_project_gallery.down,
+    name: '20260906_030845_add_project_gallery',
   },
 ]
