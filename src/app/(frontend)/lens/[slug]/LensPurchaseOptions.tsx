@@ -18,10 +18,7 @@ export function LensPurchaseOptions({ digitalDownload, printOptions }: Props) {
   if (prints.length === 0 && !hasDigitalDownload) return null
 
   return (
-    <section
-      className="mt-20 border-t border-site-border-subtle pt-10 md:mt-24"
-      data-testid="lens-purchase-options"
-    >
+    <section className="mt-20 pt-10 md:mt-24" data-testid="lens-purchase-options">
       <header className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="font-mono text-[0.625rem] font-semibold tracking-[0.14em] text-site-accent uppercase">

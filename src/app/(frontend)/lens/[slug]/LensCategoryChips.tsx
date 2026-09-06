@@ -4,10 +4,11 @@ export function LensCategoryChips({ categories }: { categories: Category[] }) {
   if (categories.length === 0) return null
 
   return (
-    <div className="flex flex-wrap gap-2 pt-1" data-testid="lens-categories">
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1" data-testid="lens-categories">
+      <span aria-hidden="true" className="h-px w-6 bg-site-accent" />
       {categories.map((category) => (
         <span
-          className="border border-site-border-subtle bg-site-surface-deep/35 px-3 py-2 font-mono text-[0.5625rem] font-semibold tracking-[0.12em] text-site-text-secondary uppercase"
+          className="font-mono text-[0.625rem] font-semibold tracking-[0.16em] text-site-accent uppercase"
           key={category.id}
         >
           {category.title}

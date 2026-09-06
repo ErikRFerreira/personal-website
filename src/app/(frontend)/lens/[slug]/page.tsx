@@ -56,7 +56,7 @@ export default async function LensPage({ params: paramsPromise }: Args) {
         payload: await getPayload({ config: configPromise }),
       })
     : []
-  const context = [lens.location?.trim(), lens.year].filter(Boolean).join(' / ')
+  const context = [lens.location?.trim(), lens.year].filter(Boolean).join(' · ')
   const hasLongForm = Boolean(lens.fullStory || lens.licensingText)
 
   return (
@@ -76,7 +76,6 @@ export default async function LensPage({ params: paramsPromise }: Args) {
           <div className="mt-6 grid items-start gap-10 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-8">
               <LensHero
-                collectionName={collection?.name}
                 location={lens.location}
                 metadata={lens.technicalMetadata}
                 photo={photo}
@@ -87,16 +86,9 @@ export default async function LensPage({ params: paramsPromise }: Args) {
 
             <aside className="space-y-6 lg:col-span-4 lg:pt-1" data-testid="lens-primary-info">
               <header>
-                {collection && (
-                  <div className="mb-5 flex items-center gap-3">
-                    <span aria-hidden="true" className="h-px w-6 bg-site-accent" />
-                    <p className="font-mono text-[0.625rem] font-semibold tracking-[0.16em] text-site-accent uppercase">
-                      {collection.name}
-                    </p>
-                  </div>
-                )}
+                <LensCategoryChips categories={categories} />
 
-                <h1 className="text-4xl leading-[1.02] font-extrabold tracking-[-0.04em] text-site-text-primary xl:text-5xl">
+                <h1 className="mt-5 text-4xl leading-[1.02] font-extrabold tracking-[-0.04em] text-site-text-primary xl:text-5xl">
                   {lens.title}
                 </h1>
 
@@ -114,7 +106,6 @@ export default async function LensPage({ params: paramsPromise }: Args) {
               </header>
 
               <LensTechnicalMeta metadata={lens.technicalMetadata} />
-              <LensCategoryChips categories={categories} />
             </aside>
           </div>
 

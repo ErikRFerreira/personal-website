@@ -1,6 +1,6 @@
+import { Media } from '@/components/Media'
 import Link from 'next/link'
 
-import { Media } from '@/components/Media'
 import type { Len, Media as MediaType, Series } from '@/payload-types'
 
 type Props = {
@@ -12,8 +12,8 @@ export const LensRelatedPhotos: React.FC<Props> = ({ collection, photos }) => {
   if (photos.length === 0) return null
 
   return (
-    <section className="pb-20 md:pb-24">
-      <div className="mx-auto max-w-7xl border-t border-site-border-subtle px-6 pt-10 md:px-10">
+    <section className="pb-20 md:pb-24 border-t border-site-border-subtle pt-10">
+      <div className="mx-auto container px-6 pt-10 md:px-10">
         <div className="mb-10 flex items-end justify-between gap-8">
           <div className="flex flex-col gap-2">
             <span className="font-mono text-[0.625rem] leading-[1.2] font-semibold tracking-[0.14em] text-site-accent uppercase">

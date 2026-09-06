@@ -1,4 +1,5 @@
 import RichText from '@/components/RichText'
+
 import type { Len } from '@/payload-types'
 
 type Props = {
@@ -11,10 +12,10 @@ export function LensEditorial({ fullStory, licensingText }: Props) {
 
   return (
     <section
-      className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-24"
+      className="mx-auto container px-6 py-20 md:px-10 md:py-24"
       data-testid="lens-long-form"
     >
-      <div className="flex items-center gap-4 border-t border-site-border-subtle pt-10">
+      <div className="flex items-center gap-4 pt-10">
         <p className="shrink-0 font-mono text-[0.625rem] font-semibold tracking-[0.14em] text-site-accent uppercase">
           Field perspective
         </p>

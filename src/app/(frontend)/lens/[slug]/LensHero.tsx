@@ -5,7 +5,6 @@ import { formatLensFrameTechnical, LensPhotoFrame } from '@/components/LensPhoto
 import { LensZoomImage } from './LensZoomImage'
 
 type Props = {
-  collectionName?: string | null
   location?: string | null
   metadata?: Len['technicalMetadata'] | null
   photo: MediaType
@@ -14,20 +13,18 @@ type Props = {
 }
 
 export const LensHero: React.FC<Props> = ({
-  collectionName,
   location,
   metadata,
   photo,
   title,
   year,
 }) => {
-  const context = [collectionName, location?.trim()].filter(Boolean).join(' / ')
   const { primary, secondary } = formatLensFrameTechnical(metadata)
 
   return (
     <LensPhotoFrame
       className="aspect-[4/3] w-full"
-      context={context}
+      context={location?.trim()}
       data-detail-frame="true"
       photoTitle={title}
       stageClassName="absolute inset-x-[4%] top-[7%] bottom-[9%] md:inset-x-[5%]"
