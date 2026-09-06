@@ -1,0 +1,24 @@
+.about-story-section {
+  padding-top: clamp(7rem, 9vw, 10rem);
+  padding-bottom: clamp(8rem, 10vw, 11rem);
+}
+
+.about-vectors-section {
+  padding-top: clamp(6rem, 8vw, 8rem);
+  padding-bottom: clamp(8rem, 10vw, 11rem);
+}
+
+.about-protocol-section {
+  padding-top: clamp(7rem, 9vw, 10rem);
+  padding-bottom: clamp(7.5rem, 10vw, 11rem);
+}
+
+.about-timeline-section {
+  padding-top: clamp(8rem, 10vw, 11rem);
+  padding-bottom: clamp(6rem, 8vw, 8rem);
+}
+
+.site-section-compact.about-closing-section {
+  padding-top: clamp(7rem, 9vw, 9rem);
+  padding-bottom: clamp(7rem, 9vw, 9rem);
+}
