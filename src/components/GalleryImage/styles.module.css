@@ -1,0 +1,21 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  width: min(96rem, calc(100vw - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--site-border-subtle);
+  border-radius: 4px;
+  background: var(--site-surface-deep);
+  color: var(--site-text-primary);
+}
+
+.modal:not([open]) {
+  display: none;
+}
+
+.modal::backdrop {
+  background: rgb(0 0 0 / 85%);
+}

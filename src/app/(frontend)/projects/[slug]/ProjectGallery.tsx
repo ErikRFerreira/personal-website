@@ -1,4 +1,5 @@
 import { Media } from '@/components/Media'
+import { GalleryImage } from '@/components/GalleryImage'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import RichText from '@/components/RichText'
 import type { Media as MediaType, Project } from '@/payload-types'
@@ -92,7 +93,9 @@ export function ProjectGallery({ project }: { project: Project }) {
                 data-gallery-layout={entry.layout}
               >
                 {split && caption}
-                <div
+                <GalleryImage
+                  image={image}
+                  title={entry.title}
                   className={cn(
                     'flex min-w-0 items-center justify-center rounded border border-site-border-subtle bg-site-surface-elevated p-6 md:p-10',
                     entry.layout === 'half' && 'lg:h-[584px] lg:p-8',
@@ -100,6 +103,7 @@ export function ProjectGallery({ project }: { project: Project }) {
                   )}
                 >
                   <Media
+                    htmlElement={null}
                     imgClassName={cn(
                       'mx-auto block h-auto w-auto max-w-full object-contain',
                       entry.layout === 'half'
@@ -117,7 +121,7 @@ export function ProjectGallery({ project }: { project: Project }) {
                         : '(min-width: 1440px) 576px, (min-width: 1024px) calc(50vw - 9rem), calc(100vw - 6rem)'
                     }
                   />
-                </div>
+                </GalleryImage>
                 {!split && caption}
               </figure>
             </RevealOnScroll>
