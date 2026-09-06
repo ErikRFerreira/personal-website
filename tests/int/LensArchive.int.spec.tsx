@@ -3,6 +3,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import {
+  buildLensArchiveURL,
   formatLensArchiveCaption,
   LensArchive,
   resolveLensArchiveFormat,
@@ -144,6 +145,50 @@ describe('LensArchive', () => {
         }),
       ),
     ).toBe('portrait')
+  })
+
+  it('builds archive URLs with optional taxonomy filters', () => {
+    expect(buildLensArchiveURL(2, '', '')).toBe('/next/lens?page=2')
+    expect(buildLensArchiveURL(1, '3', '7')).toBe('/next/lens?page=1&category=3&collection=7')
+  })
+
+  it('filters independently by category and collection', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      json: async () => ({ docs: [makePhoto(2)], hasNextPage: false, nextPage: null }),
+      ok: true,
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    render(
+      <LensArchive
+        categories={[{ count: 1, id: 3, label: 'Ocean' }]}
+        collections={[{ id: 7, label: 'Underwater' }]}
+        docs={[makePhoto(1)]}
+        hasNextPage={false}
+        nextPage={null}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Filter by Ocean category' }))
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'Photo 2' })).not.toBeNull())
+    expect(fetchMock).toHaveBeenLastCalledWith(
+      '/next/lens?page=1&category=3',
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
+    )
+
+    fireEvent.change(screen.getByLabelText('Collection'), { target: { value: '7' } })
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2))
+    expect(fetchMock).toHaveBeenLastCalledWith(
+      '/next/lens?page=1&category=3&collection=7',
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /All \[01\]/ }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3))
+    expect(fetchMock).toHaveBeenLastCalledWith(
+      '/next/lens?page=1&collection=7',
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
+    )
   })
 
   it('swaps the first pair layout when portrait and landscape order is reversed', () => {

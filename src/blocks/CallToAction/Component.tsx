@@ -1,23 +1,59 @@
 import React from 'react'
+import { ArrowRight } from 'lucide-react'
 
 import type { CallToActionBlock as CTABlockProps } from '@/payload-types'
 
 import RichText from '@/components/RichText'
-import { CMSLink } from '@/components/Link'
+import { CtaButton } from '@/components/CtaButton'
+import { RevealOnScroll } from '@/components/RevealOnScroll'
 
 export const CallToActionBlock: React.FC<CTABlockProps> = ({ links, richText }) => {
   return (
-    <div className="container">
-      <div className="bg-card rounded border-border border p-4 flex flex-col gap-8 md:flex-row md:justify-between md:items-center">
-        <div className="max-w-[48rem] flex items-center">
-          {richText && <RichText className="mb-0" data={richText} enableGutter={false} />}
-        </div>
-        <div className="flex flex-col gap-8">
-          {(links || []).map(({ link }, i) => {
-            return <CMSLink key={i} size="lg" {...link} />
-          })}
+    <section
+      aria-label="Call to action"
+      className="site-section relative isolate overflow-hidden border-b border-site-border-subtle bg-site-surface-deep!"
+      data-theme="dark"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-80"
+        style={{
+          background:
+            'radial-gradient(ellipse 52% 72% at 50% 54%, color-mix(in srgb, var(--site-accent) 7%, transparent) 0%, color-mix(in srgb, var(--site-accent) 2%, transparent) 42%, transparent 74%)',
+        }}
+      />
+
+      <div className="site-container flex min-h-[18rem] items-center justify-center md:min-h-[21rem]">
+        <div className="flex w-full max-w-4xl flex-col items-center text-center">
+          {richText && (
+            <RevealOnScroll revealName="cta-copy">
+              <RichText
+                className="text-balance text-[clamp(2.25rem,5vw,4.75rem)] leading-[0.98] font-bold tracking-[-0.045em] text-site-text-primary [&_h1]:m-0 [&_h1]:text-[inherit] [&_h1]:leading-[inherit] [&_h1]:font-[inherit] [&_h2]:m-0 [&_h2]:text-[inherit] [&_h2]:leading-[inherit] [&_h2]:font-[inherit] [&_h3]:m-0 [&_h3]:text-[inherit] [&_h3]:leading-[inherit] [&_h3]:font-[inherit] [&_h4]:m-0 [&_h4]:text-[inherit] [&_h4]:leading-[inherit] [&_h4]:font-[inherit] [&_p]:m-0"
+                data={richText}
+                enableGutter={false}
+                enableProse={false}
+              />
+            </RevealOnScroll>
+          )}
+
+          {links && links.length > 0 && (
+            <RevealOnScroll className="mt-10 md:mt-12" delay={120} revealName="cta-links">
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                {links.map(({ id, link }, index) => (
+                  <CtaButton
+                    {...link}
+                    className="font-mono text-[0.6875rem] font-bold tracking-[0.16em] uppercase"
+                    key={id ?? index}
+                    size="md"
+                  >
+                    <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                  </CtaButton>
+                ))}
+              </div>
+            </RevealOnScroll>
+          )}
         </div>
       </div>
-    </div>
+    </section>
   )
 }

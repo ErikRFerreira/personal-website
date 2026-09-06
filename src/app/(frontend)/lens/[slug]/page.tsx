@@ -60,11 +60,11 @@ export default async function LensPage({ params: paramsPromise }: Args) {
   const hasLongForm = Boolean(lens.fullStory || lens.licensingText)
 
   return (
-    <main className="lens-detail-page relative isolate overflow-hidden bg-site-surface-base pt-[var(--header-height)] text-site-text-primary">
+    <main className="lens-detail-page relative isolate overflow-hidden bg-site-surface-deep pt-[var(--header-height)] text-site-text-primary">
       <div aria-hidden="true" className="lens-ambient-layer lens-ambient-layer--detail" />
 
       <div className="relative z-10">
-        <section className="mx-auto max-w-7xl px-6 pt-8 pb-6 md:px-10 md:pt-12 md:pb-10">
+        <section className="mx-auto container px-6 pt-8 pb-6 md:px-10 md:pt-12 md:pb-10">
           <Link
             className="inline-flex items-center gap-2 font-mono text-[0.625rem] font-semibold tracking-[0.12em] text-site-text-muted uppercase transition-colors hover:text-site-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
             href="/lens"

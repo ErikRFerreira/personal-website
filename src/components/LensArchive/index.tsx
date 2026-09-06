@@ -1,5 +1,6 @@
 'use client'
 
+import { ChevronDown } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { LensArchiveItem, type LensArchivePhoto, type ResolvedLensFormat } from './LensArchiveItem'
@@ -16,7 +17,24 @@ type LensArchivePage = {
   nextPage: number | null
 }
 
-type LensArchiveProps = LensArchivePage
+export type LensFilterOption = {
+  count?: number
+  id: number
+  label: string
+}
+
+type LensArchiveProps = LensArchivePage & {
+  categories?: LensFilterOption[]
+  collections?: LensFilterOption[]
+  totalDocs?: number
+}
+
+export function buildLensArchiveURL(page: number, category: string, collection: string): string {
+  const searchParams = new URLSearchParams({ page: String(page) })
+  if (category) searchParams.set('category', category)
+  if (collection) searchParams.set('collection', collection)
+  return `/next/lens?${searchParams.toString()}`
+}
 
 export function resolveLensArchiveFormat(
   photo: Pick<LensArchivePhoto, 'archiveFormat' | 'photo'>,
@@ -37,17 +55,74 @@ export function resolveLensArchiveFormat(
 }
 
 export function LensArchive({
+  categories = [],
+  collections = [],
   docs: initialDocs,
   hasNextPage: initialHasNext,
   nextPage: initialNextPage,
+  totalDocs = initialDocs.length,
 }: LensArchiveProps) {
   const [docs, setDocs] = useState(initialDocs)
   const [hasNextPage, setHasNextPage] = useState(initialHasNext)
   const [nextPage, setNextPage] = useState(initialNextPage)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [filterError, setFilterError] = useState(false)
+  const [category, setCategory] = useState('')
+  const [collection, setCollection] = useState('')
+  const [isFiltering, setIsFiltering] = useState(false)
   const sentinelRef = useRef<HTMLDivElement>(null)
   const inFlightRef = useRef(false)
+  const requestRef = useRef(0)
+  const abortRef = useRef<AbortController>(null)
+
+  const requestFilteredPage = useCallback(async (nextCategory: string, nextCollection: string) => {
+    const requestID = ++requestRef.current
+    abortRef.current?.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
+    inFlightRef.current = true
+    setIsFiltering(true)
+    setError(null)
+    setFilterError(false)
+
+    try {
+      const response = await fetch(buildLensArchiveURL(1, nextCategory, nextCollection), {
+        signal: controller.signal,
+      })
+      if (!response.ok) throw new Error('The photographs could not be filtered.')
+
+      const page = (await response.json()) as LensArchivePage
+      if (requestRef.current !== requestID) return
+
+      setDocs(page.docs)
+      setHasNextPage(page.hasNextPage)
+      setNextPage(page.nextPage)
+    } catch (filterError) {
+      if (controller.signal.aborted || requestRef.current !== requestID) return
+      setError(
+        filterError instanceof Error
+          ? filterError.message
+          : 'The photographs could not be filtered.',
+      )
+      setFilterError(true)
+    } finally {
+      if (requestRef.current === requestID) {
+        inFlightRef.current = false
+        setIsFiltering(false)
+      }
+    }
+  }, [])
+
+  const changeCategory = (value: string) => {
+    setCategory(value)
+    void requestFilteredPage(value, collection)
+  }
+
+  const changeCollection = (value: string) => {
+    setCollection(value)
+    void requestFilteredPage(category, value)
+  }
 
   const loadMore = useCallback(async () => {
     if (!hasNextPage || nextPage === null || inFlightRef.current) return
@@ -55,12 +130,15 @@ export function LensArchive({
     inFlightRef.current = true
     setIsLoading(true)
     setError(null)
+    setFilterError(false)
+    const requestID = ++requestRef.current
 
     try {
-      const response = await fetch(`/next/lens?page=${nextPage}`)
+      const response = await fetch(buildLensArchiveURL(nextPage, category, collection))
       if (!response.ok) throw new Error('The next photographs could not be loaded.')
 
       const page = (await response.json()) as LensArchivePage
+      if (requestRef.current !== requestID) return
 
       setDocs((current) => {
         const knownIDs = new Set(current.map(({ id }) => id))
@@ -69,16 +147,21 @@ export function LensArchive({
       setHasNextPage(page.hasNextPage)
       setNextPage(page.nextPage)
     } catch (loadError) {
+      if (requestRef.current !== requestID) return
       setError(
         loadError instanceof Error
           ? loadError.message
           : 'The next photographs could not be loaded.',
       )
     } finally {
-      inFlightRef.current = false
-      setIsLoading(false)
+      if (requestRef.current === requestID) {
+        inFlightRef.current = false
+        setIsLoading(false)
+      }
     }
-  }, [hasNextPage, nextPage])
+  }, [category, collection, hasNextPage, nextPage])
+
+  useEffect(() => () => abortRef.current?.abort(), [])
 
   useEffect(() => {
     const sentinel = sentinelRef.current
@@ -97,29 +180,105 @@ export function LensArchive({
 
   return (
     <>
-      {docs.length > 0 ? (
-        <div className="grid grid-cols-1 gap-x-6 gap-y-20 md:grid-cols-12 md:gap-y-28 lg:gap-x-8 lg:gap-y-32">
-          {docs.map((photo, index) => {
-            const format = resolveLensArchiveFormat(photo)
-            const pairedPhoto = index < 2 ? docs[index === 0 ? 1 : 0] : undefined
-            const pairedFormat = pairedPhoto ? resolveLensArchiveFormat(pairedPhoto) : undefined
+      {(categories.length > 0 || collections.length > 0) && (
+        <div
+          aria-label="Filter photographs"
+          className="-mt-8 mb-12 flex flex-col gap-5 border-b border-site-border-subtle pb-6 md:-mt-12 md:mb-16 lg:flex-row lg:items-center lg:gap-8"
+          role="group"
+        >
+          {categories.length > 0 && (
+            <div className="flex min-w-0 flex-1 gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <button
+                aria-pressed={category === ''}
+                className={`h-8 shrink-0 rounded-full border px-4 font-mono text-[0.625rem] font-bold tracking-[0.12em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-site-border-active disabled:cursor-wait disabled:opacity-60 ${
+                  category === ''
+                    ? 'border-site-accent bg-site-accent text-site-accent-foreground'
+                    : 'border-site-border-subtle text-site-text-secondary hover:border-site-border-control hover:text-site-text-primary'
+                }`}
+                disabled={isFiltering}
+                onClick={() => changeCategory('')}
+                type="button"
+              >
+                All <span className="opacity-70">[{String(totalDocs).padStart(2, '0')}]</span>
+              </button>
 
-            return (
-              <LensArchiveItem
-                format={format}
-                index={index}
-                key={photo.id}
-                pairedFormat={pairedFormat}
-                photo={photo}
-              />
-            )
-          })}
+              {categories.map((option) => (
+                <button
+                  aria-label={`Filter by ${option.label} category`}
+                  aria-pressed={category === String(option.id)}
+                  className={`h-8 shrink-0 rounded-full border px-4 font-mono text-[0.625rem] font-bold tracking-[0.1em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-site-border-active disabled:cursor-wait disabled:opacity-60 ${
+                    category === String(option.id)
+                      ? 'border-site-accent bg-site-accent text-site-accent-foreground'
+                      : 'border-site-border-subtle text-site-text-secondary hover:border-site-border-control hover:text-site-text-primary'
+                  }`}
+                  disabled={isFiltering}
+                  key={option.id}
+                  onClick={() => changeCategory(String(option.id))}
+                  type="button"
+                >
+                  {option.label}{' '}
+                  <span className="opacity-60">[{String(option.count ?? 0).padStart(2, '0')}]</span>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {collections.length > 0 && (
+            <label className="flex shrink-0 items-center gap-3">
+              <span className="font-mono text-[0.5625rem] font-bold tracking-[0.13em] text-site-text-muted uppercase">
+                Collection
+              </span>
+              <span className="relative w-48 sm:w-52">
+                <select
+                  className="h-8 w-full appearance-none rounded-full border border-site-border-subtle bg-site-surface-elevated/65 pr-9 pl-4 font-mono text-[0.625rem] font-bold tracking-[0.08em] text-site-text-primary uppercase transition-colors hover:border-site-border-control focus:border-site-border-active focus:outline-none disabled:cursor-wait disabled:opacity-60"
+                  disabled={isFiltering}
+                  onChange={(event) => changeCollection(event.target.value)}
+                  value={collection}
+                >
+                  <option value="">All collections</option>
+                  {collections.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  aria-hidden="true"
+                  className="pointer-events-none absolute top-1/2 right-3 size-3.5 -translate-y-1/2 text-site-accent"
+                />
+              </span>
+            </label>
+          )}
         </div>
-      ) : (
-        <p className="text-base text-site-text-secondary">
-          No photographs have been published yet.
-        </p>
       )}
+
+      <div aria-busy={isFiltering} className={isFiltering ? 'opacity-45' : undefined}>
+        {docs.length > 0 ? (
+          <div className="grid grid-cols-1 gap-x-6 gap-y-20 md:grid-cols-12 md:gap-y-28 lg:gap-x-8 lg:gap-y-32">
+            {docs.map((photo, index) => {
+              const format = resolveLensArchiveFormat(photo)
+              const pairedPhoto = index < 2 ? docs[index === 0 ? 1 : 0] : undefined
+              const pairedFormat = pairedPhoto ? resolveLensArchiveFormat(pairedPhoto) : undefined
+
+              return (
+                <LensArchiveItem
+                  format={format}
+                  index={index}
+                  key={photo.id}
+                  pairedFormat={pairedFormat}
+                  photo={photo}
+                />
+              )
+            })}
+          </div>
+        ) : (
+          <p className="text-base text-site-text-secondary">
+            {category || collection
+              ? 'No photographs match these filters.'
+              : 'No photographs have been published yet.'}
+          </p>
+        )}
+      </div>
 
       <div
         aria-live="polite"
@@ -137,7 +296,9 @@ export function LensArchive({
         {error && (
           <button
             className="text-sm font-semibold text-site-accent transition-colors hover:text-site-accent-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
-            onClick={() => void loadMore()}
+            onClick={() =>
+              filterError ? void requestFilteredPage(category, collection) : void loadMore()
+            }
             type="button"
           >
             Retry loading photographs
