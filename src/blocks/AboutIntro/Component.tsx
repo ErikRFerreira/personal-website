@@ -26,7 +26,7 @@ export function AboutIntroBlock({
           {/* ── Left column ── */}
           <div>
             {eyebrow && (
-              <p className="mb-5 font-mono text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-site-accent">
+              <p className="site-section-label mb-5 text-site-accent">
                 {eyebrow}
               </p>
             )}
@@ -45,7 +45,7 @@ export function AboutIntroBlock({
 
             {socialLinks && socialLinks.length > 0 && (
               <div className="mt-8">
-                <p className="font-mono text-[0.6875rem] font-bold uppercase tracking-[0.18em] text-site-text-muted">
+                <p className="site-section-label text-site-text-muted">
                   Connect
                 </p>
                 <div className="mt-3 flex flex-wrap gap-6">

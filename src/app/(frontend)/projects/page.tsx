@@ -43,7 +43,7 @@ export default async function Page() {
           hoverTrailAmount={0}
         />
       </div>
-      <div className="site-container pbe-24 relative z-2">
+      <div className="site-container relative z-2 pb-24">
         <ArchiveHeader
           title="Projects"
           subtitle="A collection of digital products built with thoughtful design and robust engineering."

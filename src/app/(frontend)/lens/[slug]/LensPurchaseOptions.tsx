@@ -21,14 +21,14 @@ export function LensPurchaseOptions({ digitalDownload, printOptions }: Props) {
     <section className="mt-20 pt-10 md:mt-24" data-testid="lens-purchase-options">
       <header className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="font-mono text-[0.625rem] font-semibold tracking-[0.14em] text-site-accent uppercase">
+          <p className="site-meta-label text-site-accent">
             Available formats
           </p>
           <h2 className="mt-1 text-2xl leading-tight font-bold tracking-[-0.02em] text-site-text-primary md:text-3xl">
             Purchase options
           </h2>
         </div>
-        <p className="font-mono text-[0.5625rem] tracking-[0.12em] text-site-text-muted uppercase">
+        <p className="site-meta-label text-site-text-muted">
           {prints.length > 0 && hasDigitalDownload
             ? 'Print and digital available'
             : prints.length > 0
@@ -47,7 +47,7 @@ export function LensPurchaseOptions({ digitalDownload, printOptions }: Props) {
         >
           {prints.length > 0 && (
             <div data-testid="lens-print-options">
-              <h3 className="font-mono text-[0.625rem] font-semibold tracking-[0.13em] text-site-text-secondary uppercase">
+              <h3 className="site-meta-label text-site-text-secondary">
                 Print
               </h3>
               <ul className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -86,7 +86,7 @@ export function LensPurchaseOptions({ digitalDownload, printOptions }: Props) {
               }
               data-testid="lens-digital-download"
             >
-              <h3 className="font-mono text-[0.625rem] font-semibold tracking-[0.13em] text-site-text-secondary uppercase">
+              <h3 className="site-meta-label text-site-text-secondary">
                 Digital download
               </h3>
               <div className="mt-4 border border-site-border-subtle bg-site-surface-deep/55 p-4">

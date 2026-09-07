@@ -143,7 +143,7 @@ export function HeroImageStack({
               data-hero-image-scrim
             />
 
-            <figcaption className="absolute right-3 bottom-3 z-20 border border-site-border-active bg-site-surface-deep/90 px-3 py-2 font-mono text-[0.625rem] leading-none font-bold tracking-[0.16em] text-site-accent uppercase backdrop-blur-sm md:right-4 md:bottom-4">
+            <figcaption className="site-meta-label absolute right-3 bottom-3 z-20 border border-site-border-active bg-site-surface-deep/90 px-3 py-2 font-bold text-site-accent backdrop-blur-sm md:right-4 md:bottom-4">
               {label}
             </figcaption>
           </motion.figure>

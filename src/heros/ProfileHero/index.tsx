@@ -76,7 +76,7 @@ export function ProfileHero({
                     delay={1140}
                     revealName="profile-hero-image-label"
                   >
-                    <p className="border border-site-border-active bg-site-surface-deep/90 px-3 py-2 font-mono text-[0.625rem] leading-none font-bold tracking-[0.16em] text-site-accent uppercase backdrop-blur-sm">
+                    <p className="site-meta-label border border-site-border-active bg-site-surface-deep/90 px-3 py-2 font-bold text-site-accent backdrop-blur-sm">
                       {imageLabel}
                     </p>
                   </RevealOnScroll>

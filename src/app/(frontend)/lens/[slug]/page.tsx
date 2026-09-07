@@ -64,9 +64,9 @@ export default async function LensPage({ params: paramsPromise }: Args) {
       <div aria-hidden="true" className="lens-ambient-layer lens-ambient-layer--detail" />
 
       <div className="relative z-10">
-        <section className="mx-auto container px-6 pt-8 pb-6 md:px-10 md:pt-12 md:pb-10">
+        <section className="site-container pt-8 pb-6 md:pt-12 md:pb-10">
           <Link
-            className="inline-flex items-center gap-2 font-mono text-[0.625rem] font-semibold tracking-[0.12em] text-site-text-muted uppercase transition-colors hover:text-site-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
+            className="site-meta-label inline-flex items-center gap-2 text-site-text-muted transition-colors hover:text-site-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
             href="/lens"
           >
             <ArrowLeft aria-hidden="true" className="size-3.5" />
@@ -93,13 +93,13 @@ export default async function LensPage({ params: paramsPromise }: Args) {
                 </h1>
 
                 {context && (
-                  <p className="mt-4 font-mono text-[0.625rem] font-semibold tracking-[0.1em] text-site-text-muted uppercase">
+                  <p className="site-meta-label mt-4 text-site-text-muted">
                     {context}
                   </p>
                 )}
 
                 {lens.intro && (
-                  <p className="mt-6 text-sm leading-[1.75] text-site-text-secondary xl:text-base">
+                  <p className="site-body-small mt-6 text-site-text-secondary xl:text-base">
                     {lens.intro}
                   </p>
                 )}

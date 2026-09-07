@@ -59,7 +59,7 @@ export function TimelinePanel({
                 className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_center,var(--site-surface-elevated),var(--site-surface-deep))]"
                 data-testid="about-timeline-image-placeholder"
               >
-                <span className="font-mono text-[0.625rem] font-bold tracking-[0.18em] text-site-text-muted uppercase">
+                <span className="site-meta-label text-site-text-muted">
                   Image unavailable
                 </span>
               </div>
@@ -84,7 +84,7 @@ export function TimelinePanel({
                   >
                     <dt
                       className={cn(
-                        'font-mono text-[0.625rem] leading-none font-bold tracking-[0.16em] uppercase',
+                        'site-meta-label',
                         isHighlighted ? 'text-site-accent' : 'text-site-text-muted',
                       )}
                     >

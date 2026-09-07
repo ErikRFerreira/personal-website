@@ -190,7 +190,7 @@ export function LensArchive({
             <div className="flex min-w-0 flex-1 gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <button
                 aria-pressed={category === ''}
-                className={`h-8 shrink-0 rounded-full border px-4 font-mono text-[0.625rem] font-bold tracking-[0.12em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-site-border-active disabled:cursor-wait disabled:opacity-60 ${
+                className={`site-meta-label h-8 shrink-0 rounded-full border px-4 font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-site-border-active disabled:cursor-wait disabled:opacity-60 ${
                   category === ''
                     ? 'border-site-accent bg-site-accent text-site-accent-foreground'
                     : 'border-site-border-subtle text-site-text-secondary hover:border-site-border-control hover:text-site-text-primary'
@@ -206,7 +206,7 @@ export function LensArchive({
                 <button
                   aria-label={`Filter by ${option.label} category`}
                   aria-pressed={category === String(option.id)}
-                  className={`h-8 shrink-0 rounded-full border px-4 font-mono text-[0.625rem] font-bold tracking-[0.1em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-site-border-active disabled:cursor-wait disabled:opacity-60 ${
+                  className={`site-meta-label h-8 shrink-0 rounded-full border px-4 font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-site-border-active disabled:cursor-wait disabled:opacity-60 ${
                     category === String(option.id)
                       ? 'border-site-accent bg-site-accent text-site-accent-foreground'
                       : 'border-site-border-subtle text-site-text-secondary hover:border-site-border-control hover:text-site-text-primary'
@@ -225,12 +225,12 @@ export function LensArchive({
 
           {collections.length > 0 && (
             <label className="flex shrink-0 items-center gap-3">
-              <span className="font-mono text-[0.5625rem] font-bold tracking-[0.13em] text-site-text-muted uppercase">
+              <span className="site-meta-label font-bold text-site-text-muted">
                 Collection
               </span>
               <span className="relative w-48 sm:w-52">
                 <select
-                  className="h-8 w-full appearance-none rounded-full border border-site-border-subtle bg-site-surface-elevated/65 pr-9 pl-4 font-mono text-[0.625rem] font-bold tracking-[0.08em] text-site-text-primary uppercase transition-colors hover:border-site-border-control focus:border-site-border-active focus:outline-none disabled:cursor-wait disabled:opacity-60"
+                  className="site-meta-label h-8 w-full appearance-none rounded-full border border-site-border-subtle bg-site-surface-elevated/65 pr-9 pl-4 font-bold text-site-text-primary transition-colors hover:border-site-border-control focus:border-site-border-active focus:outline-none disabled:cursor-wait disabled:opacity-60"
                   disabled={isFiltering}
                   onChange={(event) => changeCollection(event.target.value)}
                   value={collection}

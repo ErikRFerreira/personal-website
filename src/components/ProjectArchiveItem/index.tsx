@@ -99,7 +99,7 @@ export function ProjectArchiveItem({ index, project, total }: ProjectArchiveItem
         <div className={image?.url ? 'mt-5 md:mt-6' : ''}>
           <div className="mb-5 flex items-center gap-4 md:mb-6">
             <span
-              className="shrink-0 font-mono text-[0.6875rem] leading-none font-bold tracking-[0.18em] text-site-accent uppercase"
+              className="site-section-label shrink-0 text-site-accent"
               data-project-index="true"
             >
               {indexLabel}
@@ -120,7 +120,7 @@ export function ProjectArchiveItem({ index, project, total }: ProjectArchiveItem
             </div>
 
             {hasMetadata && (
-              <dl className="min-w-0 font-mono text-[0.6875rem] leading-[1.5] font-bold tracking-[0.1em] uppercase lg:pt-1">
+              <dl className="site-caption min-w-0 font-bold uppercase lg:pt-1">
                 <div className="flex flex-wrap gap-x-4 gap-y-1.5">
                   {project.year && (
                     <div>

@@ -35,7 +35,7 @@ export function DisciplinesBlock({ eyebrow, items, label }: DisciplinesProps) {
           <div className="mb-16 flex items-center gap-4 md:mb-24">
             <AccentHexagon />
             <h2
-              className="shrink-0 font-mono text-[0.6875rem] leading-none font-bold tracking-[0.2em] text-site-accent uppercase"
+              className="site-section-label shrink-0 text-site-accent"
               id="disciplines-heading"
             >
               {heading}

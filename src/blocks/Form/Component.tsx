@@ -14,6 +14,7 @@ import { ArrowRight } from 'lucide-react'
 
 import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
+import './Form.css'
 
 export type FormBlockType = {
   blockName?: string
@@ -197,7 +198,7 @@ export const FormBlock: React.FC<
             <div>
               {eyebrow && (
                 <RevealOnScroll delay={0} revealName="contact-eyebrow">
-                  <p className="mb-3 font-mono text-[0.6875rem] leading-[1.2] font-bold tracking-[0.18em] text-site-accent uppercase">
+                  <p className="site-section-label mb-3 text-site-accent">
                     {eyebrow}
                   </p>
                 </RevealOnScroll>
@@ -219,7 +220,7 @@ export const FormBlock: React.FC<
 
               {/* Form with underline-style inputs */}
               <RevealOnScroll delay={240} revealName="contact-form">
-                <div className="[&_input]:rounded-none [&_input]:border-0 [&_input]:border-b [&_input]:border-site-border-control [&_input]:bg-transparent [&_input]:px-0 [&_input]:text-site-text-primary [&_input]:placeholder:text-site-text-muted [&_input]:focus-visible:border-site-border-active [&_input]:focus-visible:ring-0 [&_input]:focus-visible:outline-none [&_label]:text-[0.625rem] [&_label]:font-semibold [&_label]:tracking-widest [&_label]:text-site-text-muted [&_label]:uppercase [&_textarea]:rounded-none [&_textarea]:border-0 [&_textarea]:border-b [&_textarea]:border-site-border-control [&_textarea]:bg-transparent [&_textarea]:px-0 [&_textarea]:text-site-text-primary [&_textarea]:placeholder:text-site-text-muted [&_textarea]:focus-visible:border-site-border-active [&_textarea]:focus-visible:ring-0 [&_textarea]:focus-visible:outline-none [&_[role=combobox]]:rounded-none [&_[role=combobox]]:border-0 [&_[role=combobox]]:border-b [&_[role=combobox]]:border-site-border-control [&_[role=combobox]]:bg-transparent [&_[role=combobox]]:text-site-text-primary [&_[role=combobox]]:focus-visible:border-site-border-active [&_[role=combobox]]:focus-visible:ring-0 [&_[role=combobox]]:focus-visible:outline-none [&_[data-slot=checkbox]]:focus-visible:ring-0 [&_[data-slot=checkbox]]:focus-visible:outline-none">
+                <div className="contact-form">
                   {formJSX}
                 </div>
               </RevealOnScroll>

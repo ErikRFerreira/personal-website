@@ -38,7 +38,7 @@ function ProjectMetadata({ project }: { project: Project }) {
         <dl className="grid grid-cols-2 gap-x-4 gap-y-5">
           {cells.map(({ label, value }) => (
             <div key={label} className={label === 'Stack' ? 'col-span-2 min-w-0' : 'min-w-0'}>
-              <dt className="mb-1.5 font-mono text-[0.625rem] tracking-[0.16em] text-site-text-muted uppercase">
+              <dt className="site-meta-label mb-1.5 text-site-text-muted">
                 {label}
               </dt>
               <dd className="text-sm leading-[1.55] break-words text-site-text-primary">{value}</dd>
@@ -73,7 +73,7 @@ export function ProjectHeader({ project }: { project: Project }) {
     <header className="site-container pt-10 md:pt-14 lg:pt-16">
       <RevealOnScroll revealName="project-header">
         <Link
-          className="group inline-flex items-center gap-3 font-mono text-[0.6875rem] leading-none font-bold tracking-[0.16em] text-site-text-secondary uppercase transition-colors duration-200 hover:text-site-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
+          className="site-section-label group inline-flex items-center gap-3 text-site-text-secondary transition-colors duration-200 hover:text-site-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
           href="/projects"
         >
           <span

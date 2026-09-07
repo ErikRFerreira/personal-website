@@ -13,10 +13,10 @@ export const LensRelatedPhotos: React.FC<Props> = ({ collection, photos }) => {
 
   return (
     <section className="pb-20 md:pb-24 border-t border-site-border-subtle pt-10">
-      <div className="mx-auto container px-6 pt-10 md:px-10">
+      <div className="site-container pt-10">
         <div className="mb-10 flex items-end justify-between gap-8">
           <div className="flex flex-col gap-2">
-            <span className="font-mono text-[0.625rem] leading-[1.2] font-semibold tracking-[0.14em] text-site-accent uppercase">
+            <span className="site-meta-label text-site-accent">
               Related Lens photographs
             </span>
             <h2 className="text-2xl leading-tight font-bold text-site-text-primary">
@@ -63,7 +63,7 @@ function RelatedPhotoCard({ collectionName, photo }: { collectionName: string; p
         <div className="absolute inset-0 bg-site-overlay-dark opacity-25 transition-opacity duration-700 ease-out group-hover:opacity-0 motion-reduce:transition-none" />
       </div>
       <div className="flex flex-col gap-1 border-x border-b border-site-border-subtle bg-site-surface-elevated/55 px-4 py-3 transition-colors duration-300 group-hover:border-site-border-active">
-        <span className="font-mono text-[0.625rem] leading-[1.2] font-semibold tracking-[0.12em] text-site-accent uppercase">
+        <span className="site-meta-label text-site-accent">
           {collectionName}
         </span>
         <span className="text-sm font-medium text-site-text-primary">{photo.title}</span>

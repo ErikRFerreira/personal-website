@@ -23,7 +23,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
               {showcaseTitle}
             </h2>
             {showcaseSubtitle && (
-              <p className="mt-1 font-mono text-[0.6875rem] tracking-widest text-site-text-muted uppercase md:text-xs">
+              <p className="site-caption mt-1 text-site-text-muted uppercase">
                 {showcaseSubtitle}
               </p>
             )}
@@ -42,7 +42,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
             />
           </div>
           {showcaseCaption && (
-            <figcaption className="mt-4 font-mono text-[0.625rem] leading-normal font-semibold tracking-[0.12em] text-site-text-muted uppercase">
+            <figcaption className="site-caption mt-4 text-site-text-muted uppercase">
               {showcaseCaption}
             </figcaption>
           )}

@@ -24,7 +24,7 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
             {eyebrow && (
               <div className="mb-5 flex items-center gap-4">
                 <AccentHexagon />
-                <p className="font-mono text-[0.6875rem] leading-[1.2] font-bold tracking-[0.24em] text-site-accent uppercase">
+                <p className="site-section-label text-site-accent">
                   {eyebrow}
                 </p>
               </div>
@@ -91,7 +91,7 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
                     </h3>
 
                     {location && (
-                      <p className="shrink-0 pt-1 font-mono text-[0.625rem] leading-[1.2] font-bold tracking-[0.18em] text-site-accent uppercase">
+                      <p className="site-meta-label shrink-0 pt-1 font-bold text-site-accent">
                         {location}
                       </p>
                     )}

@@ -46,7 +46,7 @@ function ProjectImage({ project, sizes }: { project: Project; sizes: string }) {
       ) : (
         <div
           aria-label={`${project.title} preview unavailable`}
-          className="flex h-full w-full items-center justify-center px-6 text-center font-mono text-[0.6875rem] font-semibold tracking-[0.16em] text-site-text-muted uppercase"
+          className="site-caption flex h-full w-full items-center justify-center px-6 text-center text-site-text-muted uppercase"
           data-project-image-placeholder="true"
           role="img"
         >
@@ -71,7 +71,7 @@ function ProjectTechnologies({ tech }: { tech: Project['tech'] }) {
     <div className="flex flex-wrap gap-x-6 gap-y-2" data-project-technologies="true">
       {tech.map((item, techIndex) => (
         <span
-          className="font-mono text-[0.625rem] leading-none font-semibold tracking-[0.12em] text-site-text-muted uppercase"
+          className="site-meta-label text-site-text-muted"
           key={item.id ?? `${item.techName}-${techIndex}`}
         >
           {item.techName}
@@ -129,7 +129,7 @@ function WideProject({ project, index }: Props) {
             </span>
             <span aria-hidden="true" className="h-px w-12 bg-site-border-active/50" />
             {labels.metadata && (
-              <span className="font-mono text-[0.6875rem] leading-none font-bold tracking-[0.18em] text-site-accent uppercase">
+              <span className="site-section-label text-site-accent">
                 {labels.metadata}
               </span>
             )}
@@ -176,7 +176,7 @@ function OffsetProject({ project, index }: Props) {
         data-project-content="true"
       >
         <div className="space-y-3">
-          <p className="font-mono text-[0.6875rem] leading-none font-bold tracking-[0.18em] text-site-accent uppercase opacity-70">
+          <p className="site-section-label text-site-accent opacity-70">
             {[labels.number, labels.metadata].filter(Boolean).join(' // ')}
           </p>
           <h3 className="text-[2.5rem] leading-[0.98] font-extrabold tracking-[-0.035em] text-site-text-primary md:text-[3rem]">

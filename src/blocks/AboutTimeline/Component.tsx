@@ -36,7 +36,7 @@ export function AboutTimelineBlock({ eyebrow, milestones }: AboutTimelineBlockPr
           <div className="lg:col-span-5">
             <RevealOnScroll revealName="about-timeline-heading">
               <h2
-                className="mb-10 font-mono text-[0.6875rem] leading-none font-bold tracking-[0.2em] text-site-accent uppercase md:mb-12"
+                className="site-section-label mb-10 text-site-accent md:mb-12"
                 id={headingId}
               >
                 {eyebrow || 'Timeline'}

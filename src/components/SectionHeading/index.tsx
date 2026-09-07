@@ -12,7 +12,7 @@ export function SectionHeading({ title, label, className }: Props) {
   return (
     <div className={cn('mb-12 flex flex-col gap-4 pb-4', className)}>
       {label && (
-        <p className="font-mono text-[0.6875rem] font-bold leading-[1.2] tracking-[0.18em] text-site-accent uppercase">
+        <p className="site-section-label text-site-accent">
           {label}
         </p>
       )}

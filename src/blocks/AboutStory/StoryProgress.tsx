@@ -54,7 +54,7 @@ export function StoryProgress({ body, eyebrow, heading }: StoryProgressProps) {
 
           {eyebrow && (
             <RevealOnScroll delay={0} revealName="about-story-eyebrow">
-              <p className="mb-5 font-mono text-[0.6875rem] leading-none font-bold tracking-[0.2em] text-site-accent uppercase">
+              <p className="site-section-label mb-5 text-site-accent">
                 {eyebrow}
               </p>
             </RevealOnScroll>

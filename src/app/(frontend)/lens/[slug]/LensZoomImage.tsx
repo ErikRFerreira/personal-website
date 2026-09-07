@@ -69,7 +69,7 @@ export function LensZoomImage({ photo, title }: LensZoomImageProps) {
       />
 
       <div
-        className={`${styles.zoomHint} pointer-events-none absolute right-4 bottom-4 z-30 items-center gap-2 border border-site-border-subtle bg-site-surface-deep/75 px-3 py-2 font-mono text-[0.625rem] font-bold tracking-[0.14em] text-site-accent uppercase backdrop-blur-md`}
+        className={`${styles.zoomHint} site-meta-label pointer-events-none absolute right-4 bottom-4 z-30 items-center gap-2 border border-site-border-subtle bg-site-surface-deep/75 px-3 py-2 font-bold text-site-accent backdrop-blur-md`}
       >
         <ZoomIn aria-hidden="true" className="size-3.5" />
         Hover to enlarge

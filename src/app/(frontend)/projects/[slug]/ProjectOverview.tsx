@@ -13,7 +13,7 @@ export function ProjectOverview({ project }: { project: Project }) {
         className="mx-auto max-w-2xl"
         data-project-content="true"
       >
-        <span className="mb-4 block font-mono text-xs tracking-widest text-site-accent uppercase">
+        <span className="site-section-label mb-4 block text-site-accent">
           Project Context &amp; Purpose
         </span>
         <RichText data={project.content} enableGutter={false} />

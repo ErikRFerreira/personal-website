@@ -11,7 +11,7 @@ function ArchiveHeader({ detail, title, subtitle }: ArchiveHeaderProps) {
     <header className="mb-16 flex w-full max-w-3xl flex-col items-start md:mb-24">
       {detail && (
         <p
-          className={`${styles.detail} mb-5 font-mono text-[0.6875rem] leading-none font-bold tracking-[0.18em] text-site-accent uppercase`}
+          className={`${styles.detail} site-section-label mb-5 text-site-accent`}
         >
           {detail}
         </p>

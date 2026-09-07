@@ -157,7 +157,7 @@ export function ProjectDetail({ nextProject, project }: ProjectDetailProps) {
               className="group min-w-0 max-w-full w-fit break-words focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
               href="/projects"
             >
-              <span className="font-mono text-[0.625rem] font-bold tracking-[0.16em] text-site-text-muted uppercase">
+              <span className="site-meta-label font-bold text-site-text-muted">
                 &larr; Back
               </span>
               <span className="mt-2 block text-lg md:text-xl leading-tight font-bold tracking-[-0.025em] text-site-text-primary transition-colors duration-200 group-hover:text-site-accent">
@@ -170,7 +170,7 @@ export function ProjectDetail({ nextProject, project }: ProjectDetailProps) {
                 className="group min-w-0 max-w-full w-fit break-words focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active md:ml-auto md:text-right"
                 href={`/projects/${nextProject.slug}`}
               >
-                <span className="font-mono text-[0.625rem] font-bold tracking-[0.16em] text-site-accent uppercase">
+                <span className="site-meta-label font-bold text-site-accent">
                   Next Project &rarr;
                 </span>
                 <span className="mt-2 block text-xl leading-tight font-bold tracking-[-0.025em] text-site-text-primary transition-colors duration-200 group-hover:text-site-accent md:text-2xl">

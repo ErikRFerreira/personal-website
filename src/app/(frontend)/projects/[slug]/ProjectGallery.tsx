@@ -25,7 +25,7 @@ export function ProjectGallery({ project }: { project: Project }) {
         <div className="mb-8 flex flex-col gap-4 border-t border-site-border-subtle pt-6 md:mb-10 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <span aria-hidden="true" className="h-0.5 w-2.5 bg-site-accent" />
-            <h2 className="font-mono text-xs font-bold tracking-wider text-site-text-primary uppercase">
+            <h2 className="site-section-label text-site-text-primary">
               Project Gallery
             </h2>
             {project.gallerySubtitle?.trim() && (
@@ -33,13 +33,13 @@ export function ProjectGallery({ project }: { project: Project }) {
                 <span aria-hidden="true" className="hidden text-site-text-muted md:inline">
                   /
                 </span>
-                <p className="font-mono text-xs text-site-text-secondary">
+                <p className="site-caption text-site-text-secondary">
                   {project.gallerySubtitle.trim()}
                 </p>
               </>
             )}
           </div>
-          <p className="shrink-0 font-mono text-xs tracking-widest text-site-text-muted uppercase">
+          <p className="site-section-label shrink-0 text-site-text-muted">
             {String(entries.length).padStart(2, '0')} {entries.length === 1 ? 'Screen' : 'Screens'}
           </p>
         </div>
@@ -57,7 +57,7 @@ export function ProjectGallery({ project }: { project: Project }) {
 
           const caption = (
             <figcaption className={cn('min-w-0', split && 'lg:col-start-1 lg:row-start-1')}>
-              <p className="font-mono text-xs tracking-widest text-site-accent uppercase">
+              <p className="site-section-label text-site-accent">
                 Screen {String(index + 1).padStart(2, '0')}
               </p>
               <h3

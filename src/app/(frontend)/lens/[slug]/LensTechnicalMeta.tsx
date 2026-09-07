@@ -24,7 +24,7 @@ const MetaCell: React.FC<MetaCell> = ({ label, value, wide }) => {
 
   return (
     <div className={`min-w-0 border-t border-site-border-subtle pt-3 ${wide ? 'col-span-2' : ''}`}>
-      <dt className="font-mono text-[0.5625rem] font-semibold tracking-[0.12em] text-site-text-muted uppercase">
+      <dt className="site-meta-label text-site-text-muted">
         {label}
       </dt>
       <dd
@@ -54,7 +54,7 @@ export const LensTechnicalMeta: React.FC<Props> = ({ metadata }) => {
       className="border border-site-border-subtle bg-site-surface-elevated/80 p-4 shadow-[0_1rem_2.5rem_rgba(0,0,0,0.16)] backdrop-blur-sm"
       data-testid="lens-technical-metadata"
     >
-      <h2 className="mb-3 font-mono text-[0.5625rem] font-semibold tracking-[0.15em] text-site-accent uppercase">
+      <h2 className="site-meta-label mb-3 text-site-accent">
         Technical capture profile
       </h2>
       <dl className="grid grid-cols-2 gap-x-5 gap-y-3">

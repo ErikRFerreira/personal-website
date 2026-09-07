@@ -47,6 +47,11 @@
     --site-card-gap: clamp(1.5rem, 2vw, 2rem);
     --site-card-padding: clamp(1.5rem, 2vw, 2rem);
     --site-radius-card: 1rem;
+    --site-font-size-body: 1rem;
+    --site-font-size-body-small: 0.875rem;
+    --site-font-size-label: 0.75rem;
+    --site-font-size-caption: 0.6875rem;
+    --site-font-size-meta: 0.625rem;
   }
 
   h1,
@@ -272,6 +277,42 @@
 }
 
 @layer utilities {
+  .site-body {
+    font-size: var(--site-font-size-body);
+    line-height: 1.75;
+  }
+
+  .site-body-small {
+    font-size: var(--site-font-size-body-small);
+    line-height: 1.75;
+  }
+
+  .site-section-label {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: var(--site-font-size-label);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .site-meta-label {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: var(--site-font-size-meta);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .site-caption {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: var(--site-font-size-caption);
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+  }
+
   .site-page {
     --background: var(--site-surface-deep);
     --foreground: var(--site-text-primary);
@@ -486,17 +527,4 @@ html[data-theme='light'] {
     animation: none;
     will-change: auto;
   }
-}
-
-/* Form labels stay highlighted once their control has a value. */
-.form-field label {
-  transition: color 200ms ease-out;
-}
-
-.form-field:focus-within label,
-.form-field:has(input:not(:placeholder-shown)) label,
-.form-field:has(textarea:not(:placeholder-shown)) label,
-.form-field:has([data-slot='select-trigger']:not([data-placeholder])) label,
-.form-field:has([data-slot='checkbox'][data-state='checked']) label {
-  color: var(--site-accent);
 }

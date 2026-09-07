@@ -48,7 +48,7 @@ export function SelectedProjectsBlock({ eyebrow, label, projects }: SelectedProj
         <RevealOnScroll revealName="section-heading">
           <div className="mb-16 flex items-center gap-4">
             <AccentHexagon />
-            <h2 className="shrink-0 font-mono text-[0.6875rem] leading-none font-bold tracking-[0.2em] text-site-accent uppercase">
+            <h2 className="site-section-label shrink-0 text-site-accent">
               {heading}
             </h2>
             <div aria-hidden="true" className="h-px flex-1 bg-site-border-subtle" />

@@ -203,7 +203,7 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
             data-archive-frame="true"
             data-archive-format={format}
             overlay={
-              <span className="absolute right-4 bottom-[14%] z-30 flex translate-y-2 items-center gap-1.5 font-mono text-[0.625rem] font-bold tracking-[0.18em] text-site-accent uppercase opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none md:right-5">
+              <span className="site-meta-label absolute right-4 bottom-[14%] z-30 flex translate-y-2 items-center gap-1.5 font-bold text-site-accent opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none md:right-5">
                 View <ArrowUpRight aria-hidden="true" className="size-3.5" />
               </span>
             }
@@ -269,7 +269,7 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
             </div>
 
             <div className="absolute inset-0 bg-gradient-to-t from-site-surface-base/70 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 motion-reduce:transition-none" />
-            <span className="absolute right-5 bottom-5 flex translate-y-2 items-center gap-1.5 font-mono text-[0.625rem] font-bold tracking-[0.18em] text-site-accent uppercase opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none md:right-6 md:bottom-6">
+            <span className="site-meta-label absolute right-5 bottom-5 flex translate-y-2 items-center gap-1.5 font-bold text-site-accent opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none md:right-6 md:bottom-6">
               View <ArrowUpRight aria-hidden="true" className="size-3.5" />
             </span>
           </div>
@@ -280,7 +280,7 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
             {photo.title}
           </h2>
           {caption && (
-            <p className="mt-2 font-mono text-[0.625rem] leading-[1.5] font-semibold tracking-[0.08em] text-site-text-muted transition-colors duration-200 group-hover:text-site-text-secondary">
+            <p className="site-caption mt-2 text-site-text-muted transition-colors duration-200 group-hover:text-site-text-secondary">
               {caption}
             </p>
           )}

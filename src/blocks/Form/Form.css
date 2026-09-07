@@ -16,9 +16,9 @@
 
 .contact-form label {
   color: var(--site-text-muted);
-  font-size: 0.75rem;
+  font-size: var(--site-font-size-label);
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 

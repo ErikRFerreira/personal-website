@@ -8,7 +8,7 @@ export function LensCategoryChips({ categories }: { categories: Category[] }) {
       <span aria-hidden="true" className="h-px w-6 bg-site-accent" />
       {categories.map((category) => (
         <span
-          className="font-mono text-[0.625rem] font-semibold tracking-[0.16em] text-site-accent uppercase"
+          className="site-meta-label text-site-accent"
           key={category.id}
         >
           {category.title}
