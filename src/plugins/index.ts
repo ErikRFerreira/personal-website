@@ -35,6 +35,7 @@ const generateURL: GenerateURL<Post | Page | { slug?: string; title?: string }> 
 
 export const plugins: Plugin[] = [
   vercelBlobStorage({
+    addRandomSuffix: true,
     collections: {
       media: true,
     },
