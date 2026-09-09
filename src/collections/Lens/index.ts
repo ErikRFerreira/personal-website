@@ -48,10 +48,21 @@ export const Lens: CollectionConfig = {
           fields: [
             {
               name: 'series',
-              type: 'text',
-              label: 'Series / Collection',
+              type: 'relationship',
+              relationTo: 'series',
+              label: 'Collection',
               admin: {
-                description: 'Group this photo under a named series or collection',
+                description: 'Group this photo in a managed Lens collection',
+              },
+            },
+            {
+              name: 'categories',
+              type: 'relationship',
+              relationTo: 'categories',
+              hasMany: true,
+              label: 'Categories',
+              admin: {
+                description: 'Classify this photo with shared site taxonomy terms',
               },
             },
             {
@@ -108,21 +119,35 @@ export const Lens: CollectionConfig = {
               ],
             },
             {
+              name: 'digitalDownload',
+              type: 'group',
+              label: 'Digital Download',
+              admin: {
+                description: 'Optional availability and pricing for a digital download',
+              },
+              fields: [
+                {
+                  name: 'available',
+                  type: 'checkbox',
+                  label: 'Available',
+                  defaultValue: false,
+                },
+                {
+                  name: 'price',
+                  type: 'number',
+                  label: 'Price (EUR)',
+                  admin: {
+                    condition: (_, siblingData) => siblingData?.available === true,
+                  },
+                },
+              ],
+            },
+            {
               name: 'licensingText',
               type: 'textarea',
               label: 'Licensing / Usage Text',
               admin: {
                 description: 'Usage rights, licensing terms, or copyright notice',
-              },
-            },
-            {
-              name: 'relatedPhotos',
-              type: 'relationship',
-              label: 'Related Photos',
-              relationTo: 'lens',
-              hasMany: true,
-              admin: {
-                description: 'Other photos from the same shoot or series',
               },
             },
           ],
@@ -153,6 +178,24 @@ export const Lens: CollectionConfig = {
       ],
     },
     slugField(),
+    {
+      name: 'archiveFormat',
+      type: 'select',
+      label: 'Archive Format',
+      options: [
+        { label: 'Auto (from image)', value: 'auto' },
+        { label: 'Portrait', value: 'portrait' },
+        { label: 'Landscape', value: 'landscape' },
+        { label: 'Square', value: 'square' },
+        { label: 'Panorama', value: 'panorama' },
+      ],
+      defaultValue: 'auto',
+      admin: {
+        description:
+          'Override the archive crop and frame shape, or use the uploaded image dimensions.',
+        position: 'sidebar',
+      },
+    },
     {
       name: 'status',
       type: 'select',

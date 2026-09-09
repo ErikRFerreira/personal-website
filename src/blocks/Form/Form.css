@@ -1,0 +1,60 @@
+.form-field {
+  max-width: 100%;
+}
+
+.form-field label {
+  transition: color 200ms ease-out;
+}
+
+.form-field:focus-within label,
+.form-field:has(input:not(:placeholder-shown)) label,
+.form-field:has(textarea:not(:placeholder-shown)) label,
+.form-field:has([data-slot='select-trigger']:not([data-placeholder])) label,
+.form-field:has([data-slot='checkbox'][data-state='checked']) label {
+  color: var(--site-accent);
+}
+
+.contact-form label {
+  color: var(--site-text-muted);
+  font-size: var(--site-font-size-label);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.contact-form input,
+.contact-form textarea,
+.contact-form [role='combobox'] {
+  border: 0;
+  border-bottom: 1px solid var(--site-border-control);
+  border-radius: 0;
+  outline: none;
+  background: transparent;
+  color: var(--site-text-primary);
+  box-shadow: none;
+  padding-inline: 0;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: var(--site-text-muted);
+}
+
+.contact-form input:focus-visible,
+.contact-form textarea:focus-visible,
+.contact-form [role='combobox']:focus-visible {
+  border-bottom-color: var(--site-border-active);
+  outline: none;
+  box-shadow: none;
+}
+
+.contact-form [data-slot='checkbox']:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (width >= 48rem) {
+  .form-field {
+    max-width: var(--form-field-width, 100%);
+  }
+}

@@ -1,31 +1,440 @@
-import { test, expect, Page } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 
 test.describe('Frontend', () => {
-  let page: Page
-
-  test.beforeAll(async ({ browser }, testInfo) => {
-    const context = await browser.newContext()
-    page = await context.newPage()
-  })
-
   test('can load homepage', async ({ page }) => {
     const browserErrors: string[] = []
     page.on('pageerror', (error) => browserErrors.push(error.message))
 
-    await page.goto('http://localhost:3000')
-    await expect(page).toHaveTitle(/Payload Website Template/)
+    await page.goto('http://localhost:3000', { waitUntil: 'networkidle' })
+    await expect(page).toHaveTitle(/Erik Fereira - Developer & Photographer/)
     const heading = page.locator('h1').first()
     await expect(heading).toBeVisible()
     await expect(heading).not.toHaveText('')
+    await expect(page.locator('html')).toHaveClass(/lenis/)
+
+    await page.mouse.wheel(0, 1000)
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
+
+    const wheelTo = async (selector: string) => {
+      const target = page.locator(selector).first()
+      const delta = await target.evaluate(
+        (element) => element.getBoundingClientRect().top - window.innerHeight * 0.2,
+      )
+
+      await page.mouse.wheel(0, delta)
+      await expect
+        .poll(() =>
+          target.evaluate((element) => {
+            const rect = element.getBoundingClientRect()
+            return rect.top < window.innerHeight && rect.bottom > 0
+          }),
+        )
+        .toBe(true)
+    }
+
+    const expectReveal = async (selector: string) => {
+      const target = page.locator(selector).first()
+      if (!(await target.count())) return
+
+      await wheelTo(selector)
+      await expect(target).toHaveAttribute('data-reveal-state', 'visible')
+    }
 
     const blocks = page.locator('[data-block-type]')
     const blockCount = await blocks.count()
 
     if (blockCount > 1) {
       await expect(blocks.nth(1)).toHaveAttribute('data-deferred', 'true')
-      await blocks.last().scrollIntoViewIfNeeded()
     }
 
+    await expectReveal('[data-block-type="selectedProjects"] [data-reveal-name="section-heading"]')
+    await expectReveal('[data-block-type="selectedProjects"] [data-reveal-name="project-row"]')
+
+    const projectLink = page
+      .locator('[data-block-type="selectedProjects"] [data-reveal-name="project-row"] a')
+      .first()
+    if (await projectLink.count()) {
+      await expect(projectLink).toHaveAttribute('href', /\/projects\//)
+      await projectLink.hover()
+    }
+
+    await expectReveal('[data-block-type="capabilities"] [data-reveal-name="capabilities-heading"]')
+    await expectReveal('[data-block-type="capabilities"] [data-reveal-name="capability-card"]')
+
+    const capabilityCard = page.locator('[data-block-type="capabilities"] .capability-card').first()
+    if (await capabilityCard.count()) {
+      await capabilityCard.hover()
+      await expect(capabilityCard).toBeVisible()
+    }
+
+    const capabilityBlocks = page.locator('[data-block-type="capabilities"]')
+    for (let index = 0; index < (await capabilityBlocks.count()); index += 1) {
+      const capabilityBlock = capabilityBlocks.nth(index)
+      const nextBlockType = await capabilityBlock.evaluate((element) =>
+        element.nextElementSibling?.getAttribute('data-block-type'),
+      )
+
+      if (nextBlockType === 'revealText') {
+        await expect(capabilityBlock).toHaveAttribute('data-transition-to', 'revealText')
+      } else {
+        await expect(capabilityBlock).not.toHaveAttribute('data-transition-to')
+      }
+    }
+
+    const revealText = page.locator('[data-block-type="revealText"]')
+    if (await revealText.count()) {
+      await wheelTo('[data-block-type="revealText"]')
+      await expect(revealText.locator('.word').first()).toBeVisible()
+
+      const transitionClearance = await revealText.first().evaluate((element) => {
+        const content = element.querySelector('section > div')
+        const nextBlock = element.nextElementSibling
+
+        if (!content || nextBlock?.getAttribute('data-block-type') !== 'lensBlock') return null
+
+        return nextBlock.getBoundingClientRect().top - content.getBoundingClientRect().bottom
+      })
+
+      if (transitionClearance !== null) {
+        expect(transitionClearance).toBeGreaterThanOrEqual(0)
+      }
+    }
+
+    const lensBlock = page.locator('[data-block-type="lensBlock"]')
+    if (await lensBlock.count()) {
+      for (let index = 0; index < (await lensBlock.count()); index += 1) {
+        const lens = lensBlock.nth(index)
+        const previousBlockType = await lens.evaluate((element) =>
+          element.previousElementSibling?.getAttribute('data-block-type'),
+        )
+
+        if (previousBlockType === 'revealText') {
+          await expect(lens).toHaveAttribute('data-transition-from', 'revealText')
+        } else {
+          await expect(lens).not.toHaveAttribute('data-transition-from')
+        }
+      }
+
+      await expectReveal('[data-block-type="lensBlock"] [data-reveal-name="section-heading"]')
+      await expectReveal('[data-block-type="lensBlock"] [data-reveal-name="lens-photo"]')
+
+      const lensLink = lensBlock.locator('[data-reveal-name="lens-photo"] a').first()
+      await expect(lensLink).toHaveAttribute('href', /\/lens\//)
+      await lensLink.hover({ force: true })
+
+      const ambientLayer = lensBlock.first().locator('.lens-ambient-layer')
+      await expect(ambientLayer).toHaveAttribute('aria-hidden', 'true')
+      await expect(lensBlock.locator('canvas')).toHaveCount(0)
+      await expect
+        .poll(() => ambientLayer.evaluate((element) => getComputedStyle(element).animationName))
+        .toBe('lens-ambient-pulse')
+
+      await page.emulateMedia({ reducedMotion: 'reduce' })
+      await expect
+        .poll(() => ambientLayer.evaluate((element) => getComputedStyle(element).animationName))
+        .toBe('none')
+      await page.emulateMedia({ reducedMotion: 'no-preference' })
+
+      const lensHref = await lensLink.getAttribute('href')
+      const detailPage = await page.context().newPage()
+      const detailErrors: string[] = []
+      detailPage.on('pageerror', (error) => detailErrors.push(error.message))
+
+      await detailPage.goto(new URL(lensHref!, page.url()).href, { waitUntil: 'networkidle' })
+
+      const detailRoot = detailPage.locator('.lens-detail-page')
+      const detailAmbientLayer = detailRoot.locator(':scope > .lens-ambient-layer--detail')
+      await expect(detailRoot).toBeVisible()
+      await expect(detailAmbientLayer).toHaveAttribute('aria-hidden', 'true')
+      await expect(detailRoot.locator('canvas')).toHaveCount(0)
+      await expect
+        .poll(() =>
+          detailAmbientLayer.evaluate((element) => getComputedStyle(element).animationName),
+        )
+        .toBe('lens-ambient-pulse')
+      await expect
+        .poll(() =>
+          detailRoot.evaluate((root) => {
+            const ambient = root.querySelector<HTMLElement>('.lens-ambient-layer--detail')
+            return ambient
+              ? Math.abs(ambient.getBoundingClientRect().height - root.scrollHeight)
+              : -1
+          }),
+        )
+        .toBeLessThanOrEqual(1)
+
+      await detailPage.emulateMedia({ reducedMotion: 'reduce' })
+      await expect
+        .poll(() =>
+          detailAmbientLayer.evaluate((element) => getComputedStyle(element).animationName),
+        )
+        .toBe('none')
+
+      expect(detailErrors).toEqual([])
+      await detailPage.close()
+    }
+
+    await expectReveal('[data-block-type="homeBio"] [data-reveal-name="home-bio"]')
+
     expect(browserErrors).toEqual([])
+  })
+
+  test('renders the Lens detail layout without nested or horizontal scrolling', async ({
+    page,
+  }) => {
+    const browserErrors: string[] = []
+    page.on('pageerror', (error) => browserErrors.push(error.message))
+
+    await page.setViewportSize({ height: 900, width: 1440 })
+    await page.goto('http://localhost:3000/lens/dubai-skyline', {
+      waitUntil: 'domcontentloaded',
+    })
+
+    const detailRoot = page.locator('.lens-detail-page')
+    const primaryInfo = detailRoot.getByTestId('lens-primary-info')
+    const detailFrame = detailRoot.locator('[data-detail-frame="true"]')
+
+    await expect(detailRoot).toBeVisible()
+    await expect(primaryInfo).toBeVisible()
+    await expect
+      .poll(() => primaryInfo.evaluate((element) => getComputedStyle(element).overflowY))
+      .not.toMatch(/auto|scroll/)
+    await expect
+      .poll(async () => {
+        const frameBounds = await detailFrame.boundingBox()
+        const infoBounds = await primaryInfo.boundingBox()
+        return frameBounds && infoBounds ? frameBounds.width > infoBounds.width : false
+      })
+      .toBe(true)
+
+    await page.setViewportSize({ height: 844, width: 390 })
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1,
+        ),
+      )
+      .toBe(true)
+    await expect
+      .poll(async () => {
+        const frameBounds = await detailFrame.boundingBox()
+        const infoBounds = await primaryInfo.boundingBox()
+        return frameBounds && infoBounds
+          ? infoBounds.y >= frameBounds.y + frameBounds.height
+          : false
+      })
+      .toBe(true)
+
+    expect(browserErrors).toEqual([])
+  })
+
+  test('supports the homepage hero image stack interactions', async ({ page }) => {
+    const heroTestBaseURL = process.env.HERO_TEST_BASE_URL || 'http://localhost:3000'
+
+    await page.setViewportSize({ height: 844, width: 390 })
+    await page.goto(heroTestBaseURL, { waitUntil: 'networkidle' })
+
+    const stack = page.getByTestId('hero-image-stack')
+    const diverCard = stack.locator('[data-card-identity="diver"]')
+    const developerCard = stack.locator('[data-card-identity="developer"]')
+
+    const control = page.getByTestId('hero-image-stack-control')
+    await expect(stack).toHaveAttribute('data-active-card', 'diver')
+    await expect(control).toHaveAccessibleName(/Show Developer image/i)
+    await expect(diverCard).toContainText('01 / DIVER')
+    await expect(diverCard.getByRole('img')).toHaveAccessibleName(/diver/i)
+    await expect(developerCard).toContainText('02 / DEVELOPER')
+    await expect(developerCard.getByRole('img')).toHaveAccessibleName(
+      /developer|programmer|software/i,
+    )
+
+    await control.click()
+    await expect(stack).toHaveAttribute('data-active-card', 'developer')
+
+    await control.focus()
+    await control.press('Enter')
+    await expect(stack).toHaveAttribute('data-active-card', 'diver')
+
+    await control.press('Space')
+    await expect(stack).toHaveAttribute('data-active-card', 'developer')
+
+    expect(
+      await stack.evaluate((element) =>
+        [...element.querySelectorAll('[data-card-identity]')].every((card) => {
+          const bounds = card.getBoundingClientRect()
+          return bounds.left >= 0 && bounds.right <= document.documentElement.clientWidth
+        }),
+      ),
+    ).toBe(true)
+
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.reload({ waitUntil: 'networkidle' })
+    await expect(page.getByTestId('hero-image-stack')).toHaveAttribute(
+      'data-reduced-motion',
+      'true',
+    )
+  })
+
+  test('renders the editorial About hero responsively', async ({ page }) => {
+    await page.setViewportSize({ height: 900, width: 1440 })
+    await page.goto('http://localhost:3000/about', { waitUntil: 'networkidle' })
+
+    const hero = page.getByTestId('about-hero')
+    const imageFrame = page.getByTestId('about-hero-image-frame')
+
+    await expect(hero.getByRole('heading', { name: 'ABOUT ME' })).toBeVisible()
+    await expect(hero.locator('img')).toHaveCount(1)
+    await expect(hero.getByTestId('hero-image-stack-control')).toHaveCount(0)
+
+    const desktopGeometry = await hero.evaluate((element) => {
+      const container = element.querySelector<HTMLElement>('.site-container')
+      const text = element.querySelector<HTMLElement>('[data-about-hero-text]')
+      const image = element.querySelector<HTMLElement>('[data-about-hero-image-layer]')
+
+      if (!container || !text || !image) return null
+
+      const containerBounds = container.getBoundingClientRect()
+      const textBounds = text.getBoundingClientRect()
+      const imageBounds = image.getBoundingClientRect()
+      const containerStyles = getComputedStyle(container)
+      const paddingLeft = Number.parseFloat(containerStyles.paddingLeft)
+      const paddingRight = Number.parseFloat(containerStyles.paddingRight)
+      const contentWidth = containerBounds.width - paddingLeft - paddingRight
+
+      return {
+        imageStartsBelowText: imageBounds.top > textBounds.bottom,
+        rightGap: Math.abs(containerBounds.right - paddingRight - imageBounds.right),
+        widthRatio: imageBounds.width / contentWidth,
+      }
+    })
+
+    expect(desktopGeometry).not.toBeNull()
+    expect(desktopGeometry?.imageStartsBelowText).toBe(true)
+    expect(desktopGeometry?.rightGap).toBeLessThanOrEqual(1)
+    expect(desktopGeometry?.widthRatio).toBeGreaterThanOrEqual(0.7)
+    expect(desktopGeometry?.widthRatio).toBeLessThanOrEqual(0.74)
+
+    await page.setViewportSize({ height: 844, width: 390 })
+    await page.reload({ waitUntil: 'networkidle' })
+
+    await expect(hero.getByRole('heading', { name: 'ABOUT ME' })).toBeVisible()
+    expect(
+      await imageFrame.evaluate((element) => element.getBoundingClientRect().height),
+    ).toBeGreaterThan(220)
+    expect(
+      await hero.evaluate((element) => {
+        const viewportWidth = document.documentElement.clientWidth
+
+        return [...element.querySelectorAll('*')].every((child) => {
+          const bounds = child.getBoundingClientRect()
+          return bounds.left >= -0.5 && bounds.right <= viewportWidth + 0.5
+        })
+      }),
+    ).toBe(true)
+  })
+
+  test('renders the About protocol responsively with accessible motion and quote focus', async ({
+    page,
+  }) => {
+    test.setTimeout(60_000)
+
+    await page.setViewportSize({ height: 900, width: 1440 })
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
+    await page.goto('http://localhost:3000/about', { waitUntil: 'networkidle' })
+
+    const protocol = page.getByTestId('about-protocol')
+    const content = page.getByTestId('about-protocol-content')
+    const description = page.getByTestId('about-protocol-description')
+    const principles = page.getByTestId('about-protocol-principles')
+    const quote = page.getByTestId('about-protocol-quote')
+
+    await protocol.scrollIntoViewIfNeeded()
+    await expect(protocol.getByRole('heading', { level: 2 })).toBeVisible()
+    await expect(description).toHaveText(
+      'A practical framework for building reliable systems, navigating uncertainty, and knowing when conventions deserve to be challenged.',
+    )
+    expect(await principles.locator('li').count()).toBeGreaterThan(0)
+    await expect(protocol.getByRole('blockquote')).toHaveCount(1)
+    await expect(quote).toBeVisible()
+    expect(
+      await content.evaluate(
+        (element) => getComputedStyle(element).gridTemplateColumns.split(' ').length,
+      ),
+    ).toBe(2)
+
+    const firstMarker = principles.locator('li').first().locator('span[aria-hidden="true"]')
+    await principles.locator('li').first().hover()
+    await expect
+      .poll(() => firstMarker.evaluate((element) => getComputedStyle(element).backgroundColor))
+      .toBe('rgb(0, 242, 255)')
+
+    const quoteStylesBeforeHover = await quote.evaluate((element) => {
+      const styles = getComputedStyle(element)
+
+      return {
+        backgroundColor: styles.backgroundColor,
+        borderTopColor: styles.borderTopColor,
+        boxShadow: styles.boxShadow,
+        color: getComputedStyle(element.querySelector('p')!).color,
+        transform: styles.transform,
+      }
+    })
+
+    await quote.hover()
+    await expect
+      .poll(() =>
+        quote.evaluate((element) => {
+          const styles = getComputedStyle(element)
+
+          return {
+            backgroundColor: styles.backgroundColor,
+            borderTopColor: styles.borderTopColor,
+            boxShadow: styles.boxShadow,
+            color: getComputedStyle(element.querySelector('p')!).color,
+            transform: styles.transform,
+          }
+        }),
+      )
+      .toEqual(quoteStylesBeforeHover)
+
+    await quote.focus()
+    await expect
+      .poll(() => quote.evaluate((element) => getComputedStyle(element).borderTopColor))
+      .toBe('rgba(0, 242, 255, 0.72)')
+    await expect
+      .poll(() => quote.locator('p').evaluate((element) => getComputedStyle(element).color))
+      .toBe('rgb(0, 242, 255)')
+
+    await page.setViewportSize({ height: 844, width: 390 })
+    await protocol.scrollIntoViewIfNeeded()
+
+    expect(
+      await content.evaluate(
+        (element) => getComputedStyle(element).gridTemplateColumns.split(' ').length,
+      ),
+    ).toBe(1)
+    expect(
+      await protocol.evaluate((element) => {
+        const viewportWidth = document.documentElement.clientWidth
+
+        return [...element.querySelectorAll('*')].every((child) => {
+          const bounds = child.getBoundingClientRect()
+          return bounds.left >= -0.5 && bounds.right <= viewportWidth + 0.5
+        })
+      }),
+    ).toBe(true)
+
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await protocol.scrollIntoViewIfNeeded()
+    await expect(content).toHaveAttribute('data-reduced-motion', 'true')
+    await expect
+      .poll(() => quote.evaluate((element) => getComputedStyle(element).transitionProperty))
+      .toBe('none')
+  })
+
+  test('keeps Payload Admin on native scrolling', async ({ page }) => {
+    await page.goto('http://localhost:3000/admin', { waitUntil: 'networkidle' })
+
+    await expect(page.locator('html')).not.toHaveClass(/lenis/)
   })
 })

@@ -43,6 +43,7 @@ export const Posts: CollectionConfig<'posts'> = {
     slug: true,
     categories: true,
     meta: {
+      // @ts-expect-error MetaImageField exists at runtime but is omitted from generated SEO types.
       image: true,
       description: true,
     },

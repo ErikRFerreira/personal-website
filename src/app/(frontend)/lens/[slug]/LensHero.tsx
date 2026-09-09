@@ -1,16 +1,38 @@
 import React from 'react'
 
-import type { Media as MediaType } from '@/payload-types'
-import { Media } from '@/components/Media'
+import type { Len, Media as MediaType } from '@/payload-types'
+import { formatLensFrameTechnical, LensPhotoFrame } from '@/components/LensPhotoFrame'
+import { LensZoomImage } from './LensZoomImage'
 
 type Props = {
+  location?: string | null
+  metadata?: Len['technicalMetadata'] | null
   photo: MediaType
+  title: string
+  year?: number | null
 }
 
-export const LensHero: React.FC<Props> = ({ photo }) => {
+export const LensHero: React.FC<Props> = ({
+  location,
+  metadata,
+  photo,
+  title,
+  year,
+}) => {
+  const { primary, secondary } = formatLensFrameTechnical(metadata)
+
   return (
-    <div className="relative h-[55vh] min-h-[400px] w-full">
-      <Media resource={photo} fill priority imgClassName="object-cover" />
-    </div>
+    <LensPhotoFrame
+      className="aspect-[4/3] w-full"
+      context={location?.trim()}
+      data-detail-frame="true"
+      photoTitle={title}
+      stageClassName="absolute inset-x-[4%] top-[7%] bottom-[9%] md:inset-x-[5%]"
+      technicalPrimary={primary}
+      technicalSecondary={secondary}
+      year={year}
+    >
+      <LensZoomImage photo={photo} title={title} />
+    </LensPhotoFrame>
   )
 }

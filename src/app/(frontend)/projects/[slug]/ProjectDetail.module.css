@@ -1,0 +1,38 @@
+.page {
+  --project-section-gap: var(--site-section-space-mobile);
+}
+
+/* One owner for section spacing, including when optional blocks are absent. */
+.sections > * + * {
+  margin-top: var(--project-section-gap);
+}
+
+.sections > header + [data-reveal-name='project-featured-image'] {
+  margin-top: 2.5rem;
+}
+
+.page :global(.payload-richtext) {
+  line-height: 1.75;
+}
+
+.page [data-project-content] blockquote {
+  background: transparent;
+  border-left-width: 1px;
+  padding-left: 1.25rem;
+}
+
+@media (min-width: 48rem) {
+  .page {
+    --project-section-gap: var(--site-section-space-tablet);
+  }
+}
+
+@media (min-width: 64rem) {
+  .page {
+    --project-section-gap: min(var(--site-section-space-desktop), 7.5rem);
+  }
+
+  .sections > header + [data-reveal-name='project-featured-image'] {
+    margin-top: 3.5rem;
+  }
+}

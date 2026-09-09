@@ -10,9 +10,15 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { SimpleTextBlock } from '@/blocks/SimpleText/Component'
 import { SelectedProjectsBlock } from '@/blocks/SelectedProjects/Component'
 import { InitiateProjectBlock } from '@/blocks/InitiateProject/Component'
-import Capabilities from './Capabilities/Component'
+import { CapabilitiesBlock } from './Capabilities/Component'
+import { DisciplinesBlock } from './Disciplines/Component'
 import { LensBlockComponent } from './LensBlock/Component'
 import { AboutIntroBlock } from './AboutIntro/Component'
+import { AboutStoryBlock } from './AboutStory/Component'
+import { AboutProtocolBlock } from './AboutProtocol/Component'
+import { AboutTimelineBlock } from './AboutTimeline/Component'
+import { RevealText } from './RevealText/Component'
+import HomeBio from './HomeBio/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -23,9 +29,15 @@ const blockComponents = {
   simpleText: SimpleTextBlock,
   selectedProjects: SelectedProjectsBlock,
   initiateProject: InitiateProjectBlock,
-  capabilities: Capabilities,
+  capabilities: CapabilitiesBlock,
+  disciplines: DisciplinesBlock,
   lensBlock: LensBlockComponent,
   aboutIntro: AboutIntroBlock,
+  aboutStory: AboutStoryBlock,
+  aboutProtocol: AboutProtocolBlock,
+  aboutTimeline: AboutTimelineBlock,
+  revealText: RevealText,
+  homeBio: HomeBio,
 }
 
 export const RenderBlocks: React.FC<{
@@ -41,6 +53,14 @@ export const RenderBlocks: React.FC<{
       <Fragment>
         {blocks.map((block, index) => {
           const { blockType } = block
+          const transitionFrom =
+            blockType === 'lensBlock' && blocks[index - 1]?.blockType === 'revealText'
+              ? 'revealText'
+              : undefined
+          const transitionTo =
+            blockType === 'capabilities' && blocks[index + 1]?.blockType === 'revealText'
+              ? 'revealText'
+              : undefined
 
           if (blockType && blockType in blockComponents) {
             const Block = blockComponents[blockType]
@@ -51,6 +71,8 @@ export const RenderBlocks: React.FC<{
                   className={deferOffscreen && index > 0 ? 'homepage-deferred-block' : undefined}
                   data-block-type={blockType}
                   data-deferred={deferOffscreen && index > 0 ? 'true' : undefined}
+                  data-transition-from={transitionFrom}
+                  data-transition-to={transitionTo}
                   key={block.id ?? index}
                 >
                   <Suspense fallback={<div aria-hidden="true" className="min-h-24" />}>

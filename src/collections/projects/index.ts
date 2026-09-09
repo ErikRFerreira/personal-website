@@ -6,10 +6,13 @@ import {
   HeadingFeature,
   HorizontalRuleFeature,
   InlineToolbarFeature,
+  OrderedListFeature,
+  UnorderedListFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
 import { authenticated } from '../../access/authenticated'
+import { ProjectPrinciples } from '../../blocks/ProjectPrinciples/config'
 
 export const Projects: CollectionConfig<'projects'> = {
   slug: 'projects',
@@ -129,19 +132,87 @@ export const Projects: CollectionConfig<'projects'> = {
               relationTo: 'media',
             },
             {
+              name: 'showcaseTitle',
+              type: 'text',
+              label: 'Showcase Title',
+              admin: {
+                description: 'Heading shown above the showcase image (e.g., "MOD Calc").',
+              },
+            },
+            {
+              name: 'showcaseSubtitle',
+              type: 'text',
+              label: 'Showcase Subtitle',
+              admin: {
+                description:
+                  'Small caption under the showcase title (e.g., "Maximum Operating Depth").',
+              },
+            },
+            {
+              name: 'showcaseImage',
+              type: 'upload',
+              label: 'Showcase Image',
+              relationTo: 'media',
+              admin: {
+                description: 'Main image shown in the showcase section.',
+              },
+            },
+            {
+              name: 'showcaseCaption',
+              type: 'text',
+              label: 'Showcase Caption',
+              admin: {
+                description: 'Optional small caption shown under the showcase image.',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Gallery',
+          fields: [
+            { name: 'gallerySubtitle', type: 'text', label: 'Gallery Subtitle' },
+            {
               name: 'gallery',
               type: 'array',
-              label: 'Gallery',
+              labels: { singular: 'Screen', plural: 'Screens' },
+              admin: {
+                description:
+                  'Drag screens to reorder them. Consecutive half-width screens share a row on desktop.',
+              },
               fields: [
                 {
                   name: 'image',
                   type: 'upload',
                   relationTo: 'media',
                   required: true,
+                  filterOptions: { mimeType: { contains: 'image/' } },
+                },
+                { name: 'title', type: 'text', required: true },
+                {
+                  name: 'description',
+                  type: 'richText',
+                  required: true,
+                  editor: lexicalEditor({
+                    features: ({ rootFeatures }) => [
+                      ...rootFeatures,
+                      HeadingFeature({ enabledHeadingSizes: ['h4'] }),
+                      OrderedListFeature(),
+                      UnorderedListFeature(),
+                      FixedToolbarFeature(),
+                      InlineToolbarFeature(),
+                    ],
+                  }),
                 },
                 {
-                  name: 'caption',
-                  type: 'text',
+                  name: 'layout',
+                  type: 'select',
+                  required: true,
+                  defaultValue: 'full',
+                  options: [
+                    { label: 'Full width', value: 'full' },
+                    { label: 'Half width', value: 'half' },
+                    { label: 'Image beside text', value: 'split' },
+                  ],
                 },
               ],
             },
@@ -164,6 +235,16 @@ export const Projects: CollectionConfig<'projects'> = {
                   HorizontalRuleFeature(),
                 ],
               }),
+            },
+            {
+              name: 'detailBlocks',
+              type: 'blocks',
+              label: 'Project Detail Blocks',
+              blocks: [ProjectPrinciples],
+              admin: {
+                description:
+                  'Optional reusable sections displayed after the showcase and before the gallery.',
+              },
             },
           ],
         },

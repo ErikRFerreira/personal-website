@@ -40,7 +40,7 @@ export function InitiateProjectBlock({
         aria-hidden="true"
         style={{
           background:
-            'radial-gradient(ellipse 64% 48% at 50% 46%, rgb(0 242 255 / 0.09) 0%, rgb(0 242 255 / 0.03) 34%, transparent 72%)',
+            'radial-gradient(ellipse 64% 48% at 50% 46%, color-mix(in srgb, var(--site-accent) 9%, transparent) 0%, color-mix(in srgb, var(--site-accent) 3%, transparent) 34%, transparent 72%)',
         }}
       />
 

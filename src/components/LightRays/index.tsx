@@ -355,6 +355,8 @@ void main() {
       }
 
       window.addEventListener('resize', updatePlacement)
+      const resizeObserver = new ResizeObserver(updatePlacement)
+      resizeObserver.observe(containerRef.current)
       updatePlacement()
       animationIdRef.current = requestAnimationFrame(loop)
 
@@ -365,6 +367,7 @@ void main() {
         }
 
         window.removeEventListener('resize', updatePlacement)
+        resizeObserver.disconnect()
 
         if (renderer) {
           try {

@@ -1,180 +1,133 @@
-/**
- * @file Lens photo detail page.
- * Renders a full-page view for a single lens photo, including a hero image,
- * technical metadata, print options, full story accordion, and related photos.
- *
- * Supports Next.js static generation at build time (via generateStaticParams)
- * and Payload draft-mode preview for editors.
- */
 import configPromise from '@payload-config'
+import { ArrowLeft } from 'lucide-react'
 import { draftMode } from 'next/headers'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
-import React, { cache } from 'react'
+import { cache } from 'react'
 
-import type { Len, Media as MediaType } from '@/payload-types'
+import type { Category, Media, Series } from '@/payload-types'
+import { LensCategoryChips } from './LensCategoryChips'
+import { LensEditorial } from './LensEditorial'
 import { LensHero } from './LensHero'
-import { LensTechnicalMeta } from './LensTechnicalMeta'
-import { LensPrintOptions } from './LensPrintOptions'
-import { LensAccordion } from './LensAccordion'
+import { LensPurchaseOptions } from './LensPurchaseOptions'
 import { LensRelatedPhotos } from './LensRelatedPhotos'
+import { LensTechnicalMeta } from './LensTechnicalMeta'
+import { findRelatedLensPhotos } from './queries'
 
-/**
- * Generates static params for all published lens photos to enable static generation of their pages.
- *
- * @returns An array of objects containing the slug for each published lens photo, used to generate static pages.
- * @remarks This function fetches all published lens photos from the Payload CMS and extracts their slugs to create the necessary parameters for static page generation in Next.js.
- * @see https://nextjs.org/docs/app/building-your-application/data-fetching/generating-static-params
- */
+export const revalidate = 600
+
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
-
-  // Fetch all published lens photos to get their slugs for static generation
   const photos = await payload.find({
     collection: 'lens',
     limit: 1000,
     overrideAccess: false,
     pagination: false,
-    select: {
-      slug: true,
-    },
-    where: {
-      status: {
-        equals: 'published',
-      },
-    },
+    select: { slug: true },
+    where: { status: { equals: 'published' } },
   })
 
-  // Map the fetched photos to an array of params objects containing only the slug
-  return photos.docs.map(({ slug }) => {
-    return { slug }
-  })
+  return photos.docs.map(({ slug }) => ({ slug }))
 }
 
-/** Route params passed by Next.js to the page. `params` is a Promise in the App Router (Next.js 15+). */
 type Args = {
-  params: Promise<{
-    slug?: string
-  }>
+  params: Promise<{ slug?: string }>
 }
 
-/**
- * Lens photo detail page component.
- *
- * Awaits the route params, URL-decodes the slug, and fetches the matching
- * lens document from Payload. Renders a structured layout composed of:
- * - `LensHero`          — full-width hero image
- * - `LensTechnicalMeta` — camera/EXIF metadata
- * - `LensPrintOptions`  — sticky right-column print acquisition panel
- * - `LensAccordion`     — expandable full story and licensing sections
- * - `LensRelatedPhotos` — related photos from the same series
- *
- * Returns a plain fallback div when no matching document is found.
- */
 export default async function LensPage({ params: paramsPromise }: Args) {
   const { slug = '' } = await paramsPromise
-  // Decode URL-encoded characters (e.g. spaces, special chars) in the slug
-  const decodedSlug = decodeURIComponent(slug)
+  const lens = await queryLensBySlug({ slug: decodeURIComponent(slug) })
 
-  const lens = await queryLensBySlug({ slug: decodedSlug })
+  if (!lens) notFound()
 
-  if (!lens) {
-    return <div>Lens photo not found</div>
-  }
+  const photo = typeof lens.photo === 'object' ? (lens.photo as Media) : null
+  if (!photo) notFound()
 
-  // `photo` is a relationship field — Payload populates it as an object at depth >= 1.
-  // Guard against the unpopulated case where it would be a plain ID string.
-  const photo = typeof lens.photo === 'object' ? (lens.photo as MediaType) : null
-
-  // Build a breadcrumb string from available contextual fields, separated by " // "
-  // e.g. "Tokyo Series // Shibuya // 2024"
-  const breadcrumb = [lens.series, lens.location, lens.year].filter(Boolean).join(' // ')
+  const collection =
+    typeof lens.series === 'object' && lens.series !== null ? (lens.series as Series) : null
+  const categories = (lens.categories ?? []).filter(
+    (category): category is Category => typeof category === 'object' && category !== null,
+  )
+  const relatedPhotos = collection
+    ? await findRelatedLensPhotos({
+        collectionID: collection.id,
+        currentPhotoID: lens.id,
+        payload: await getPayload({ config: configPromise }),
+      })
+    : []
+  const context = [lens.location?.trim(), lens.year].filter(Boolean).join(' · ')
+  const hasLongForm = Boolean(lens.fullStory || lens.licensingText)
 
   return (
-    <div className="site-section !py-0">
-      {/* Full-width hero image */}
-      {photo && <LensHero photo={photo} />}
+    <main className="lens-detail-page relative isolate overflow-hidden bg-site-surface-deep pt-[var(--header-height)] text-site-text-primary">
+      <div aria-hidden="true" className="lens-ambient-layer lens-ambient-layer--detail" />
 
-      {/* Main content */}
-      <div className="site-container py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_420px] gap-12 xl:gap-16 items-start">
-          {/* Left column */}
-          <div>
-            {/* Breadcrumb + series link */}
-            <div className="flex items-center justify-between mb-6">
-              {breadcrumb && (
-                <span className="font-mono text-[11px] leading-[1.2] font-semibold tracking-[0.12em] text-site-accent uppercase">
-                  {breadcrumb}
-                </span>
-              )}
-              {lens.series && (
-                <a
-                  href="/lens"
-                  className="text-[11px] tracking-[0.08em] text-site-text-muted no-underline transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-200 ease-out hover:text-site-accent motion-reduce:transition-none"
-                >
-                  View Full Series
-                </a>
-              )}
+      <div className="relative z-10">
+        <section className="site-container pt-8 pb-6 md:pt-12 md:pb-10">
+          <Link
+            className="site-meta-label inline-flex items-center gap-2 text-site-text-muted transition-colors hover:text-site-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
+            href="/lens"
+          >
+            <ArrowLeft aria-hidden="true" className="size-3.5" />
+            Back to Lens archive
+          </Link>
+
+          <div className="mt-6 grid items-start gap-10 lg:grid-cols-12 lg:gap-12">
+            <div className="lg:col-span-8">
+              <LensHero
+                location={lens.location}
+                metadata={lens.technicalMetadata}
+                photo={photo}
+                title={lens.title}
+                year={lens.year}
+              />
             </div>
 
-            {/* Title */}
-            <h1 className="text-3xl leading-[1.15] font-bold text-site-text-primary md:text-5xl">
-              {lens.title}
-            </h1>
+            <aside className="space-y-6 lg:col-span-4 lg:pt-1" data-testid="lens-primary-info">
+              <header>
+                <LensCategoryChips categories={categories} />
 
-            {/* Cyan divider */}
-            <div className="mt-5 mb-6 h-0.5 w-12 bg-site-accent" />
+                <h1 className="mt-5 text-4xl leading-[1.02] font-extrabold tracking-[-0.04em] text-site-text-primary xl:text-5xl">
+                  {lens.title}
+                </h1>
 
-            {/* Intro / caption */}
-            {lens.intro && (
-              <p className="text-base leading-[1.7] text-site-text-secondary">{lens.intro}</p>
-            )}
+                {context && (
+                  <p className="site-meta-label mt-4 text-site-text-muted">
+                    {context}
+                  </p>
+                )}
 
-            {/* Technical metadata */}
-            {lens.technicalMetadata && (
-              <LensTechnicalMeta metadata={lens.technicalMetadata} location={lens.location} />
-            )}
+                {lens.intro && (
+                  <p className="site-body-small mt-6 text-site-text-secondary xl:text-base">
+                    {lens.intro}
+                  </p>
+                )}
+              </header>
+
+              <LensTechnicalMeta metadata={lens.technicalMetadata} />
+            </aside>
           </div>
 
-          {/* Right column — print acquisition */}
-          <div className="md:sticky md:top-24">
-            <LensPrintOptions printOptions={lens.printOptions} />
-          </div>
-        </div>
+          <LensPurchaseOptions
+            digitalDownload={lens.digitalDownload}
+            printOptions={lens.printOptions}
+          />
+        </section>
 
-        {/* Accordion */}
-        <div className="mt-12 md:mt-16">
-          <LensAccordion fullStory={lens.fullStory} licensingText={lens.licensingText} />
-        </div>
+        {hasLongForm && (
+          <LensEditorial fullStory={lens.fullStory} licensingText={lens.licensingText} />
+        )}
+
+        {collection && <LensRelatedPhotos collection={collection} photos={relatedPhotos} />}
       </div>
-
-      {/* Related photos */}
-      <LensRelatedPhotos series={lens.series} relatedPhotos={lens.relatedPhotos} />
-    </div>
+    </main>
   )
 }
 
-/**
- * Fetches a single lens document by its slug.
- *
- * Wrapped in React's `cache()` so that multiple calls with the same slug
- * within a single render pass share one database round-trip.
- *
- * Draft-mode behaviour:
- * - When draft mode is active (Payload preview), `overrideAccess: true` is used
- *   so editors can see unpublished documents, and the `status` filter is omitted.
- * - When draft mode is inactive (public), `overrideAccess: false` enforces access
- *   control and restricts results to published documents only.
- *
- * `depth: 2` ensures relationship fields (e.g. `photo`, `relatedPhotos`) are
- * fully populated rather than returned as bare IDs.
- *
- * @returns The matching `Len` document, or `null` if not found.
- */
 const queryLensBySlug = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()
-
   const payload = await getPayload({ config: configPromise })
-
   const result = await payload.find({
     collection: 'lens',
     depth: 2,
@@ -183,23 +136,11 @@ const queryLensBySlug = cache(async ({ slug }: { slug: string }) => {
     pagination: false,
     where: {
       and: [
-        {
-          slug: {
-            equals: slug,
-          },
-        },
-        ...(draft
-          ? []
-          : [
-              {
-                status: {
-                  equals: 'published',
-                },
-              },
-            ]),
+        { slug: { equals: slug } },
+        ...(draft ? [] : [{ status: { equals: 'published' as const } }]),
       ],
     },
   })
 
-  return result.docs?.[0] || null
+  return result.docs[0] ?? null
 })

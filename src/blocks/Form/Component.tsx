@@ -5,14 +5,16 @@ import { useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
-import { Button } from '@/components/ui/button'
+import { CtaButton } from '@/components/CtaButton'
 import { ContactCard } from '@/components/ContactCard'
+import { RevealOnScroll } from '@/components/RevealOnScroll'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 import type { FormBlock as FormBlockType_Generated } from '@/payload-types'
 import { ArrowRight } from 'lucide-react'
 
 import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
+import './Form.css'
 
 export type FormBlockType = {
   blockName?: string
@@ -150,7 +152,10 @@ export const FormBlock: React.FC<
                 const Field: React.FC<any> = fields?.[field.blockType as keyof typeof fields]
                 if (Field) {
                   return (
-                    <div className="mb-6 last:mb-0" key={index}>
+                    <div
+                      className={layout === 'contact' ? 'mb-10 last:mb-0' : 'mb-6 last:mb-0'}
+                      key={index}
+                    >
                       <Field
                         form={formFromProps}
                         {...field}
@@ -167,14 +172,16 @@ export const FormBlock: React.FC<
           </div>
 
           {layout === 'contact' ? (
-            <Button className="gap-2 px-6 py-3" form={formID} type="submit">
-              {effectiveSubmitLabel}
-              <ArrowRight className="h-4 w-4" />
-            </Button>
+            <div className="mt-14">
+              <CtaButton form={formID} size="md" type="submit">
+                {effectiveSubmitLabel}
+                <ArrowRight className="h-4 w-4" />
+              </CtaButton>
+            </div>
           ) : (
-            <Button form={formID} type="submit" variant="default">
+            <CtaButton form={formID} size="md" type="submit">
               {effectiveSubmitLabel}
-            </Button>
+            </CtaButton>
           )}
         </form>
       )}
@@ -185,37 +192,45 @@ export const FormBlock: React.FC<
   if (layout === 'contact') {
     return (
       <section className="site-section" data-theme="dark">
-        <div className="site-container">
+        <div className="site-container pb-24">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[3fr_2fr] lg:gap-16">
             {/* Left: heading + form */}
             <div>
               {eyebrow && (
-                <p className="mb-3 font-mono text-[0.6875rem] leading-[1.2] font-bold tracking-[0.18em] text-site-accent uppercase">
-                  {eyebrow}
-                </p>
+                <RevealOnScroll delay={0} revealName="contact-eyebrow">
+                  <p className="site-section-label mb-3 text-site-accent">
+                    {eyebrow}
+                  </p>
+                </RevealOnScroll>
               )}
               {heading && (
-                <h1 className="mb-4 text-4xl leading-tight font-bold text-site-text-primary md:text-5xl lg:text-6xl">
-                  {heading}
-                </h1>
+                <RevealOnScroll delay={80} revealName="contact-heading">
+                  <h1 className="mb-4 text-4xl leading-tight font-bold text-site-text-primary md:text-5xl lg:text-6xl">
+                    {heading}
+                  </h1>
+                </RevealOnScroll>
               )}
               {introText && (
-                <p className="mb-10 max-w-lg text-sm leading-[1.7] text-site-text-secondary">
-                  {introText}
-                </p>
+                <RevealOnScroll delay={160} revealName="contact-intro">
+                  <p className="mb-10 max-w-lg text-sm leading-[1.7] text-site-text-secondary">
+                    {introText}
+                  </p>
+                </RevealOnScroll>
               )}
 
               {/* Form with underline-style inputs */}
-              <div className="[&_input]:rounded-none [&_input]:border-0 [&_input]:border-b [&_input]:bg-transparent [&_input]:px-0 [&_input]:text-site-text-primary [&_input]:placeholder:text-site-text-muted [&_input]:focus-visible:border-site-border-active [&_input]:focus-visible:ring-0 [&_label]:text-[0.625rem] [&_label]:font-semibold [&_label]:tracking-widest [&_label]:text-site-text-muted [&_label]:uppercase [&_textarea]:rounded-none [&_textarea]:border-0 [&_textarea]:border-b [&_textarea]:bg-transparent [&_textarea]:px-0 [&_textarea]:text-site-text-primary [&_textarea]:placeholder:text-site-text-muted [&_textarea]:focus-visible:border-site-border-active [&_textarea]:focus-visible:ring-0 [&_[role=combobox]]:rounded-none [&_[role=combobox]]:border-0 [&_[role=combobox]]:border-b [&_[role=combobox]]:bg-transparent [&_[role=combobox]]:text-site-text-primary [&_[role=combobox]]:focus:ring-0">
-                {formJSX}
-              </div>
+              <RevealOnScroll delay={240} revealName="contact-form">
+                <div className="contact-form">
+                  {formJSX}
+                </div>
+              </RevealOnScroll>
             </div>
 
             {/* Right: quick access card */}
             {quickAccessCard && (
-              <div className="lg:pt-24">
+              <RevealOnScroll className="lg:pt-24" delay={320} revealName="contact-card">
                 <ContactCard {...quickAccessCard} />
-              </div>
+              </RevealOnScroll>
             )}
           </div>
         </div>

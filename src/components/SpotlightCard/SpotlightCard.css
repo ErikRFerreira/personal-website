@@ -1,18 +1,40 @@
 .card-spotlight {
   position: relative;
   border-radius: 1.5rem;
-  border: 1px solid rgb(46 52 71 / 30%);
-  background-color: rgb(12 19 36 / 30%);
+  border: 1px solid var(--site-border-subtle);
+  background-color: color-mix(in srgb, var(--site-surface-elevated) 72%, transparent);
   padding: 2rem;
   overflow: hidden;
   transition: background-color 200ms ease-out;
   --mouse-x: 50%;
   --mouse-y: 50%;
-  --spotlight-color: rgba(255, 255, 255, 0.05);
+  --spotlight-color: var(--site-glow-accent);
 }
 
 .card-spotlight:hover {
-  background-color: rgb(12 19 36 / 50%);
+  background-color: var(--site-surface-elevated);
+}
+
+.capability-card,
+.discipline-card {
+  min-height: 100%;
+  border-radius: 0;
+  border-color: var(--site-border-subtle);
+  background-color: color-mix(in srgb, var(--site-surface-elevated) 92%, transparent);
+  padding: clamp(2rem, 4vw, 3rem);
+  transition:
+    background-color 300ms ease-out,
+    border-color 300ms ease-out,
+    box-shadow 300ms ease-out;
+}
+
+.capability-card:hover,
+.capability-card:focus-within,
+.discipline-card:hover,
+.discipline-card:focus-within {
+  border-color: var(--site-border-active);
+  background-color: var(--site-surface-elevated);
+  box-shadow: 0 0 2rem var(--site-glow-accent);
 }
 
 @media (prefers-reduced-motion: reduce) {

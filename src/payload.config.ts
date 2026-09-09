@@ -64,6 +64,10 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    // Containers do not have an interactive terminal for destructive schema-push
+    // confirmations. Set this to false in Docker and apply intentional schema
+    // changes through Payload migrations instead.
+    push: process.env.PAYLOAD_DB_PUSH !== 'false',
   }),
   collections: [Pages, Posts, Media, Categories, Users, Projects, Lens, Series],
   cors: [getServerSideURL()].filter(Boolean),

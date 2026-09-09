@@ -10,47 +10,58 @@ type TechnicalMetadata = {
 }
 
 type Props = {
-  metadata: TechnicalMetadata
-  location?: string | null
+  metadata?: TechnicalMetadata | null
 }
 
 type MetaCell = {
   label: string
   value: string | number | null | undefined
+  wide?: boolean
 }
 
-const MetaCell: React.FC<MetaCell> = ({ label, value }) => {
-  if (!value) return null
+const MetaCell: React.FC<MetaCell> = ({ label, value, wide }) => {
+  if (value == null || value === '') return null
+
   return (
-    <div className="flex flex-col gap-1 px-4 py-4">
-      <span className="text-[10px] leading-none font-semibold tracking-widest text-site-text-muted uppercase">
+    <div className={`min-w-0 border-t border-site-border-subtle pt-3 ${wide ? 'col-span-2' : ''}`}>
+      <dt className="site-meta-label text-site-text-muted">
         {label}
-      </span>
-      <span className="text-sm font-medium text-site-text-primary">{value}</span>
+      </dt>
+      <dd
+        className="mt-1 truncate font-mono text-xs font-medium text-site-text-primary"
+        title={String(value)}
+      >
+        {value}
+      </dd>
     </div>
   )
 }
 
-export const LensTechnicalMeta: React.FC<Props> = ({ metadata, location }) => {
+export const LensTechnicalMeta: React.FC<Props> = ({ metadata }) => {
   const cells: MetaCell[] = [
-    { label: 'Camera', value: metadata.camera },
-    { label: 'Lens', value: metadata.lens },
-    { label: 'Aperture', value: metadata.aperture },
-    { label: 'Shutter', value: metadata.shutterSpeed },
-    { label: 'ISO', value: metadata.iso },
-    { label: 'Focal Length', value: metadata.focalLength },
-    { label: 'Location', value: location },
-  ].filter((c) => Boolean(c.value))
+    { label: 'Aperture', value: metadata?.aperture },
+    { label: 'Shutter', value: metadata?.shutterSpeed },
+    { label: 'ISO', value: metadata?.iso },
+    { label: 'Focal Length', value: metadata?.focalLength },
+    { label: 'Camera', value: metadata?.camera, wide: true },
+    { label: 'Lens', value: metadata?.lens, wide: true },
+  ].filter((cell) => cell.value != null && cell.value !== '')
 
   if (cells.length === 0) return null
 
   return (
-    <div className="mt-8 border border-site-border-subtle bg-site-surface-elevated">
-      <div className="grid grid-cols-3 divide-x divide-y divide-site-border-subtle">
+    <section
+      className="border border-site-border-subtle bg-site-surface-elevated/80 p-4 shadow-[0_1rem_2.5rem_rgba(0,0,0,0.16)] backdrop-blur-sm"
+      data-testid="lens-technical-metadata"
+    >
+      <h2 className="site-meta-label mb-3 text-site-accent">
+        Technical capture profile
+      </h2>
+      <dl className="grid grid-cols-2 gap-x-5 gap-y-3">
         {cells.map((cell) => (
-          <MetaCell key={cell.label} label={cell.label} value={cell.value} />
+          <MetaCell key={cell.label} {...cell} />
         ))}
-      </div>
-    </div>
+      </dl>
+    </section>
   )
 }

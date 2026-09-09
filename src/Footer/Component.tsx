@@ -12,11 +12,11 @@ export async function Footer() {
   const navItems = footerData?.navItems || []
 
   return (
-    <footer className="mt-auto bg-card text-white" data-theme="dark">
+    <footer className="mt-auto bg-site-surface-footer text-site-text-primary" data-theme="dark">
       <div className="container py-12 md:py-16 flex flex-col md:flex-row md:items-end md:justify-between gap-8 md:gap-6">
         {/* Left: brand */}
         <Link href="/" className="flex items-center">
-          <Logo className="text-white" />
+          <Logo className="text-site-text-primary" />
         </Link>
 
         {/* Right: nav links + copyright grouped */}
@@ -25,7 +25,7 @@ export async function Footer() {
             {navItems.map(({ link }, i) => {
               return (
                 <CMSLink
-                  className="relative pb-px text-white/60 hover:text-white text-xs tracking-widest uppercase transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+                  className="relative pb-px text-xs tracking-widest text-site-text-secondary uppercase transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 hover:text-site-text-primary hover:after:w-full"
                   key={i}
                   {...link}
                 />
@@ -33,7 +33,7 @@ export async function Footer() {
             })}
           </nav>
 
-          <p className="text-white/50 text-[0.6rem] tracking-widest uppercase">
+          <p className="text-[0.6rem] tracking-widest text-site-text-muted uppercase">
             &copy; {new Date().getFullYear()} Erik Ferreira. All rights reserved.
           </p>
         </div>

@@ -1,4 +1,9 @@
-import type { Field, TextFieldSingleValidation, UploadFieldSingleValidation } from 'payload'
+import type {
+  Field,
+  TextareaFieldValidation,
+  TextFieldSingleValidation,
+  UploadFieldSingleValidation,
+} from 'payload'
 
 import {
   FixedToolbarFeature,
@@ -9,37 +14,48 @@ import {
 
 import { linkGroup } from '@/fields/linkGroup'
 
-const validateHTTPSVideoURL = (value?: null | string): string | true => {
-  if (!value) return true
+const specializedHeroTypes = ['profileHero', 'aboutHero'] as const
 
-  try {
-    return new URL(value).protocol === 'https:' ? true : 'Video URL must use HTTPS'
-  } catch {
-    return 'Video URL must be an absolute HTTPS URL'
+const isSpecializedHero = (type?: string) =>
+  specializedHeroTypes.includes(type as (typeof specializedHeroTypes)[number])
+
+const requiredForSpecializedHero =
+  (label: string): TextFieldSingleValidation =>
+  (value, { siblingData }) => {
+    if (isSpecializedHero((siblingData as { type?: string })?.type) && !value?.trim()) {
+      return `${label} is required for this hero type`
+    }
+
+    return true
   }
+
+const profileIntroRequired: TextareaFieldValidation = (value, { siblingData }) => {
+  if (isSpecializedHero((siblingData as { type?: string })?.type) && !value?.trim()) {
+    return 'Introduction is required for this hero type'
+  }
+
+  return true
 }
 
-const validateVideoURL: TextFieldSingleValidation = (value) => validateHTTPSVideoURL(value)
-
-const validateRightVideoURL: TextFieldSingleValidation = (value, { siblingData }) => {
-  const urlValidation = validateHTTPSVideoURL(value)
-
-  if (urlValidation !== true) return urlValidation
-
-  if (value && !(siblingData as { rightMedia?: unknown })?.rightMedia) {
-    return 'Select right media to use as the video fallback'
+const profileImageRequired: UploadFieldSingleValidation = (value, { siblingData }) => {
+  if (isSpecializedHero((siblingData as { type?: string })?.type) && !value) {
+    return 'Image is required for this hero type'
   }
 
   return true
 }
 
-const validateRightMedia: UploadFieldSingleValidation = (value, { siblingData }) => {
-  if ((siblingData as { rightVideoUrl?: unknown })?.rightVideoUrl && !value) {
-    return 'Select right media to use as the video fallback'
-  }
+const requiredForProfileImageSlider =
+  (label: string): TextFieldSingleValidation =>
+  (value, { siblingData }) => {
+    const data = siblingData as { enableImageStack?: boolean; type?: string }
 
-  return true
-}
+    if (data?.type === 'profileHero' && data.enableImageStack && !value?.trim()) {
+      return `${label} is required when the image slider is enabled`
+    }
+
+    return true
+  }
 
 export const hero: Field = {
   name: 'hero',
@@ -51,166 +67,123 @@ export const hero: Field = {
       defaultValue: 'lowImpact',
       label: 'Type',
       options: [
-        {
-          label: 'None',
-          value: 'none',
-        },
-        {
-          label: 'High Impact',
-          value: 'highImpact',
-        },
-        {
-          label: 'Medium Impact',
-          value: 'mediumImpact',
-        },
-        {
-          label: 'Low Impact',
-          value: 'lowImpact',
-        },
-        {
-          label: 'Portfolio Hero',
-          value: 'portfolioHero',
-        },
+        { label: 'None', value: 'none' },
+        { label: 'High Impact', value: 'highImpact' },
+        { label: 'Medium Impact', value: 'mediumImpact' },
+        { label: 'Low Impact', value: 'lowImpact' },
+        { label: 'Profile Hero', value: 'profileHero' },
+        { label: 'About Hero', value: 'aboutHero' },
       ],
       required: true,
     },
     {
-      name: 'eyebrow',
+      name: 'name',
       type: 'text',
       admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
+        condition: (_, { type } = {}) => isSpecializedHero(type),
       },
-      label: 'Eyebrow',
+      label: 'Heading / name',
+      validate: requiredForSpecializedHero('Heading / name'),
     },
     {
-      name: 'headline',
-      type: 'text',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-      },
-      label: 'Headline',
-      required: true,
-    },
-    {
-      name: 'description',
+      name: 'intro',
       type: 'textarea',
       admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
+        condition: (_, { type } = {}) => isSpecializedHero(type),
       },
-      label: 'Description',
+      label: 'Introduction',
+      validate: profileIntroRequired,
     },
-    {
-      name: 'rightEyebrow',
-      type: 'text',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-      },
-      defaultValue: 'Software Engineer',
-      label: 'Right eyebrow',
-    },
-    {
-      name: 'rightHeadline',
-      type: 'text',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-      },
-      defaultValue: 'Engineering Scale.',
-      label: 'Right headline',
-    },
-    {
-      name: 'rightDescription',
-      type: 'textarea',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-      },
-      label: 'Right description',
-    },
-    {
-      name: 'positioningLine',
-      type: 'textarea',
-      admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-      },
-      defaultValue:
-        'Software engineering and visual storytelling shaped by depth, precision, and perspective.',
-      label: 'Positioning line',
-    },
-    {
-      name: 'richText',
-      type: 'richText',
-      editor: lexicalEditor({
-        features: ({ rootFeatures }) => {
-          return [
-            ...rootFeatures,
-            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-            FixedToolbarFeature(),
-            InlineToolbarFeature(),
-          ]
-        },
-      }),
-      // Only show the rich text editor for non-portfolio hero types
-      admin: {
-        condition: (_, { type } = {}) => type !== 'portfolioHero',
-      },
-      label: false,
-    },
-    linkGroup({
-      overrides: {
-        maxRows: 2,
-      },
-    }),
     {
       name: 'media',
       type: 'upload',
       admin: {
         condition: (_, { type } = {}) =>
-          ['highImpact', 'mediumImpact', 'portfolioHero'].includes(type),
+          ['highImpact', 'mediumImpact', 'profileHero', 'aboutHero'].includes(type),
         description:
-          'For Portfolio Hero CDN videos, select an image to use as the poster and fallback.',
+          'Main hero image. When the Profile Hero image slider is enabled, this is the Diver slide.',
       },
+      label: 'Primary hero image',
       relationTo: 'media',
-      required: false,
+      validate: profileImageRequired,
     },
     {
-      name: 'videoUrl',
+      name: 'imageLabel',
       type: 'text',
       admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-        description: 'Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.',
+        condition: (_, { enableImageStack, type } = {}) =>
+          type === 'aboutHero' || (type === 'profileHero' && !enableImageStack),
       },
-      label: 'Video URL',
-      validate: validateVideoURL,
+      label: 'Image label',
     },
     {
-      name: 'rightMedia',
+      name: 'enableImageStack',
+      type: 'checkbox',
+      admin: {
+        condition: (_, { type } = {}) => type === 'profileHero',
+        description: 'Show the interactive Diver / Developer image slider.',
+      },
+      defaultValue: false,
+      label: 'Enable image slider',
+    },
+    {
+      name: 'stackPrimaryLabel',
+      type: 'text',
+      admin: {
+        condition: (_, { enableImageStack, type } = {}) =>
+          type === 'profileHero' && Boolean(enableImageStack),
+      },
+      defaultValue: '01 / DIVER',
+      label: 'Primary image label',
+      validate: requiredForProfileImageSlider('Primary image label'),
+    },
+    {
+      name: 'secondaryMedia',
       type: 'upload',
       admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-        description:
-          'Select an image to use as the poster and fallback for a right-panel CDN video.',
+        condition: (_, { enableImageStack, type } = {}) =>
+          type === 'profileHero' && Boolean(enableImageStack),
+        description: 'Uses the built-in developer artwork when left empty.',
       },
-      label: 'Right media',
+      label: 'Developer image',
       relationTo: 'media',
-      validate: validateRightMedia,
     },
     {
-      name: 'rightVideoUrl',
+      name: 'stackSecondaryLabel',
       type: 'text',
       admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
-        description: 'Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.',
+        condition: (_, { enableImageStack, type } = {}) =>
+          type === 'profileHero' && Boolean(enableImageStack),
       },
-      label: 'Right video URL',
-      validate: validateRightVideoURL,
+      defaultValue: '02 / DEVELOPER',
+      label: 'Secondary image label',
+      validate: requiredForProfileImageSlider('Secondary image label'),
     },
     {
-      name: 'scrollLabel',
-      type: 'text',
+      name: 'richText',
+      type: 'richText',
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => [
+          ...rootFeatures,
+          HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+          FixedToolbarFeature(),
+          InlineToolbarFeature(),
+        ],
+      }),
       admin: {
-        condition: (_, { type } = {}) => type === 'portfolioHero',
+        condition: (_, { type } = {}) => !isSpecializedHero(type),
       },
-      label: 'Scroll label',
+      label: false,
     },
+    linkGroup({
+      overrides: {
+        admin: {
+          condition: (_, { type } = {}) => !isSpecializedHero(type),
+          initCollapsed: true,
+        },
+        maxRows: 2,
+      },
+    }),
   ],
   label: false,
 }

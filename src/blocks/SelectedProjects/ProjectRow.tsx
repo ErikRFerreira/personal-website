@@ -1,101 +1,149 @@
+import { CtaButton } from '@/components/CtaButton'
+
 import type { Project } from '@/payload-types'
-import { Tag } from '@/components/Tag'
-import Image from 'next/image'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
+import Image from 'next/image'
 
 type Props = {
   project: Project
   index: number
 }
 
-export function ProjectRow({ project, index }: Props) {
+const projectTypeLabels: Partial<Record<NonNullable<Project['type']>, string>> = {
+  design: 'Design',
+  'mobile-app': 'Mobile App',
+  'open-source': 'Open Source',
+  other: 'Other',
+  'web-app': 'Web App',
+}
+
+function getProjectLabels(project: Project, index: number) {
+  const number = String(index + 1).padStart(2, '0')
+  const type = project.type ? projectTypeLabels[project.type] : null
+  const typeCode = type?.toUpperCase().replaceAll(' ', '_')
+
+  return {
+    metadata: [typeCode, project.year].filter(Boolean).join(' // '),
+    number,
+  }
+}
+
+function ProjectImage({ project, sizes }: { project: Project; sizes: string }) {
   const image = typeof project.image === 'object' && project.image !== null ? project.image : null
-  const isEven = index % 2 === 0
-  const indexLabel = String(index + 1).padStart(2, '0')
 
   return (
-    <div className={index > 0 ? 'border-t border-site-border-subtle pt-12 md:pt-16' : ''}>
-      <div className="mb-7 flex max-w-[31.625rem] items-center gap-4">
-        <span className="font-mono text-[0.6875rem] leading-none font-bold tracking-[0.18em] text-site-accent uppercase">
-          {indexLabel}
+    <div className="relative aspect-[16/10] overflow-hidden bg-site-surface-elevated">
+      {image?.url ? (
+        <Image
+          alt={image.alt ?? project.title}
+          className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
+          decoding="async"
+          fill
+          loading="lazy"
+          quality={75}
+          sizes={sizes}
+          src={getMediaUrl(image.url, image.updatedAt)}
+        />
+      ) : (
+        <div
+          aria-label={`${project.title} preview unavailable`}
+          className="site-caption flex h-full w-full items-center justify-center px-6 text-center text-site-text-muted uppercase"
+          data-project-image-placeholder="true"
+          role="img"
+        >
+          Preview unavailable
+        </div>
+      )}
+      {image?.url && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-site-surface-deep/25 opacity-100 transition-opacity duration-500 ease-out group-hover:opacity-0 motion-reduce:transition-none"
+          data-project-image-overlay="true"
+        />
+      )}
+    </div>
+  )
+}
+
+function ProjectTechnologies({ tech }: { tech: Project['tech'] }) {
+  if (!Array.isArray(tech) || tech.length === 0) return null
+
+  return (
+    <div className="flex flex-wrap gap-x-6 gap-y-2 mb-4" data-project-technologies="true">
+      {tech.map((item, techIndex) => (
+        <span
+          className="site-meta-label text-site-text-muted"
+          key={item.id ?? `${item.techName}-${techIndex}`}
+        >
+          {item.techName}
         </span>
-        <div className="h-px w-full max-w-[25.125rem] bg-site-accent/40" />
+      ))}
+    </div>
+  )
+}
+
+function ProjectCta({ project }: { project: Project }) {
+  return (
+    <CtaButton
+      className="w-max font-mono uppercase"
+      label="Read Case Study"
+      size="sm"
+      type="custom"
+      url={`/projects/${project.slug}`}
+    >
+      <span aria-hidden="true">&rarr;</span>
+    </CtaButton>
+  )
+}
+
+export function ProjectRow({ project, index }: Props) {
+  const labels = getProjectLabels(project, index)
+  const imageOnRight = index % 2 === 0
+
+  return (
+    <article
+      className="group grid grid-cols-12 items-center gap-8 lg:gap-10"
+      data-project-card="true"
+      data-project-layout={imageOnRight ? 'image-right' : 'image-left'}
+    >
+      <div
+        className={`relative order-1 col-span-12 lg:col-span-7 ${imageOnRight ? 'lg:order-2' : 'lg:order-1'}`}
+        data-project-frame="true"
+      >
+        <div
+          aria-hidden="true"
+          className={`absolute -top-3 z-20 h-12 w-12 border-t border-site-border-active/70 ${
+            imageOnRight ? '-right-3 border-r' : '-left-3 border-l'
+          }`}
+          data-project-corner={imageOnRight ? 'top-right' : 'top-left'}
+        />
+        <ProjectImage project={project} sizes="(max-width: 1023px) 100vw, 58vw" />
       </div>
 
-      <div className="grid items-center gap-10 md:grid-cols-[minmax(0,31.625rem)_minmax(0,1fr)] md:gap-12 lg:gap-16">
-        <div className={['flex flex-col', !isEven ? 'md:order-2' : ''].join(' ')}>
-          <h3 className="mb-6 max-w-[27rem] text-[2.5rem] leading-[0.98] font-extrabold text-[#dfe4ff] md:text-[2.875rem]">
+      <div
+        className={`order-2 col-span-12 flex flex-col gap-6 lg:col-span-5 ${
+          imageOnRight ? 'lg:order-1 lg:pr-8' : 'lg:order-2 lg:pl-8'
+        }`}
+        data-project-content="true"
+      >
+        <div className="space-y-3">
+          <p className="site-section-label text-site-accent opacity-70">
+            {[labels.number, labels.metadata].filter(Boolean).join(' // ')}
+          </p>
+          <h3 className="text-[2.5rem] leading-[0.98] font-extrabold tracking-[-0.035em] text-site-text-primary md:text-[3rem]">
             {project.title}
           </h3>
-
-          {project.description && (
-            <p className="mb-8 max-w-[27.25rem] text-lg leading-[1.6] text-[#a9b1c9]">
-              {project.description}
-            </p>
-          )}
-
-          {Array.isArray(project.metrics) && project.metrics.length > 0 && (
-            <div className="mb-7 grid max-w-[31.625rem] grid-cols-1 rounded-lg border border-site-border-subtle bg-transparent px-6 py-5 sm:grid-cols-2 sm:gap-8">
-              {project.metrics.slice(0, 2).map((metric, i) => (
-                <div key={metric.id ?? i} className="flex min-w-0 flex-col gap-2 py-2">
-                  <span className="text-[0.6875rem] leading-[1.2] font-bold tracking-[0.18em] text-[#b3bbd3] uppercase">
-                    {metric.label}
-                  </span>
-                  <span
-                    className={[
-                      'text-[1.375rem] leading-[1.25] font-extrabold',
-                      i === 0 ? 'text-site-accent' : 'text-[#dfe4ff]',
-                    ].join(' ')}
-                  >
-                    {metric.value}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {Array.isArray(project.tech) && project.tech.length > 0 && (
-            <div className="mb-9 flex flex-wrap gap-2.5">
-              {project.tech.map((tech) => (
-                <Tag
-                  key={tech.id}
-                  className="bg-[#182036] px-4 py-2 text-[0.6875rem] tracking-[0.08em] text-[#b8c0d6]"
-                >
-                  {tech.techName}
-                </Tag>
-              ))}
-            </div>
-          )}
-
-          <a
-            href={`/projects/${project.slug}`}
-            className="inline-flex items-center text-sm font-bold tracking-[0.01em] text-site-text-primary transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-200 ease-out hover:text-site-accent focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-site-border-active focus-visible:shadow-[0_0_0_4px_var(--site-glow-accent)] motion-reduce:transition-none"
-          >
-            Read Case Study
-            <span className="ml-2">&rarr;</span>
-          </a>
         </div>
 
-        <div
-          className={[
-            'relative aspect-[16/10] min-h-64 overflow-hidden rounded-lg bg-site-surface-elevated md:min-h-0',
-            !isEven ? 'md:order-1' : '',
-          ].join(' ')}
-        >
-          {image?.url && (
-            <Image
-              alt={image.alt ?? project.title}
-              decoding="async"
-              fill
-              loading="lazy"
-              quality={75}
-              sizes="(max-width: 767px) 100vw, 50vw"
-              src={getMediaUrl(image.url, image.updatedAt)}
-              className="h-full w-full object-cover transition-transform duration-200 ease-out hover:scale-[1.02] motion-reduce:transition-none"
-            />
-          )}
-        </div>
+        {project.description && (
+          <p className="max-w-md text-base leading-[1.7] text-site-text-secondary md:text-lg">
+            {project.description}
+          </p>
+        )}
+
+        <ProjectTechnologies tech={project.tech} />
+        <ProjectCta project={project} />
       </div>
-    </div>
+    </article>
   )
 }

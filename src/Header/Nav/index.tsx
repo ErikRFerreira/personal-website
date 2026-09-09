@@ -1,26 +1,37 @@
 'use client'
 
 import React from 'react'
+import { usePathname } from 'next/navigation'
 import type { Header as HeaderType } from '@/payload-types'
-import { CMSLink } from '@/components/Link'
+import { CtaButton } from '@/components/CtaButton'
+import { CMSLink, getCMSLinkHref } from '@/components/Link'
+import { cn } from '@/utilities/ui'
 
 export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const navItems = data?.navItems || []
+  const pathname = usePathname()
 
   return (
-    <nav className="flex gap-6 items-center">
-      {navItems.map(({ link, isCta }, i) => (
-        <CMSLink
-          key={i}
-          {...link}
-          appearance={isCta ? 'inline' : 'link'}
-          className={
-            isCta
-              ? 'rounded-full border border-current px-4 py-1.5 text-sm leading-none transition-colors duration-200 hover:border-site-accent hover:text-site-accent'
-              : 'transition-colors duration-200 hover:text-site-accent'
-          }
-        />
-      ))}
+    <nav className="flex items-center gap-3 sm:gap-6 lg:gap-10">
+      {navItems.map(({ link, isCta }, i) => {
+        if (isCta) return <CtaButton key={i} {...link} size="sm" />
+
+        const href = getCMSLinkHref(link)
+        const isActive =
+          !!href && href !== '/' && (pathname === href || pathname?.startsWith(`${href}/`))
+
+        return (
+          <CMSLink
+            key={i}
+            {...link}
+            appearance="link"
+            className={cn(
+              'transition-colors duration-200 hover:text-site-accent',
+              isActive ? 'text-site-accent' : 'text-site-text-primary',
+            )}
+          />
+        )
+      })}
     </nav>
   )
 }

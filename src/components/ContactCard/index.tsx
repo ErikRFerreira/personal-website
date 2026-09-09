@@ -1,6 +1,7 @@
 import React from 'react'
 import { Mail, MapPin } from 'lucide-react'
 import { Media } from '@/components/Media'
+import SpotlightCard from '@/components/SpotlightCard'
 import { Tag } from '@/components/Tag'
 import type { FormBlock } from '@/payload-types'
 
@@ -25,17 +26,19 @@ export const ContactCard: React.FC<QuickAccessCard> = ({
     : '?'
 
   return (
-    <div className="rounded-site-card border border-site-border-subtle bg-site-surface-elevated p-[var(--site-card-padding)] backdrop-blur-sm">
+    <SpotlightCard className="rounded-site-card! border! border-site-border-subtle! bg-site-surface-elevated! p-(--site-card-padding)! backdrop-blur-sm">
       {/* Avatar + name */}
       <div className="mb-6 flex items-center gap-4">
-        <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-full">
-          {avatar && typeof avatar === 'object' ? (
-            <Media fill imgClassName="object-cover" resource={avatar} size="56px" />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center bg-site-surface-base text-sm font-semibold text-site-text-primary">
-              {initials}
-            </div>
-          )}
+        <div className="h-20 w-20 flex-shrink-0 rounded-full border border-site-accent/30 p-1 shadow-[0_0_1rem_var(--site-glow-accent)]">
+          <div className="relative h-full w-full overflow-hidden rounded-full">
+            {avatar && typeof avatar === 'object' ? (
+              <Media fill imgClassName="object-cover" resource={avatar} size="80px" />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-site-surface-base text-sm font-semibold text-site-text-primary">
+                {initials}
+              </div>
+            )}
+          </div>
         </div>
         <div>
           {name && <p className="text-base font-semibold text-site-text-primary">{name}</p>}
@@ -83,6 +86,6 @@ export const ContactCard: React.FC<QuickAccessCard> = ({
           <span className="italic">{responseTime}</span>
         </div>
       )}
-    </div>
+    </SpotlightCard>
   )
 }

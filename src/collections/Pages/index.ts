@@ -10,9 +10,15 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { SimpleText } from '../../blocks/SimpleText/config'
 import { SelectedProjects } from '../../blocks/SelectedProjects/config'
 import { Capabilities } from '../../blocks/Capabilities/config'
+import { Disciplines } from '../../blocks/Disciplines/config'
 import { LensBlock } from '../../blocks/LensBlock/config'
 import { AboutIntro } from '../../blocks/AboutIntro/config'
+import { AboutStory } from '../../blocks/AboutStory/config'
+import { AboutProtocol } from '../../blocks/AboutProtocol/config'
+import { AboutTimeline } from '../../blocks/AboutTimeline/config'
 import { InitiateProject } from '../../blocks/InitiateProject/config'
+import { RevealText } from '../../blocks/RevealText/config'
+import { HomeBio } from '../../blocks/HomeBio/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -87,9 +93,15 @@ export const Pages: CollectionConfig<'pages'> = {
                 SimpleText,
                 SelectedProjects,
                 Capabilities,
+                Disciplines,
                 LensBlock,
                 AboutIntro,
+                AboutStory,
+                AboutProtocol,
+                AboutTimeline,
                 InitiateProject,
+                RevealText,
+                HomeBio,
               ],
               required: true,
               admin: {

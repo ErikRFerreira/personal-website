@@ -165,14 +165,24 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'portfolioHero';
-    eyebrow?: string | null;
-    headline?: string | null;
-    description?: string | null;
-    rightEyebrow?: string | null;
-    rightHeadline?: string | null;
-    rightDescription?: string | null;
-    positioningLine?: string | null;
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'profileHero' | 'aboutHero';
+    name?: string | null;
+    intro?: string | null;
+    /**
+     * Main hero image. When the Profile Hero image slider is enabled, this is the Diver slide.
+     */
+    media?: (number | null) | Media;
+    imageLabel?: string | null;
+    /**
+     * Show the interactive Diver / Developer image slider.
+     */
+    enableImageStack?: boolean | null;
+    stackPrimaryLabel?: string | null;
+    /**
+     * Uses the built-in developer artwork when left empty.
+     */
+    secondaryMedia?: (number | null) | Media;
+    stackSecondaryLabel?: string | null;
     richText?: {
       root: {
         type: string;
@@ -212,23 +222,6 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
-    /**
-     * For Portfolio Hero CDN videos, select an image to use as the poster and fallback.
-     */
-    media?: (number | null) | Media;
-    /**
-     * Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.
-     */
-    videoUrl?: string | null;
-    /**
-     * Select an image to use as the poster and fallback for a right-panel CDN video.
-     */
-    rightMedia?: (number | null) | Media;
-    /**
-     * Optional public HTTPS URL for a CDN-hosted MP4 or WebM video.
-     */
-    rightVideoUrl?: string | null;
-    scrollLabel?: string | null;
   };
   layout: (
     | CallToActionBlock
@@ -239,61 +232,21 @@ export interface Page {
     | SimpleTextBlock
     | SelectedProjectsBlock
     | CapabilitiesBlock
+    | DisciplinesBlock
     | LensBlock
     | AboutIntroBlock
+    | AboutStoryBlock
+    | AboutProtocolBlock
+    | AboutTimelineBlock
     | InitiateProjectBlock
+    | RevealTextBlock
+    | HomeBioBlock
   )[];
   meta?: {
     title?: string | null;
     description?: string | null;
   };
   publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: number;
-  title: string;
-  heroImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -421,6 +374,52 @@ export interface FolderInterface {
   folderType?: 'media'[] | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  heroImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  relatedPosts?: (number | Post)[] | null;
+  categories?: (number | Category)[] | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  authors?: (number | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -914,10 +913,46 @@ export interface Project {
       }[]
     | null;
   image?: (number | null) | Media;
+  /**
+   * Heading shown above the showcase image (e.g., "MOD Calc").
+   */
+  showcaseTitle?: string | null;
+  /**
+   * Small caption under the showcase title (e.g., "Maximum Operating Depth").
+   */
+  showcaseSubtitle?: string | null;
+  /**
+   * Main image shown in the showcase section.
+   */
+  showcaseImage?: (number | null) | Media;
+  /**
+   * Optional small caption shown under the showcase image.
+   */
+  showcaseCaption?: string | null;
+  gallerySubtitle?: string | null;
+  /**
+   * Drag screens to reorder them. Consecutive half-width screens share a row on desktop.
+   */
   gallery?:
     | {
         image: number | Media;
-        caption?: string | null;
+        title: string;
+        description: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        layout: 'full' | 'half' | 'split';
         id?: string | null;
       }[]
     | null;
@@ -936,6 +971,10 @@ export interface Project {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Optional reusable sections displayed after the showcase and before the gallery.
+   */
+  detailBlocks?: ProjectPrinciplesBlock[] | null;
   status: 'draft' | 'published';
   type?: ('web-app' | 'mobile-app' | 'open-source' | 'design' | 'other') | null;
   /**
@@ -947,23 +986,68 @@ export interface Project {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectPrinciplesBlock".
+ */
+export interface ProjectPrinciplesBlock {
+  eyebrow?: string | null;
+  title: string;
+  description?: string | null;
+  /**
+   * Three concise principles are recommended.
+   */
+  items: {
+    label?: string | null;
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'projectPrinciples';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CapabilitiesBlock".
  */
 export interface CapabilitiesBlock {
   eyebrow?: string | null;
-  label?: string | null;
-  intro?: string | null;
-  capabilities?:
-    | {
-        name: string;
-        description: string;
-        icon: number | Media;
-        id?: string | null;
-      }[]
-    | null;
+  items: {
+    title: string;
+    description: string;
+    icon: number | Media;
+    tags?:
+      | {
+          tag: string;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
   id?: string | null;
   blockName?: string | null;
   blockType: 'capabilities';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DisciplinesBlock".
+ */
+export interface DisciplinesBlock {
+  eyebrow?: string | null;
+  items: {
+    title: string;
+    description: string;
+    icon: number | Media;
+    tags?:
+      | {
+          tag: string;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'disciplines';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -990,9 +1074,13 @@ export interface Len {
   title: string;
   photo: number | Media;
   /**
-   * Group this photo under a named series or collection
+   * Group this photo in a managed Lens collection
    */
-  series?: string | null;
+  series?: (number | null) | Series;
+  /**
+   * Classify this photo with shared site taxonomy terms
+   */
+  categories?: (number | Category)[] | null;
   /**
    * A brief caption or teaser shown in listings
    */
@@ -1037,13 +1125,16 @@ export interface Len {
       }[]
     | null;
   /**
+   * Optional availability and pricing for a digital download
+   */
+  digitalDownload?: {
+    available?: boolean | null;
+    price?: number | null;
+  };
+  /**
    * Usage rights, licensing terms, or copyright notice
    */
   licensingText?: string | null;
-  /**
-   * Other photos from the same shoot or series
-   */
-  relatedPhotos?: (number | Len)[] | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -1053,7 +1144,34 @@ export interface Len {
    */
   generateSlug?: boolean | null;
   slug: string;
+  /**
+   * Override the archive crop and frame shape, or use the uploaded image dimensions.
+   */
+  archiveFormat?: ('auto' | 'portrait' | 'landscape' | 'square' | 'panorama') | null;
   status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "series".
+ */
+export interface Series {
+  id: number;
+  name: string;
+  /**
+   * A brief description of the series or collection
+   */
+  description?: string | null;
+  /**
+   * An optional image representing the series or collection
+   */
+  coverImage?: (number | null) | Media;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1078,6 +1196,68 @@ export interface AboutIntroBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'aboutIntro';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutStoryBlock".
+ */
+export interface AboutStoryBlock {
+  eyebrow?: string | null;
+  heading: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutStory';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutProtocolBlock".
+ */
+export interface AboutProtocolBlock {
+  heading: string;
+  description: string;
+  principles: {
+    text: string;
+    id?: string | null;
+  }[];
+  /**
+   * Enter the quote without surrounding quotation marks.
+   */
+  quote: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutProtocol';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutTimelineBlock".
+ */
+export interface AboutTimelineBlock {
+  eyebrow?: string | null;
+  milestones: {
+    year: string;
+    title?: string | null;
+    description: string;
+    image: number | Media;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'aboutTimeline';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1113,25 +1293,36 @@ export interface InitiateProjectBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "series".
+ * via the `definition` "RevealTextBlock".
  */
-export interface Series {
-  id: number;
+export interface RevealTextBlock {
+  text: string;
+  supportingText: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'revealText';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeBioBlock".
+ */
+export interface HomeBioBlock {
+  eyebrow?: string | null;
   name: string;
+  roles?: string | null;
   /**
-   * A brief description of the series or collection
+   * Keep this concise — ideally 2–3 sentences.
    */
-  description?: string | null;
-  /**
-   * An optional image representing the series or collection
-   */
-  'Cover Image'?: (number | null) | Media;
-  /**
-   * A URL-friendly identifier for the series (e.g., "summer-2024")
-   */
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
+  bio: string;
+  portrait: number | Media;
+  email: string;
+  cta: {
+    label: string;
+    url: string;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'homeBio';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1444,13 +1635,14 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
-        eyebrow?: T;
-        headline?: T;
-        description?: T;
-        rightEyebrow?: T;
-        rightHeadline?: T;
-        rightDescription?: T;
-        positioningLine?: T;
+        name?: T;
+        intro?: T;
+        media?: T;
+        imageLabel?: T;
+        enableImageStack?: T;
+        stackPrimaryLabel?: T;
+        secondaryMedia?: T;
+        stackSecondaryLabel?: T;
         richText?: T;
         links?:
           | T
@@ -1467,11 +1659,6 @@ export interface PagesSelect<T extends boolean = true> {
                   };
               id?: T;
             };
-        media?: T;
-        videoUrl?: T;
-        rightMedia?: T;
-        rightVideoUrl?: T;
-        scrollLabel?: T;
       };
   layout?:
     | T
@@ -1484,9 +1671,15 @@ export interface PagesSelect<T extends boolean = true> {
         simpleText?: T | SimpleTextBlockSelect<T>;
         selectedProjects?: T | SelectedProjectsBlockSelect<T>;
         capabilities?: T | CapabilitiesBlockSelect<T>;
+        disciplines?: T | DisciplinesBlockSelect<T>;
         lensBlock?: T | LensBlockSelect<T>;
         aboutIntro?: T | AboutIntroBlockSelect<T>;
+        aboutStory?: T | AboutStoryBlockSelect<T>;
+        aboutProtocol?: T | AboutProtocolBlockSelect<T>;
+        aboutTimeline?: T | AboutTimelineBlockSelect<T>;
         initiateProject?: T | InitiateProjectBlockSelect<T>;
+        revealText?: T | RevealTextBlockSelect<T>;
+        homeBio?: T | HomeBioBlockSelect<T>;
       };
   meta?:
     | T
@@ -1633,14 +1826,41 @@ export interface SelectedProjectsBlockSelect<T extends boolean = true> {
  */
 export interface CapabilitiesBlockSelect<T extends boolean = true> {
   eyebrow?: T;
-  label?: T;
-  intro?: T;
-  capabilities?:
+  items?:
     | T
     | {
-        name?: T;
+        title?: T;
         description?: T;
         icon?: T;
+        tags?:
+          | T
+          | {
+              tag?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DisciplinesBlock_select".
+ */
+export interface DisciplinesBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        tags?:
+          | T
+          | {
+              tag?: T;
+              id?: T;
+            };
         id?: T;
       };
   id?: T;
@@ -1681,6 +1901,52 @@ export interface AboutIntroBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutStoryBlock_select".
+ */
+export interface AboutStoryBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  body?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutProtocolBlock_select".
+ */
+export interface AboutProtocolBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  principles?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  quote?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutTimelineBlock_select".
+ */
+export interface AboutTimelineBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  milestones?:
+    | T
+    | {
+        year?: T;
+        title?: T;
+        description?: T;
+        image?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "InitiateProjectBlock_select".
  */
 export interface InitiateProjectBlockSelect<T extends boolean = true> {
@@ -1698,6 +1964,36 @@ export interface InitiateProjectBlockSelect<T extends boolean = true> {
         appearance?: T;
       };
   partnershipNote?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RevealTextBlock_select".
+ */
+export interface RevealTextBlockSelect<T extends boolean = true> {
+  text?: T;
+  supportingText?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomeBioBlock_select".
+ */
+export interface HomeBioBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  name?: T;
+  roles?: T;
+  bio?: T;
+  portrait?: T;
+  email?: T;
+  cta?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1898,19 +2194,50 @@ export interface ProjectsSelect<T extends boolean = true> {
         id?: T;
       };
   image?: T;
+  showcaseTitle?: T;
+  showcaseSubtitle?: T;
+  showcaseImage?: T;
+  showcaseCaption?: T;
+  gallerySubtitle?: T;
   gallery?:
     | T
     | {
         image?: T;
-        caption?: T;
+        title?: T;
+        description?: T;
+        layout?: T;
         id?: T;
       };
   content?: T;
+  detailBlocks?:
+    | T
+    | {
+        projectPrinciples?: T | ProjectPrinciplesBlockSelect<T>;
+      };
   status?: T;
   type?: T;
   year?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectPrinciplesBlock_select".
+ */
+export interface ProjectPrinciplesBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  items?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1920,6 +2247,7 @@ export interface LensSelect<T extends boolean = true> {
   title?: T;
   photo?: T;
   series?: T;
+  categories?: T;
   intro?: T;
   fullStory?: T;
   location?: T;
@@ -1942,8 +2270,13 @@ export interface LensSelect<T extends boolean = true> {
         price?: T;
         id?: T;
       };
+  digitalDownload?:
+    | T
+    | {
+        available?: T;
+        price?: T;
+      };
   licensingText?: T;
-  relatedPhotos?: T;
   meta?:
     | T
     | {
@@ -1952,6 +2285,7 @@ export interface LensSelect<T extends boolean = true> {
       };
   generateSlug?: T;
   slug?: T;
+  archiveFormat?: T;
   status?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1963,7 +2297,8 @@ export interface LensSelect<T extends boolean = true> {
 export interface SeriesSelect<T extends boolean = true> {
   name?: T;
   description?: T;
-  'Cover Image'?: T;
+  coverImage?: T;
+  generateSlug?: T;
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
