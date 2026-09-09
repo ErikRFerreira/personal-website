@@ -1,6 +1,6 @@
 import BlurText from '@/components/BlurText'
 import { Media } from '@/components/Media'
-import MorphSlider, { MorphItem, type } from '@/components/MorphSlider'
+import MorphSlider, { type MorphItem } from '@/components/MorphSlider'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 
