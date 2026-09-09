@@ -1,4 +1,5 @@
 import { CtaButton } from '@/components/CtaButton'
+
 import type { Project } from '@/payload-types'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 import Image from 'next/image'
@@ -68,7 +69,7 @@ function ProjectTechnologies({ tech }: { tech: Project['tech'] }) {
   if (!Array.isArray(tech) || tech.length === 0) return null
 
   return (
-    <div className="flex flex-wrap gap-x-6 gap-y-2" data-project-technologies="true">
+    <div className="flex flex-wrap gap-x-6 gap-y-2 mb-4" data-project-technologies="true">
       {tech.map((item, techIndex) => (
         <span
           className="site-meta-label text-site-text-muted"
@@ -112,9 +113,7 @@ export function ProjectRow({ project, index }: Props) {
         <div
           aria-hidden="true"
           className={`absolute -top-3 z-20 h-12 w-12 border-t border-site-border-active/70 ${
-            imageOnRight
-              ? '-right-3 border-r'
-              : '-left-3 border-l'
+            imageOnRight ? '-right-3 border-r' : '-left-3 border-l'
           }`}
           data-project-corner={imageOnRight ? 'top-right' : 'top-left'}
         />

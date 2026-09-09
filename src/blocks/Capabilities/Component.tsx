@@ -2,6 +2,7 @@ import { AccentHexagon } from '@/components/AccentHexagon'
 import { Media } from '@/components/Media'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import SpotlightCard from '@/components/SpotlightCard'
+
 import type { CapabilitiesBlock as CapabilitiesBlockProps } from '@/payload-types'
 import { getRevealDelay } from '@/utilities/getRevealDelay'
 import { CapabilitiesParallax } from './CapabilitiesParallax'
@@ -45,10 +46,7 @@ export function CapabilitiesBlock({
         <RevealOnScroll revealName="capabilities-heading">
           <div className="mb-16 flex items-center gap-4 md:mb-24">
             <AccentHexagon />
-            <h2
-              className="site-section-label shrink-0 text-site-accent"
-              id="capabilities-heading"
-            >
+            <h2 className="site-section-label shrink-0 text-site-accent" id="capabilities-heading">
               {heading}
             </h2>
             <div aria-hidden="true" className="h-px flex-1 bg-site-border-subtle" />
@@ -68,7 +66,7 @@ export function CapabilitiesBlock({
               >
                 <SpotlightCard className="capability-card group">
                   <article
-                    className="relative z-10 flex h-full min-h-80 flex-col"
+                    className="relative z-10 flex h-full min-h-60 flex-col"
                     data-capability-index={index + 1}
                   >
                     <div className="mb-14 flex items-start justify-between md:mb-16">
