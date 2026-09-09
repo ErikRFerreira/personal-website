@@ -45,13 +45,13 @@ const profileImageRequired: UploadFieldSingleValidation = (value, { siblingData 
   return true
 }
 
-const requiredForProfileImageStack =
+const requiredForProfileImageSlider =
   (label: string): TextFieldSingleValidation =>
   (value, { siblingData }) => {
     const data = siblingData as { enableImageStack?: boolean; type?: string }
 
     if (data?.type === 'profileHero' && data.enableImageStack && !value?.trim()) {
-      return `${label} is required when the image stack is enabled`
+      return `${label} is required when the image slider is enabled`
     }
 
     return true
@@ -101,7 +101,7 @@ export const hero: Field = {
         condition: (_, { type } = {}) =>
           ['highImpact', 'mediumImpact', 'profileHero', 'aboutHero'].includes(type),
         description:
-          'Main hero image. When the Profile Hero image stack is enabled, this is the Diver card.',
+          'Main hero image. When the Profile Hero image slider is enabled, this is the Diver slide.',
       },
       label: 'Primary hero image',
       relationTo: 'media',
@@ -121,10 +121,10 @@ export const hero: Field = {
       type: 'checkbox',
       admin: {
         condition: (_, { type } = {}) => type === 'profileHero',
-        description: 'Show the interactive Diver / Developer image stack.',
+        description: 'Show the interactive Diver / Developer image slider.',
       },
       defaultValue: false,
-      label: 'Enable image stack',
+      label: 'Enable image slider',
     },
     {
       name: 'stackPrimaryLabel',
@@ -135,7 +135,7 @@ export const hero: Field = {
       },
       defaultValue: '01 / DIVER',
       label: 'Primary image label',
-      validate: requiredForProfileImageStack('Primary image label'),
+      validate: requiredForProfileImageSlider('Primary image label'),
     },
     {
       name: 'secondaryMedia',
@@ -157,7 +157,7 @@ export const hero: Field = {
       },
       defaultValue: '02 / DEVELOPER',
       label: 'Secondary image label',
-      validate: requiredForProfileImageStack('Secondary image label'),
+      validate: requiredForProfileImageSlider('Secondary image label'),
     },
     {
       name: 'richText',

@@ -80,6 +80,7 @@ describe('About block placeholders', () => {
         />
         <AboutProtocolBlock
           blockType="aboutProtocol"
+          description="A practical framework for building reliable systems, navigating uncertainty, and knowing when conventions deserve to be challenged."
           heading="The Protocol"
           principles={[
             { text: 'Build things that actually get used.' },
@@ -96,7 +97,6 @@ describe('About block placeholders', () => {
               title: 'Current chapter',
               description: 'Active work',
               image: 3,
-              metadata: [{ label: 'Status', value: 'Active' }],
             },
           ]}
         />
@@ -110,6 +110,9 @@ describe('About block placeholders', () => {
     expect(screen.getByTestId('about-story-vertical-progress')).not.toBeNull()
     expect(screen.getByTestId('about-story-progress-marker')).not.toBeNull()
     expect(screen.getByRole('heading', { name: 'The Protocol' })).not.toBeNull()
+    expect(screen.getByTestId('about-protocol-description').textContent).toBe(
+      'A practical framework for building reliable systems, navigating uncertainty, and knowing when conventions deserve to be challenged.',
+    )
     expect(screen.getByTestId('about-protocol-principles').children).toHaveLength(3)
     expect(screen.getAllByRole('blockquote')).toHaveLength(1)
     expect(screen.getByText('\u201cFollow protocol when protocol matters.\u201d')).not.toBeNull()
@@ -124,6 +127,6 @@ describe('About block placeholders', () => {
         ?.getAttribute('data-reveal-delay'),
     ).toBe('180')
     expect(screen.getByRole('button', { name: /Current chapter/ })).not.toBeNull()
-    expect(screen.getByText('Active')).not.toBeNull()
+    expect(screen.getByTestId('about-timeline-description').textContent).toBe('Active work')
   })
 })

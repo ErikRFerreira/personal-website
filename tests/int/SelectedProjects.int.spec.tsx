@@ -76,7 +76,7 @@ function makeProject(overrides: Partial<Project> = {}): Project {
 }
 
 describe('SelectedProjectsBlock', () => {
-  it('renders the compact heading and real project content in the alternating composition', () => {
+  it('renders the Lens-style header and real project content in the alternating composition', () => {
     const { container } = render(
       <SelectedProjectsBlock
         eyebrow="01"
@@ -86,8 +86,9 @@ describe('SelectedProjectsBlock', () => {
       />,
     )
 
-    expect(screen.getByRole('heading', { name: '01 // Selected Work' })).not.toBeNull()
-    expect(screen.queryByText('This intro is intentionally hidden.')).toBeNull()
+    expect(screen.getByText('01')).not.toBeNull()
+    expect(screen.getByRole('heading', { name: 'Selected Work' })).not.toBeNull()
+    expect(screen.getByText('This intro is intentionally hidden.')).not.toBeNull()
     expect(screen.getByRole('heading', { name: 'Project One' })).not.toBeNull()
     expect(screen.getByText('01 // WEB_APP // 2026')).not.toBeNull()
     expect(screen.getByText('A focused description of the project.')).not.toBeNull()

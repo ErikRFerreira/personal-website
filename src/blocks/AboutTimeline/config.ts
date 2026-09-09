@@ -16,14 +16,6 @@ export const AboutTimeline: Block = {
         { name: 'title', type: 'text' },
         { name: 'description', type: 'textarea', required: true },
         { name: 'image', type: 'upload', relationTo: 'media', required: true },
-        {
-          name: 'metadata',
-          type: 'array',
-          fields: [
-            { name: 'label', type: 'text', required: true },
-            { name: 'value', type: 'text', required: true },
-          ],
-        },
       ],
     },
   ],

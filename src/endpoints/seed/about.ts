@@ -88,6 +88,8 @@ export const about = ({
     {
       blockType: 'aboutProtocol',
       heading: 'The Protocol',
+      description:
+        'A practical framework for building reliable systems, navigating uncertainty, and knowing when conventions deserve to be challenged.',
       principles: [
         { text: 'Build things that actually get used.' },
         { text: 'Understand the system, not just the interface.' },
@@ -104,21 +106,18 @@ export const about = ({
           title: 'First descent',
           description: 'A representative starting point for the editable About timeline.',
           image: timelineImages[0].id,
-          metadata: [{ label: 'Focus', value: 'Foundations' }],
         },
         {
           year: '2022',
           title: 'Systems and exploration',
           description: 'Digital product work and underwater practice began informing one another.',
           image: timelineImages[1].id,
-          metadata: [{ label: 'Primary interest', value: 'Technical craft' }],
         },
         {
           year: 'Now',
           title: 'Current chapter',
           description: 'Building reliable products and documenting environments with intention.',
           image: timelineImages[2].id,
-          metadata: [{ label: 'Status', value: 'Active' }],
         },
       ],
     },

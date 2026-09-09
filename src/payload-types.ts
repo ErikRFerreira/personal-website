@@ -169,12 +169,12 @@ export interface Page {
     name?: string | null;
     intro?: string | null;
     /**
-     * Main hero image. When the Profile Hero image stack is enabled, this is the Diver card.
+     * Main hero image. When the Profile Hero image slider is enabled, this is the Diver slide.
      */
     media?: (number | null) | Media;
     imageLabel?: string | null;
     /**
-     * Show the interactive Diver / Developer image stack.
+     * Show the interactive Diver / Developer image slider.
      */
     enableImageStack?: boolean | null;
     stackPrimaryLabel?: string | null;
@@ -1229,6 +1229,7 @@ export interface AboutStoryBlock {
  */
 export interface AboutProtocolBlock {
   heading: string;
+  description: string;
   principles: {
     text: string;
     id?: string | null;
@@ -1252,13 +1253,6 @@ export interface AboutTimelineBlock {
     title?: string | null;
     description: string;
     image: number | Media;
-    metadata?:
-      | {
-          label: string;
-          value: string;
-          id?: string | null;
-        }[]
-      | null;
     id?: string | null;
   }[];
   id?: string | null;
@@ -1922,6 +1916,7 @@ export interface AboutStoryBlockSelect<T extends boolean = true> {
  */
 export interface AboutProtocolBlockSelect<T extends boolean = true> {
   heading?: T;
+  description?: T;
   principles?:
     | T
     | {
@@ -1945,13 +1940,6 @@ export interface AboutTimelineBlockSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         image?: T;
-        metadata?:
-          | T
-          | {
-              label?: T;
-              value?: T;
-              id?: T;
-            };
         id?: T;
       };
   id?: T;

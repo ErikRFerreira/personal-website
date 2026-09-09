@@ -12,12 +12,12 @@ type SelectedProjectsProps = {
   projects?: (number | Project)[] | null
 }
 
-export function SelectedProjectsBlock({ eyebrow, label, projects }: SelectedProjectsProps) {
+export function SelectedProjectsBlock({ eyebrow, label, intro, projects }: SelectedProjectsProps) {
   const selectedProjects = projects?.filter(
     (project): project is Project => typeof project === 'object' && project !== null,
   )
-  const heading =
-    [eyebrow?.trim(), label?.trim()].filter(Boolean).join(' // ') || 'Selected Projects'
+  const resolvedEyebrow = eyebrow?.trim()
+  const resolvedLabel = label?.trim() || (!resolvedEyebrow ? 'Selected Projects' : undefined)
 
   if (!selectedProjects?.length) return null
 
@@ -46,13 +46,28 @@ export function SelectedProjectsBlock({ eyebrow, label, projects }: SelectedProj
 
       <div className="site-container relative z-10">
         <RevealOnScroll revealName="section-heading">
-          <div className="mb-12 flex items-center gap-4">
-            <AccentHexagon />
-            <h2 className="site-section-label shrink-0 text-site-accent">
-              {heading}
-            </h2>
-            <div aria-hidden="true" className="h-px flex-1 bg-site-border-subtle" />
-          </div>
+          <header className="mb-16 max-w-[42rem] md:mb-24">
+            {resolvedEyebrow && (
+              <div className="mb-5 flex items-center gap-4">
+                <AccentHexagon />
+                <p className="site-section-label text-site-accent">{resolvedEyebrow}</p>
+              </div>
+            )}
+
+            {!resolvedEyebrow && resolvedLabel && <AccentHexagon className="mb-5" />}
+
+            {resolvedLabel && (
+              <h2 className="text-[3rem] leading-[0.95] font-extrabold tracking-normal text-site-text-primary md:text-[4.5rem]">
+                {resolvedLabel}
+              </h2>
+            )}
+
+            {intro && (
+              <p className="mt-8 border-l-2 border-site-accent pl-6 text-base leading-[1.75] text-site-text-secondary md:text-lg">
+                {intro}
+              </p>
+            )}
+          </header>
         </RevealOnScroll>
 
         <div className="flex flex-col gap-16 lg:gap-24">

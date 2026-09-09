@@ -7,6 +7,11 @@ export const AboutProtocol: Block = {
   fields: [
     { name: 'heading', type: 'text', required: true },
     {
+      name: 'description',
+      type: 'textarea',
+      required: true,
+    },
+    {
       name: 'principles',
       type: 'array',
       minRows: 1,

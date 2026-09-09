@@ -222,6 +222,13 @@ docker compose up
 
 The frontend is available at `http://localhost:3000` and the Payload Admin Panel at `http://localhost:3000/admin`. Source and server-side configuration changes are reloaded automatically during development.
 
+Docker disables Payload's automatic development schema push because destructive changes require an interactive confirmation that the container cannot answer. Create and run explicit migrations for schema changes instead:
+
+```bash
+docker compose exec payload pnpm payload migrate:create
+docker compose exec payload pnpm payload migrate
+```
+
 To run the containers in the background:
 
 ```bash

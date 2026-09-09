@@ -1,9 +1,10 @@
 import BlurText from '@/components/BlurText'
 import { Media } from '@/components/Media'
+import MorphSlider, { MorphItem, type } from '@/components/MorphSlider'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
+import { getMediaUrl } from '@/utilities/getMediaUrl'
 
 import { ProfileHeroParallax } from './ProfileHeroParallax'
-import { HeroImageStack } from './HeroImageStack'
 
 import type { Page } from '@/payload-types'
 
@@ -22,7 +23,25 @@ export function ProfileHero({
   const populatedSecondaryImage =
     typeof secondaryMedia === 'object' && secondaryMedia !== null ? secondaryMedia : null
   const hasPopulatedImage = Boolean(populatedImage)
-  const shouldRenderImageStack = Boolean(enableImageStack && populatedImage)
+  const shouldRenderImageSlider = Boolean(enableImageStack && populatedImage)
+  const sliderItems: MorphItem[] = populatedImage
+    ? [
+        {
+          alt: populatedImage.alt?.trim() || 'Erik Ferreira diving underwater',
+          caption: stackPrimaryLabel?.trim() || '01 / DIVER',
+          image: getMediaUrl(populatedImage.url, populatedImage.updatedAt),
+        },
+        {
+          alt: populatedSecondaryImage
+            ? populatedSecondaryImage.alt?.trim() || 'Erik Ferreira working as a software developer'
+            : 'Software development workspace displaying project source code',
+          caption: stackSecondaryLabel?.trim() || '02 / DEVELOPER',
+          image: populatedSecondaryImage
+            ? getMediaUrl(populatedSecondaryImage.url, populatedSecondaryImage.updatedAt)
+            : '/images/hero-code-bg.svg',
+        },
+      ]
+    : []
 
   if (!name || !intro) return null
 
@@ -47,13 +66,19 @@ export function ProfileHero({
                   aria-hidden="true"
                   className="absolute -inset-3 border border-site-border-active/25"
                 />
-                {enableImageStack && populatedImage ? (
-                  <HeroImageStack
-                    developerMedia={populatedSecondaryImage}
-                    diverMedia={populatedImage}
-                    primaryLabel={stackPrimaryLabel}
-                    secondaryLabel={stackSecondaryLabel}
-                  />
+                {shouldRenderImageSlider ? (
+                  <div className="relative aspect-4/5 w-full overflow-hidden bg-site-surface-elevated md:h-[min(43rem,68svh)] md:aspect-auto">
+                    <MorphSlider
+                      autoplay={false}
+                      className="profile-hero-morph-slider"
+                      items={sliderItems}
+                      loop
+                      radius={0}
+                      showControls
+                      showIndicators={false}
+                      startIndex={0}
+                    />
+                  </div>
                 ) : (
                   <div className="relative aspect-4/5 w-full overflow-hidden bg-site-surface-elevated md:h-[min(43rem,68svh)] md:aspect-auto">
                     {hasPopulatedImage ? (
@@ -70,7 +95,7 @@ export function ProfileHero({
                   </div>
                 )}
 
-                {!shouldRenderImageStack && imageLabel && (
+                {!shouldRenderImageSlider && imageLabel && (
                   <RevealOnScroll
                     className="absolute right-3 bottom-3 z-20 md:right-4 md:bottom-4"
                     delay={1140}

@@ -21,8 +21,12 @@ vi.mock('@/components/RevealOnScroll', () => ({
 }))
 
 vi.mock('@/components/Media', () => ({
-  Media: ({ resource }: { resource: Media }) => (
-    <div data-media-id={resource.id} data-testid="about-timeline-media" />
+  Media: ({ imgClassName, resource }: { imgClassName?: string; resource: Media }) => (
+    <div
+      data-img-class={imgClassName}
+      data-media-id={resource.id}
+      data-testid="about-timeline-media"
+    />
   ),
 }))
 
@@ -44,7 +48,6 @@ const milestones: AboutTimelineBlockType['milestones'] = [
     year: '2018',
     description: 'Initial system exposure.',
     image: media(10, 'First dive'),
-    metadata: [{ label: 'Origin', value: 'Brazil' }],
   },
   {
     id: 'middle',
@@ -52,10 +55,6 @@ const milestones: AboutTimelineBlockType['milestones'] = [
     title: 'Instructor Certification',
     description: 'Formalizing pedagogical frameworks.',
     image: media(20, 'Instructor training'),
-    metadata: [
-      { label: 'Origin', value: 'Portugal' },
-      { label: 'Focus', value: 'Teaching' },
-    ],
   },
   ...Array.from({ length: 8 }, (_, index) => ({
     id: `chapter-${index + 3}`,
@@ -63,7 +62,6 @@ const milestones: AboutTimelineBlockType['milestones'] = [
     title: `Chapter ${index + 3}`,
     description: `Timeline chapter ${index + 3}.`,
     image: media(40 + index, `Timeline chapter ${index + 3}`),
-    metadata: [{ label: 'Focus', value: `Chapter ${index + 3}` }],
   })),
   {
     id: 'latest',
@@ -71,10 +69,6 @@ const milestones: AboutTimelineBlockType['milestones'] = [
     title: 'Current chapter',
     description: 'Building reliable products.',
     image: media(30, 'Current work'),
-    metadata: [
-      { label: 'Classification', value: 'Technical Diver / Dev' },
-      { label: 'Status', value: 'Active' },
-    ],
   },
 ]
 
@@ -116,10 +110,21 @@ describe('AboutTimelineBlock', () => {
 
     expect(latestButton.getAttribute('aria-pressed')).toBe('true')
     expect(screen.getByTestId('about-timeline-media').getAttribute('data-media-id')).toBe('30')
-    expect(
-      screen.getByText('Active').closest('[data-highlighted]')?.getAttribute('data-highlighted'),
-    ).toBe('true')
-    expect(screen.getByTestId('about-timeline-status-icon')).not.toBeNull()
+    expect(screen.getByTestId('about-timeline-description').textContent).toBe(
+      'Building reliable products.',
+    )
+    expect(screen.getByTestId('about-timeline-media').getAttribute('data-img-class')).toContain(
+      '[filter:grayscale(1)]',
+    )
+    expect(screen.getByTestId('about-timeline-media').getAttribute('data-img-class')).toContain(
+      'group-hover:[filter:grayscale(0)]',
+    )
+    expect(screen.getByTestId('about-timeline-media').getAttribute('data-img-class')).toContain(
+      'transition-[filter]',
+    )
+    expect(screen.getByTestId('about-timeline-media').getAttribute('data-img-class')).toContain(
+      'motion-reduce:transition-none',
+    )
     expect(scrollRegion.getAttribute('tabindex')).toBe('0')
     expect(scrollRegion.hasAttribute('data-lenis-prevent')).toBe(true)
     expect(scrollRegion.classList.contains('about-timeline-scroll-region')).toBe(true)
@@ -127,7 +132,7 @@ describe('AboutTimelineBlock', () => {
     await waitFor(() => expect((scrollRegion as HTMLElement).scrollTop).toBe(880))
   })
 
-  it('updates the active image and metadata when a milestone is selected', async () => {
+  it('updates the active image and description when a milestone is selected', async () => {
     render(
       <AboutTimelineBlock
         blockType="aboutTimeline"
@@ -141,13 +146,12 @@ describe('AboutTimelineBlock', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('about-timeline-media').getAttribute('data-media-id')).toBe('20')
+      expect(screen.getByTestId('about-timeline-description').textContent).toBe(
+        'Formalizing pedagogical frameworks.',
+      )
     })
 
     expect(middleButton.getAttribute('aria-pressed')).toBe('true')
-    expect(
-      screen.getByText('Teaching').closest('[data-highlighted]')?.getAttribute('data-highlighted'),
-    ).toBe('true')
-    expect(screen.queryByTestId('about-timeline-status-icon')).toBeNull()
     expect(middleButton.textContent).toBe('2022Instructor Certification')
   })
 
@@ -160,7 +164,6 @@ describe('AboutTimelineBlock', () => {
             year: '2018',
             description: 'Initial system exposure.',
             image: 10,
-            metadata: [{ label: 'Focus', value: 'Foundations' }],
           },
         ]}
       />,
@@ -168,7 +171,6 @@ describe('AboutTimelineBlock', () => {
 
     expect(screen.getByTestId('about-timeline-image-placeholder')).not.toBeNull()
     expect(screen.queryByTestId('about-timeline-media')).toBeNull()
-    expect(screen.queryByTestId('about-timeline-status-icon')).toBeNull()
   })
 
   it('renders every milestone as keyboard-reachable LineSidebar navigation', () => {

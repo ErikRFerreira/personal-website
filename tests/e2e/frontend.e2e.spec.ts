@@ -333,7 +333,7 @@ test.describe('Frontend', () => {
     ).toBe(true)
   })
 
-  test('renders the About protocol responsively with accessible motion and hover states', async ({
+  test('renders the About protocol responsively with accessible motion and quote focus', async ({
     page,
   }) => {
     test.setTimeout(60_000)
@@ -344,11 +344,15 @@ test.describe('Frontend', () => {
 
     const protocol = page.getByTestId('about-protocol')
     const content = page.getByTestId('about-protocol-content')
+    const description = page.getByTestId('about-protocol-description')
     const principles = page.getByTestId('about-protocol-principles')
     const quote = page.getByTestId('about-protocol-quote')
 
     await protocol.scrollIntoViewIfNeeded()
     await expect(protocol.getByRole('heading', { level: 2 })).toBeVisible()
+    await expect(description).toHaveText(
+      'A practical framework for building reliable systems, navigating uncertainty, and knowing when conventions deserve to be challenged.',
+    )
     expect(await principles.locator('li').count()).toBeGreaterThan(0)
     await expect(protocol.getByRole('blockquote')).toHaveCount(1)
     await expect(quote).toBeVisible()
@@ -364,7 +368,36 @@ test.describe('Frontend', () => {
       .poll(() => firstMarker.evaluate((element) => getComputedStyle(element).backgroundColor))
       .toBe('rgb(0, 242, 255)')
 
+    const quoteStylesBeforeHover = await quote.evaluate((element) => {
+      const styles = getComputedStyle(element)
+
+      return {
+        backgroundColor: styles.backgroundColor,
+        borderTopColor: styles.borderTopColor,
+        boxShadow: styles.boxShadow,
+        color: getComputedStyle(element.querySelector('p')!).color,
+        transform: styles.transform,
+      }
+    })
+
     await quote.hover()
+    await expect
+      .poll(() =>
+        quote.evaluate((element) => {
+          const styles = getComputedStyle(element)
+
+          return {
+            backgroundColor: styles.backgroundColor,
+            borderTopColor: styles.borderTopColor,
+            boxShadow: styles.boxShadow,
+            color: getComputedStyle(element.querySelector('p')!).color,
+            transform: styles.transform,
+          }
+        }),
+      )
+      .toEqual(quoteStylesBeforeHover)
+
+    await quote.focus()
     await expect
       .poll(() => quote.evaluate((element) => getComputedStyle(element).borderTopColor))
       .toBe('rgba(0, 242, 255, 0.72)')

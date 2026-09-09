@@ -1,7 +1,5 @@
 import { Media } from '@/components/Media'
 import type { Media as MediaType } from '@/payload-types'
-import { cn } from '@/utilities/ui'
-import { CheckCircle2 } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 
 import { getMilestoneKey, type Milestone } from './types'
@@ -45,11 +43,11 @@ export function TimelinePanel({
             Selected timeline entry: {activeMilestone.year}
             {activeMilestone.title ? `, ${activeMilestone.title}` : ''}
           </p>
-          <div className="relative aspect-[16/9] w-full overflow-hidden bg-site-surface-photo">
+          <div className="group relative aspect-[16/9] w-full overflow-hidden bg-site-surface-photo">
             {populatedImage ? (
               <Media
                 fill
-                imgClassName="object-cover [filter:grayscale(1)]"
+                imgClassName="object-cover [filter:grayscale(1)] transition-[filter] duration-700 ease-out group-hover:[filter:grayscale(0)] motion-reduce:transition-none"
                 pictureClassName="block h-full w-full"
                 resource={populatedImage}
                 size="(max-width: 1023px) calc(100vw - 3rem), min(58vw, 52rem)"
@@ -59,58 +57,19 @@ export function TimelinePanel({
                 className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_center,var(--site-surface-elevated),var(--site-surface-deep))]"
                 data-testid="about-timeline-image-placeholder"
               >
-                <span className="site-meta-label text-site-text-muted">
-                  Image unavailable
-                </span>
+                <span className="site-meta-label text-site-text-muted">Image unavailable</span>
               </div>
             )}
           </div>
 
-          {activeMilestone.metadata && activeMilestone.metadata.length > 0 && (
-            <dl className="grid grid-cols-1 sm:grid-cols-2">
-              {activeMilestone.metadata.map(({ id, label, value }, index) => {
-                const isHighlighted = index === activeMilestone.metadata!.length - 1
-                const isStatus = label.trim().toLowerCase() === 'status'
-
-                return (
-                  <div
-                    className={cn(
-                      'border-t border-site-border-subtle px-5 py-4 sm:px-6',
-                      index % 2 === 0 && 'sm:border-r',
-                      isHighlighted && 'bg-site-accent/5',
-                    )}
-                    data-highlighted={isHighlighted ? 'true' : undefined}
-                    key={id ?? `${label}-${index}`}
-                  >
-                    <dt
-                      className={cn(
-                        'site-meta-label',
-                        isHighlighted ? 'text-site-accent' : 'text-site-text-muted',
-                      )}
-                    >
-                      {label}
-                    </dt>
-                    <dd
-                      className={cn(
-                        'mt-2 flex items-center gap-2 text-sm font-medium',
-                        isHighlighted ? 'text-site-accent' : 'text-site-text-primary',
-                      )}
-                    >
-                      {isHighlighted && isStatus && (
-                        <CheckCircle2
-                          aria-hidden="true"
-                          className="h-4 w-4 shrink-0"
-                          data-testid="about-timeline-status-icon"
-                          strokeWidth={2}
-                        />
-                      )}
-                      {value}
-                    </dd>
-                  </div>
-                )
-              })}
-            </dl>
-          )}
+          <div className="border-t border-site-border-subtle px-5 py-5 sm:px-6 sm:py-6">
+            <p
+              className="text-base leading-relaxed text-site-text-secondary"
+              data-testid="about-timeline-description"
+            >
+              {activeMilestone.description}
+            </p>
+          </div>
         </motion.div>
       </AnimatePresence>
     </div>

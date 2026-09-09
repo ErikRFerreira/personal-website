@@ -4,7 +4,16 @@ import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { getRevealDelay } from '@/utilities/getRevealDelay'
 import { ProtocolParallax } from './ProtocolParallax'
 
-export function AboutProtocolBlock({ heading, principles, quote }: AboutProtocolBlockProps) {
+const defaultDescription =
+  'A practical framework for building reliable systems, navigating uncertainty, and knowing when conventions deserve to be challenged.'
+
+export function AboutProtocolBlock({
+  description,
+  heading,
+  principles,
+  quote,
+}: AboutProtocolBlockProps) {
+  const displayDescription = description?.trim() || defaultDescription
   const displayQuote = quote?.trim() ?? ''
 
   return (
@@ -22,6 +31,12 @@ export function AboutProtocolBlock({ heading, principles, quote }: AboutProtocol
           >
             {heading}
           </h2>
+          <p
+            className="mt-6 max-w-3xl text-base leading-[1.75] text-site-text-secondary md:text-lg"
+            data-testid="about-protocol-description"
+          >
+            {displayDescription}
+          </p>
         </RevealOnScroll>
 
         <RevealOnScroll delay={80} revealName="about-protocol-divider">
@@ -54,20 +69,20 @@ export function AboutProtocolBlock({ heading, principles, quote }: AboutProtocol
           quote={
             <RevealOnScroll delay={180} revealName="about-protocol-quote">
               <blockquote
-                className="group relative flex min-h-52 w-full items-center justify-center border border-transparent bg-transparent px-8 py-12 text-center transition-[background-color,border-color,box-shadow,color,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-site-border-active hover:bg-site-surface-elevated/55 hover:shadow-site-glow focus-visible:-translate-y-1 focus-visible:border-site-border-active focus-visible:bg-site-surface-elevated/55 focus-visible:shadow-site-glow focus-visible:outline-none motion-reduce:transform-none motion-reduce:transition-none md:min-h-56 md:px-12"
+                className="group relative flex min-h-52 w-full items-center justify-center border border-transparent bg-transparent px-8 py-12 text-center transition-[background-color,border-color,box-shadow,color,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:-translate-y-1 focus-visible:border-site-border-active focus-visible:bg-site-surface-elevated/55 focus-visible:shadow-site-glow focus-visible:outline-none motion-reduce:transform-none motion-reduce:transition-none md:min-h-56 md:px-12"
                 data-testid="about-protocol-quote"
                 tabIndex={0}
               >
                 <span
                   aria-hidden="true"
-                  className="absolute top-0 left-0 h-8 w-8 border-t-2 border-l-2 border-site-border-active/40 transition-colors duration-500 group-hover:border-site-accent group-focus-visible:border-site-accent motion-reduce:transition-none"
+                  className="absolute top-0 left-0 h-8 w-8 border-t-2 border-l-2 border-site-border-active/40 transition-colors duration-500 group-focus-visible:border-site-accent motion-reduce:transition-none"
                 />
-                <p className="max-w-[32rem] text-[clamp(1.5rem,3vw,2.125rem)] leading-[1.35] font-medium tracking-[-0.025em] text-site-text-secondary italic transition-colors duration-500 group-hover:text-site-accent group-focus-visible:text-site-accent motion-reduce:transition-none">
+                <p className="max-w-[32rem] text-[clamp(1.5rem,3vw,2.125rem)] leading-[1.35] font-medium tracking-[-0.025em] text-site-text-secondary italic transition-colors duration-500 group-focus-visible:text-site-accent motion-reduce:transition-none">
                   &ldquo;{displayQuote}&rdquo;
                 </p>
                 <span
                   aria-hidden="true"
-                  className="absolute right-0 bottom-0 h-8 w-8 border-r-2 border-b-2 border-site-border-active/40 transition-colors duration-500 group-hover:border-site-accent group-focus-visible:border-site-accent motion-reduce:transition-none"
+                  className="absolute right-0 bottom-0 h-8 w-8 border-r-2 border-b-2 border-site-border-active/40 transition-colors duration-500 group-focus-visible:border-site-accent motion-reduce:transition-none"
                 />
               </blockquote>
             </RevealOnScroll>

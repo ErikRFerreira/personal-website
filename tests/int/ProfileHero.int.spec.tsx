@@ -16,24 +16,38 @@ vi.mock('@/components/Media', () => ({
   Media: () => <span aria-hidden="true" data-testid="profile-media" />,
 }))
 
-vi.mock('@/heros/ProfileHero/HeroImageStack', () => ({
-  HeroImageStack: ({
-    developerMedia,
-    diverMedia,
-    primaryLabel,
-    secondaryLabel,
+vi.mock('@/components/MorphSlider', () => ({
+  default: ({
+    autoplay,
+    className,
+    items,
+    loop,
+    radius,
+    showControls,
+    showIndicators,
+    startIndex,
   }: {
-    developerMedia?: Media | null
-    diverMedia: Media
-    primaryLabel?: string | null
-    secondaryLabel?: string | null
+    autoplay?: boolean
+    className?: string
+    items: Array<{ alt?: string; caption?: string; image: string }>
+    loop?: boolean
+    radius?: number
+    showControls?: boolean
+    showIndicators?: boolean
+    startIndex?: number
   }) => (
     <div
-      data-developer-id={developerMedia?.id}
-      data-diver-id={diverMedia.id}
-      data-testid="hero-image-stack"
+      className={className}
+      data-autoplay={String(autoplay)}
+      data-items={JSON.stringify(items)}
+      data-loop={String(loop)}
+      data-radius={radius}
+      data-show-controls={String(showControls)}
+      data-show-indicators={String(showIndicators)}
+      data-start-index={startIndex}
+      data-testid="profile-morph-slider"
     >
-      {primaryLabel} {secondaryLabel}
+      {items.map((item) => item.caption).join(' ')}
     </div>
   ),
 }))
@@ -48,6 +62,7 @@ const profileImage = {
   alt: 'Erik Ferreira',
   createdAt: '2026-09-02T00:00:00.000Z',
   updatedAt: '2026-09-02T00:00:00.000Z',
+  url: '/media/diver.jpg',
 } as Media
 
 const developerImage = {
@@ -55,6 +70,7 @@ const developerImage = {
   alt: 'Erik writing software',
   createdAt: '2026-09-02T00:00:00.000Z',
   updatedAt: '2026-09-02T00:00:00.000Z',
+  url: '/media/developer.jpg',
 } as Media
 
 describe('ProfileHero', () => {
@@ -93,7 +109,7 @@ describe('ProfileHero', () => {
     expect(container.querySelector('section')?.getAttribute('data-has-image')).toBe('false')
   })
 
-  it('renders the image stack only when explicitly enabled with a populated primary image', () => {
+  it('renders MorphSlider only when explicitly enabled with a populated primary image', () => {
     const { rerender } = render(
       <ProfileHero
         enableImageStack
@@ -107,9 +123,28 @@ describe('ProfileHero', () => {
       />,
     )
 
-    const stack = screen.getByTestId('hero-image-stack')
-    expect(stack.getAttribute('data-diver-id')).toBe('10')
-    expect(stack.getAttribute('data-developer-id')).toBe('11')
+    const slider = screen.getByTestId('profile-morph-slider')
+    const items = JSON.parse(slider.getAttribute('data-items') || '[]')
+
+    expect(items).toEqual([
+      {
+        alt: 'Erik Ferreira',
+        caption: '01 / DIVER',
+        image: '/media/diver.jpg?2026-09-02T00%3A00%3A00.000Z',
+      },
+      {
+        alt: 'Erik writing software',
+        caption: '02 / DEVELOPER',
+        image: '/media/developer.jpg?2026-09-02T00%3A00%3A00.000Z',
+      },
+    ])
+    expect(slider.className).toContain('profile-hero-morph-slider')
+    expect(slider.getAttribute('data-autoplay')).toBe('false')
+    expect(slider.getAttribute('data-loop')).toBe('true')
+    expect(slider.getAttribute('data-radius')).toBe('0')
+    expect(slider.getAttribute('data-show-controls')).toBe('true')
+    expect(slider.getAttribute('data-show-indicators')).toBe('false')
+    expect(slider.getAttribute('data-start-index')).toBe('0')
     expect(screen.getByText(/01 \/ DIVER/)).not.toBeNull()
     expect(screen.queryByTestId('profile-media')).toBeNull()
 
@@ -123,6 +158,44 @@ describe('ProfileHero', () => {
       />,
     )
 
-    expect(screen.queryByTestId('hero-image-stack')).toBeNull()
+    expect(screen.queryByTestId('profile-morph-slider')).toBeNull()
+  })
+
+  it('uses the built-in developer artwork and accessible defaults when secondary media is empty', () => {
+    const { rerender } = render(
+      <ProfileHero
+        enableImageStack
+        intro="Developer and diver"
+        media={{ ...profileImage, alt: '' }}
+        name="Erik Ferreira"
+        type="profileHero"
+      />,
+    )
+
+    const slider = screen.getByTestId('profile-morph-slider')
+    const items = JSON.parse(slider.getAttribute('data-items') || '[]')
+
+    expect(items[0].alt).toBe('Erik Ferreira diving underwater')
+    expect(items[1]).toEqual({
+      alt: 'Software development workspace displaying project source code',
+      caption: '02 / DEVELOPER',
+      image: '/images/hero-code-bg.svg',
+    })
+
+    rerender(
+      <ProfileHero
+        enableImageStack
+        intro="Developer and diver"
+        media={profileImage}
+        name="Erik Ferreira"
+        secondaryMedia={{ ...developerImage, alt: '' }}
+        type="profileHero"
+      />,
+    )
+
+    const cmsItems = JSON.parse(
+      screen.getByTestId('profile-morph-slider').getAttribute('data-items') || '[]',
+    )
+    expect(cmsItems[1].alt).toBe('Erik Ferreira working as a software developer')
   })
 })
