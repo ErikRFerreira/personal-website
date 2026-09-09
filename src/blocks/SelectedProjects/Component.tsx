@@ -46,7 +46,7 @@ export function SelectedProjectsBlock({ eyebrow, label, projects }: SelectedProj
 
       <div className="site-container relative z-10">
         <RevealOnScroll revealName="section-heading">
-          <div className="mb-16 flex items-center gap-4">
+          <div className="mb-12 flex items-center gap-4">
             <AccentHexagon />
             <h2 className="site-section-label shrink-0 text-site-accent">
               {heading}
@@ -55,7 +55,7 @@ export function SelectedProjectsBlock({ eyebrow, label, projects }: SelectedProj
           </div>
         </RevealOnScroll>
 
-        <div className="flex flex-col gap-24 lg:gap-32">
+        <div className="flex flex-col gap-16 lg:gap-24">
           {selectedProjects.map((project, index) => (
             <RevealOnScroll
               delay={getRevealDelay(index, 75, 225)}

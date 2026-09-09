@@ -12,6 +12,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { authenticated } from '../../access/authenticated'
+import { ProjectPrinciples } from '../../blocks/ProjectPrinciples/config'
 
 export const Projects: CollectionConfig<'projects'> = {
   slug: 'projects',
@@ -234,6 +235,16 @@ export const Projects: CollectionConfig<'projects'> = {
                   HorizontalRuleFeature(),
                 ],
               }),
+            },
+            {
+              name: 'detailBlocks',
+              type: 'blocks',
+              label: 'Project Detail Blocks',
+              blocks: [ProjectPrinciples],
+              admin: {
+                description:
+                  'Optional reusable sections displayed after the showcase and before the gallery.',
+              },
             },
           ],
         },

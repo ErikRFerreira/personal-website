@@ -101,6 +101,21 @@ function makeProject(overrides: Partial<Project> = {}): Project {
     },
     createdAt: '2026-01-01T00:00:00.000Z',
     description: 'A focused description of the project.',
+    detailBlocks: [
+      {
+        blockType: 'projectPrinciples',
+        eyebrow: 'Engineering approach',
+        items: [
+          {
+            description: 'The product remains dependable.',
+            id: 'reliability',
+            label: '01',
+            title: 'Reliability',
+          },
+        ],
+        title: 'Project principles',
+      },
+    ],
     id: 1,
     image: makeMedia(1),
     links: [
@@ -144,6 +159,7 @@ describe('ProjectDetail', () => {
     expect(screen.getByText(/Payload/)).not.toBeNull()
     expect(screen.getByText('Rendered case study content')).not.toBeNull()
     expect(screen.getByText('Interface detail')).not.toBeNull()
+    expect(screen.getByRole('heading', { name: 'Project principles' })).not.toBeNull()
 
     const featuredImage = screen.getByRole('img', { name: 'Project One' })
     const showcaseImage = screen.getByRole('img', { name: 'Interface detail' })
@@ -176,6 +192,7 @@ describe('ProjectDetail', () => {
             },
           },
           description: null,
+          detailBlocks: [],
           image: 41,
           links: [],
           role: null,
@@ -190,8 +207,43 @@ describe('ProjectDetail', () => {
     expect(screen.queryByRole('complementary', { name: 'Project metadata' })).toBeNull()
     expect(screen.queryByTestId('project-featured-image')).toBeNull()
     expect(screen.queryByText('Rendered case study content')).toBeNull()
+    expect(screen.queryByRole('heading', { name: 'Project principles' })).toBeNull()
     expect(screen.queryByText('Next Project')).toBeNull()
     expect(screen.getAllByRole('link', { name: /Back|All Projects/i })).toHaveLength(2)
+  })
+
+  it('places project detail blocks after the showcase and before the gallery', () => {
+    const project = makeProject()
+    const { container } = render(
+      <ProjectDetail
+        project={{
+          ...project,
+          gallery: [
+            {
+              description: project.content!,
+              id: 'calculator-screen',
+              image: makeMedia(3),
+              layout: 'full',
+              title: 'Calculator screen',
+            },
+          ],
+        }}
+      />,
+    )
+
+    const showcase = container.querySelector('[data-project-showcase="true"]')
+    const principles = container.querySelector('[data-project-principles="true"]')
+    const gallery = container.querySelector('section[aria-label="Project gallery"]')
+
+    expect(showcase).not.toBeNull()
+    expect(principles).not.toBeNull()
+    expect(gallery).not.toBeNull()
+    expect(showcase?.compareDocumentPosition(principles as Node)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    )
+    expect(principles?.compareDocumentPosition(gallery as Node)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    )
   })
 })
 

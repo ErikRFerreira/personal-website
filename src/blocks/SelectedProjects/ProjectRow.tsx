@@ -95,84 +95,36 @@ function ProjectCta({ project }: { project: Project }) {
   )
 }
 
-function WideProject({ project, index }: Props) {
+export function ProjectRow({ project, index }: Props) {
   const labels = getProjectLabels(project, index)
+  const imageOnRight = index % 2 === 0
 
   return (
     <article
-      className="group flex flex-col gap-10 lg:gap-12"
+      className="group grid grid-cols-12 items-center gap-8 lg:gap-10"
       data-project-card="true"
-      data-project-layout="wide"
+      data-project-layout={imageOnRight ? 'image-right' : 'image-left'}
     >
-      <div className="grid grid-cols-12 items-end gap-4 md:gap-6 lg:gap-8">
-        <div
-          className="relative col-span-12 border-l border-site-border-subtle lg:col-span-10"
-          data-project-frame="true"
-        >
-          <div
-            aria-hidden="true"
-            className="absolute -right-3 -bottom-3 z-20 h-12 w-12 border-r border-b border-site-border-active/70"
-            data-project-corner="bottom-right"
-          />
-          <ProjectImage project={project} sizes="(max-width: 1023px) 100vw, 75vw" />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-12 gap-4 md:gap-6 lg:gap-8">
-        <div
-          className="col-span-12 flex flex-col gap-6 lg:col-span-6 lg:col-start-2"
-          data-project-content="true"
-        >
-          <div className="flex items-center gap-4">
-            <span className="text-2xl leading-none font-semibold text-site-accent">
-              {labels.number}
-            </span>
-            <span aria-hidden="true" className="h-px w-12 bg-site-border-active/50" />
-            {labels.metadata && (
-              <span className="site-section-label text-site-accent">
-                {labels.metadata}
-              </span>
-            )}
-          </div>
-
-          <h3 className="text-[2.5rem] leading-[0.98] font-extrabold tracking-[-0.035em] text-site-text-primary md:text-[3rem]">
-            {project.title}
-          </h3>
-
-          {project.description && (
-            <p className="text-base leading-[1.7] text-site-text-secondary md:text-lg">
-              {project.description}
-            </p>
-          )}
-
-          <ProjectTechnologies tech={project.tech} />
-          <ProjectCta project={project} />
-        </div>
-      </div>
-    </article>
-  )
-}
-
-function OffsetProject({ project, index }: Props) {
-  const labels = getProjectLabels(project, index)
-
-  return (
-    <article
-      className="group grid grid-cols-12 items-start gap-8 lg:gap-10"
-      data-project-card="true"
-      data-project-layout="offset"
-    >
-      <div className="relative order-1 col-span-12 lg:col-span-8" data-project-frame="true">
+      <div
+        className={`relative order-1 col-span-12 lg:col-span-7 ${imageOnRight ? 'lg:order-2' : 'lg:order-1'}`}
+        data-project-frame="true"
+      >
         <div
           aria-hidden="true"
-          className="absolute -top-3 -left-3 z-20 h-12 w-12 border-t border-l border-site-border-active/70"
-          data-project-corner="top-left"
+          className={`absolute -top-3 z-20 h-12 w-12 border-t border-site-border-active/70 ${
+            imageOnRight
+              ? '-right-3 border-r'
+              : '-left-3 border-l'
+          }`}
+          data-project-corner={imageOnRight ? 'top-right' : 'top-left'}
         />
-        <ProjectImage project={project} sizes="(max-width: 1023px) 100vw, 66vw" />
+        <ProjectImage project={project} sizes="(max-width: 1023px) 100vw, 58vw" />
       </div>
 
       <div
-        className="order-2 col-span-12 flex flex-col gap-7 lg:col-span-4 lg:mt-24 lg:pl-12"
+        className={`order-2 col-span-12 flex flex-col gap-6 lg:col-span-5 ${
+          imageOnRight ? 'lg:order-1 lg:pr-8' : 'lg:order-2 lg:pl-8'
+        }`}
         data-project-content="true"
       >
         <div className="space-y-3">
@@ -195,8 +147,4 @@ function OffsetProject({ project, index }: Props) {
       </div>
     </article>
   )
-}
-
-export function ProjectRow(props: Props) {
-  return props.index === 0 ? <WideProject {...props} /> : <OffsetProject {...props} />
 }

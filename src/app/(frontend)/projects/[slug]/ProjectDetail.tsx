@@ -10,6 +10,7 @@ import { ProjectHeader } from './ProjectHeader'
 import { ProjectOverview } from './ProjectOverview'
 import { ProjectShowcase } from './ProjectShowcase'
 import { ProjectGallery } from './ProjectGallery'
+import { RenderProjectBlocks } from './RenderProjectBlocks'
 
 export type ProjectNavigationItem = Pick<Project, 'id' | 'slug' | 'title'>
 
@@ -145,6 +146,8 @@ export function ProjectDetail({ nextProject, project }: ProjectDetailProps) {
 
         <ProjectShowcase project={project} />
 
+        <RenderProjectBlocks blocks={project.detailBlocks} />
+
         <ProjectGallery project={project} />
 
         <nav
@@ -157,9 +160,7 @@ export function ProjectDetail({ nextProject, project }: ProjectDetailProps) {
               className="group min-w-0 max-w-full w-fit break-words focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
               href="/projects"
             >
-              <span className="site-meta-label font-bold text-site-text-muted">
-                &larr; Back
-              </span>
+              <span className="site-meta-label font-bold text-site-text-muted">&larr; Back</span>
               <span className="mt-2 block text-lg md:text-xl leading-tight font-bold tracking-[-0.025em] text-site-text-primary transition-colors duration-200 group-hover:text-site-accent">
                 All Projects
               </span>

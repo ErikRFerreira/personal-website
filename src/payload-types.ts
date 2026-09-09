@@ -971,6 +971,10 @@ export interface Project {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Optional reusable sections displayed after the showcase and before the gallery.
+   */
+  detailBlocks?: ProjectPrinciplesBlock[] | null;
   status: 'draft' | 'published';
   type?: ('web-app' | 'mobile-app' | 'open-source' | 'design' | 'other') | null;
   /**
@@ -979,6 +983,27 @@ export interface Project {
   year?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectPrinciplesBlock".
+ */
+export interface ProjectPrinciplesBlock {
+  eyebrow?: string | null;
+  title: string;
+  description?: string | null;
+  /**
+   * Three concise principles are recommended.
+   */
+  items: {
+    label?: string | null;
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'projectPrinciples';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2196,11 +2221,35 @@ export interface ProjectsSelect<T extends boolean = true> {
         id?: T;
       };
   content?: T;
+  detailBlocks?:
+    | T
+    | {
+        projectPrinciples?: T | ProjectPrinciplesBlockSelect<T>;
+      };
   status?: T;
   type?: T;
   year?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectPrinciplesBlock_select".
+ */
+export interface ProjectPrinciplesBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  items?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

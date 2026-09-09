@@ -76,7 +76,7 @@ function makeProject(overrides: Partial<Project> = {}): Project {
 }
 
 describe('SelectedProjectsBlock', () => {
-  it('renders the compact heading and real project content in the wide composition', () => {
+  it('renders the compact heading and real project content in the alternating composition', () => {
     const { container } = render(
       <SelectedProjectsBlock
         eyebrow="01"
@@ -89,7 +89,7 @@ describe('SelectedProjectsBlock', () => {
     expect(screen.getByRole('heading', { name: '01 // Selected Work' })).not.toBeNull()
     expect(screen.queryByText('This intro is intentionally hidden.')).toBeNull()
     expect(screen.getByRole('heading', { name: 'Project One' })).not.toBeNull()
-    expect(screen.getByText('WEB_APP // 2026')).not.toBeNull()
+    expect(screen.getByText('01 // WEB_APP // 2026')).not.toBeNull()
     expect(screen.getByText('A focused description of the project.')).not.toBeNull()
     expect(screen.getByText('Next.js')).not.toBeNull()
     expect(screen.getByText('TypeScript')).not.toBeNull()
@@ -122,7 +122,7 @@ describe('SelectedProjectsBlock', () => {
     expect(imageOverlay?.className).toContain('group-hover:opacity-0')
   })
 
-  it('uses the wide layout first and the offset layout thereafter without reordering projects', () => {
+  it('alternates image placement without reordering projects or mobile markup', () => {
     const { container } = render(
       <SelectedProjectsBlock
         projects={[
@@ -138,24 +138,29 @@ describe('SelectedProjectsBlock', () => {
     const secondFrame = cards[1]?.querySelector('[data-project-frame="true"]')
     const secondContent = cards[1]?.querySelector('[data-project-content="true"]')
 
-    expect(cards[0]?.getAttribute('data-project-layout')).toBe('wide')
-    expect(cards[1]?.getAttribute('data-project-layout')).toBe('offset')
+    expect(cards[0]?.getAttribute('data-project-layout')).toBe('image-right')
+    expect(cards[1]?.getAttribute('data-project-layout')).toBe('image-left')
     expect(cards[0]?.querySelector('h3')?.textContent).toBe('Project One')
     expect(cards[1]?.querySelector('h3')?.textContent).toBe('Project Two')
-    expect(cards[0]?.querySelector('[data-project-corner="bottom-right"]')).not.toBeNull()
+    expect(cards[0]?.querySelector('[data-project-corner="top-right"]')).not.toBeNull()
     expect(cards[1]?.querySelector('[data-project-corner="top-left"]')).not.toBeNull()
     expect(container.querySelector('[data-project-reference]')).toBeNull()
     expect(container.querySelector('[data-project-marker]')).toBeNull()
     expect(firstFrame?.compareDocumentPosition(firstContent as Node)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     )
+    expect(secondFrame?.compareDocumentPosition(secondContent as Node)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    )
+    expect(firstFrame?.className).toContain('lg:order-2')
+    expect(firstContent?.className).toContain('lg:order-1')
     expect(secondFrame?.className).toContain('order-1')
     expect(secondContent?.className).toContain('order-2')
     expect(screen.getByRole('img', { name: 'Project Two preview unavailable' })).not.toBeNull()
     expect(container.querySelector('[data-project-image-placeholder="true"]')).not.toBeNull()
   })
 
-  it('keeps every project after the first in the offset composition', () => {
+  it('continues alternating for every project after the first two', () => {
     const { container } = render(
       <SelectedProjectsBlock
         projects={[
@@ -169,9 +174,9 @@ describe('SelectedProjectsBlock', () => {
     const cards = container.querySelectorAll('[data-project-card="true"]')
 
     expect(Array.from(cards, (card) => card.getAttribute('data-project-layout'))).toEqual([
-      'wide',
-      'offset',
-      'offset',
+      'image-right',
+      'image-left',
+      'image-right',
     ])
   })
 

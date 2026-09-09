@@ -121,6 +121,35 @@ it('lays out mixed screenshots without cropping or overflow and respects reduced
   project.showcaseImage = project.gallery![4].image
   project.showcaseTitle = 'Product interface'
   project.showcaseSubtitle = 'Designed for clarity'
+  project.detailBlocks = [
+    {
+      blockType: 'projectPrinciples',
+      eyebrow: 'Engineering approach',
+      title: 'Built for clarity and reliability across real diving workflows',
+      description:
+        'A deliberately restrained interface supported by modular, testable calculation logic.',
+      items: [
+        {
+          label: '01',
+          title: 'Offline by Design',
+          description:
+            'Core calculations, preferences and history remain available without an account or network connection.',
+        },
+        {
+          label: '02',
+          title: 'Reliable Calculation Layer',
+          description:
+            'MOD, EAD, END and validation remain separate from the interface so critical logic stays predictable.',
+        },
+        {
+          label: '03',
+          title: 'Cross-Platform by Default',
+          description:
+            'React Native and Expo provide a shared TypeScript codebase across mobile platforms.',
+        },
+      ],
+    },
+  ]
   const paragraph = project.gallery![0].description.root.children[0]
   project.content = {
     root: {
@@ -134,6 +163,7 @@ it('lays out mixed screenshots without cropping or overflow and respects reduced
     },
   }
   const buttonCss = await readFile('src/components/SpecularButton/SpecularButton.css', 'utf8')
+  const spotlightCss = await readFile('src/components/SpotlightCard/SpotlightCard.css', 'utf8')
   const pageCss = (
     await readFile('src/app/(frontend)/projects/[slug]/ProjectDetail.module.css', 'utf8')
   )
@@ -160,7 +190,7 @@ it('lays out mixed screenshots without cropping or overflow and respects reduced
     for (const width of [390, 768, 1024, 1440]) {
       await page.setViewportSize({ width, height: 900 })
       await page.setContent(
-        `<html data-theme="dark"><head><style>${css.css}\n${fade}\n${buttonCss}\n${pageCss}\nbody { background: var(--site-surface-deep); --font-geist-sans: Arial; --font-geist-mono: monospace; }</style></head><body>${markup}</body></html>`,
+        `<html data-theme="dark"><head><style>${css.css}\n${fade}\n${buttonCss}\n${spotlightCss}\n${pageCss}\nbody { background: var(--site-surface-deep); --font-geist-sans: Arial; --font-geist-mono: monospace; }</style></head><body>${markup}</body></html>`,
       )
       await page
         .locator('img')
@@ -220,8 +250,30 @@ it('lays out mixed screenshots without cropping or overflow and respects reduced
           inset: getComputedStyle(node).paddingLeft,
         })),
       ).toEqual({ border: '1px', background: 'rgba(0, 0, 0, 0)', inset: '20px' })
+      const principleCards = await page
+        .locator('[data-project-principles] .card-spotlight')
+        .evaluateAll((nodes) =>
+          nodes.map((node) => {
+            const { x, y, width, height } = node.getBoundingClientRect()
+            return { x, y, width, height }
+          }),
+        )
+      expect(principleCards).toHaveLength(3)
+      if (width >= 1024) {
+        expect(principleCards[0].y).toBe(principleCards[1].y)
+        expect(principleCards[1].y).toBe(principleCards[2].y)
+        expect(principleCards[0].height).toBeCloseTo(principleCards[2].height, 0)
+        expect(principleCards[2].x).toBeGreaterThan(principleCards[1].x)
+      } else if (width >= 768) {
+        expect(principleCards[0].y).toBe(principleCards[1].y)
+        expect(principleCards[2].y).toBeGreaterThan(principleCards[0].y + principleCards[0].height)
+      } else {
+        for (let index = 1; index < principleCards.length; index++) {
+          expect(principleCards[index].y).toBeGreaterThan(principleCards[index - 1].y)
+        }
+      }
       const expectedGap = width < 768 ? 72 : width < 1024 ? 96 : 120
-      const sections = await page.locator('article > *').evaluateAll((nodes) =>
+      const sections = await page.locator('main > article > *').evaluateAll((nodes) =>
         nodes.map((node) => {
           const rect = node.getBoundingClientRect()
           return { top: rect.top, bottom: rect.bottom }
@@ -275,6 +327,7 @@ it('lays out mixed screenshots without cropping or overflow and respects reduced
       title: 'A long project title to check narrow screen wrapping',
       image: null,
       showcaseImage: null,
+      detailBlocks: [],
       content: null,
       gallery: [],
     }
@@ -282,10 +335,10 @@ it('lays out mixed screenshots without cropping or overflow and respects reduced
     await page.setContent(
       `<html data-theme="dark"><head><style>${css.css}\n${fade}\n${buttonCss}\n${pageCss}</style></head><body>${renderToStaticMarkup(<ProjectDetail project={minimalProject} />)}</body></html>`,
     )
-    expect(await page.locator('article > *').count()).toBe(2)
+    expect(await page.locator('main > article > *').count()).toBe(2)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     const remaining = await page
-      .locator('article > *')
+      .locator('main > article > *')
       .evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().toJSON()))
     expect(remaining[1].top - remaining[0].bottom).toBeCloseTo(72, 0)
     await page.emulateMedia({ reducedMotion: 'reduce' })

@@ -17,6 +17,7 @@ import * as migration_20260906_013829_add_project_showcase_fields from './202609
 import * as migration_20260906_021047_simplify_project_showcase_fields from './20260906_021047_simplify_project_showcase_fields'
 import * as migration_20260906_030845_add_project_gallery from './20260906_030845_add_project_gallery'
 import * as migration_20260906_053737_add_lens_digital_download from './20260906_053737_add_lens_digital_download'
+import * as migration_20260908_121602_add_project_principles from './20260908_121602_add_project_principles'
 
 export const migrations = [
   {
@@ -113,5 +114,10 @@ export const migrations = [
     up: migration_20260906_053737_add_lens_digital_download.up,
     down: migration_20260906_053737_add_lens_digital_download.down,
     name: '20260906_053737_add_lens_digital_download',
+  },
+  {
+    up: migration_20260908_121602_add_project_principles.up,
+    down: migration_20260908_121602_add_project_principles.down,
+    name: '20260908_121602_add_project_principles',
   },
 ]
