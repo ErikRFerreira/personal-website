@@ -33,12 +33,13 @@ export function DisciplinesParallax({ children }: DisciplinesParallaxProps) {
 
   return (
     <div
-      className="grid grid-cols-1 items-end gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+      className="grid auto-rows-fr grid-cols-1 items-end gap-6 md:auto-rows-auto md:grid-cols-2 lg:grid-cols-3 lg:gap-8"
       ref={gridRef}
     >
       {Children.toArray(children).map((child, index) => (
         <motion.div
           className={cn(
+            'h-full [&>div]:h-full md:h-auto md:[&>div]:h-auto',
             index === 2 &&
               'md:col-span-2 md:justify-self-center md:w-[calc(50%-0.75rem)] lg:col-span-1 lg:w-full lg:justify-self-stretch',
           )}

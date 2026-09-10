@@ -88,7 +88,7 @@ export default async function LensPage({ params: paramsPromise }: Args) {
               <header>
                 <LensCategoryChips categories={categories} />
 
-                <h1 className="mt-5 text-4xl leading-[1.02] font-extrabold tracking-[-0.04em] text-site-text-primary xl:text-5xl">
+                <h1 className="mt-5 text-[2rem] leading-[1.02] font-extrabold tracking-[-0.04em] text-site-text-primary md:text-4xl xl:text-5xl">
                   {lens.title}
                 </h1>
 

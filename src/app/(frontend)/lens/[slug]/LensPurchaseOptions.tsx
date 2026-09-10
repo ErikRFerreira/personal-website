@@ -24,7 +24,7 @@ export function LensPurchaseOptions({ digitalDownload, printOptions }: Props) {
           <p className="site-meta-label text-site-accent">
             Available formats
           </p>
-          <h2 className="mt-1 text-2xl leading-tight font-bold tracking-[-0.02em] text-site-text-primary md:text-3xl">
+          <h2 className="mt-1 text-[1.3125rem] leading-tight font-bold tracking-[-0.02em] text-site-text-primary md:text-3xl">
             Purchase options
           </h2>
         </div>

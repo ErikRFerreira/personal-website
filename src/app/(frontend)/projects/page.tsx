@@ -31,7 +31,7 @@ export default async function Page() {
   const projectCount = projects.docs.length
 
   return (
-    <main className="site-section pt-28 md:pt-36 relative">
+    <main className="site-section relative pt-36! md:pt-36!">
       <div className="absolute inset-0 z-1 overflow-hidden h-full">
         <LazyShapeGrid
           speed={0.3}

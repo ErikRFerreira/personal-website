@@ -41,7 +41,7 @@ export const ContactCard: React.FC<QuickAccessCard> = ({
           </div>
         </div>
         <div>
-          {name && <p className="text-base font-semibold text-site-text-primary">{name}</p>}
+          {name && <p className="text-sm font-semibold text-site-text-primary md:text-base">{name}</p>}
           {jobTitle && <p className="text-sm leading-[1.7] text-site-text-secondary">{jobTitle}</p>}
         </div>
       </div>

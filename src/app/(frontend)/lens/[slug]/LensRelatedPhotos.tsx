@@ -19,7 +19,7 @@ export const LensRelatedPhotos: React.FC<Props> = ({ collection, photos }) => {
             <span className="site-meta-label text-site-accent">
               Related Lens photographs
             </span>
-            <h2 className="text-2xl leading-tight font-bold text-site-text-primary">
+            <h2 className="text-[1.3125rem] leading-tight font-bold text-site-text-primary md:text-2xl">
               {collection.name}
             </h2>
           </div>

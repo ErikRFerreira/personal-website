@@ -161,7 +161,7 @@ export function ProjectDetail({ nextProject, project }: ProjectDetailProps) {
               href="/projects"
             >
               <span className="site-meta-label font-bold text-site-text-muted">&larr; Back</span>
-              <span className="mt-2 block text-lg md:text-xl leading-tight font-bold tracking-[-0.025em] text-site-text-primary transition-colors duration-200 group-hover:text-site-accent">
+              <span className="mt-2 block text-base leading-tight font-bold tracking-[-0.025em] text-site-text-primary transition-colors duration-200 group-hover:text-site-accent md:text-xl">
                 All Projects
               </span>
             </Link>
@@ -174,7 +174,7 @@ export function ProjectDetail({ nextProject, project }: ProjectDetailProps) {
                 <span className="site-meta-label font-bold text-site-accent">
                   Next Project &rarr;
                 </span>
-                <span className="mt-2 block text-xl leading-tight font-bold tracking-[-0.025em] text-site-text-primary transition-colors duration-200 group-hover:text-site-accent md:text-2xl">
+                <span className="mt-2 block text-lg leading-tight font-bold tracking-[-0.025em] text-site-text-primary transition-colors duration-200 group-hover:text-site-accent md:text-2xl">
                   {nextProject.title}
                 </span>
               </Link>

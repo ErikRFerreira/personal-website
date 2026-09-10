@@ -7,14 +7,37 @@ import { CtaButton } from '@/components/CtaButton'
 import { CMSLink, getCMSLinkHref } from '@/components/Link'
 import { cn } from '@/utilities/ui'
 
-export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
+interface HeaderNavProps {
+  className?: string
+  ctaClassName?: string
+  data: HeaderType
+  linkClassName?: string
+  onNavigate?: () => void
+  renderCtasAsLinks?: boolean
+}
+
+export const HeaderNav: React.FC<HeaderNavProps> = ({
+  className,
+  ctaClassName,
+  data,
+  linkClassName,
+  onNavigate,
+  renderCtasAsLinks = false,
+}) => {
   const navItems = data?.navItems || []
   const pathname = usePathname()
 
   return (
-    <nav className="flex items-center gap-3 sm:gap-6 lg:gap-10">
+    <nav
+      className={cn('flex items-center gap-3 sm:gap-6 lg:gap-10', className)}
+      onClick={(event) => {
+        if ((event.target as Element).closest('a')) onNavigate?.()
+      }}
+    >
       {navItems.map(({ link, isCta }, i) => {
-        if (isCta) return <CtaButton key={i} {...link} size="sm" />
+        if (isCta && !renderCtasAsLinks) {
+          return <CtaButton key={i} {...link} className={ctaClassName} size="sm" />
+        }
 
         const href = getCMSLinkHref(link)
         const isActive =
@@ -28,6 +51,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
             className={cn(
               'transition-colors duration-200 hover:text-site-accent',
               isActive ? 'text-site-accent' : 'text-site-text-primary',
+              linkClassName,
             )}
           />
         )

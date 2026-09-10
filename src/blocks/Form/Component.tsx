@@ -205,7 +205,7 @@ export const FormBlock: React.FC<
               )}
               {heading && (
                 <RevealOnScroll delay={80} revealName="contact-heading">
-                  <h1 className="mb-4 text-4xl leading-tight font-bold text-site-text-primary md:text-5xl lg:text-6xl">
+                  <h1 className="mb-4 text-[2rem] leading-tight font-bold text-site-text-primary md:text-5xl lg:text-6xl">
                     {heading}
                   </h1>
                 </RevealOnScroll>

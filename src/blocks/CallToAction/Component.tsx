@@ -28,7 +28,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({ links, richText }) 
           {richText && (
             <RevealOnScroll revealName="cta-copy">
               <RichText
-                className="text-balance text-[clamp(2.25rem,5vw,4.75rem)] leading-[0.98] font-bold tracking-[-0.045em] text-site-text-primary [&_h1]:m-0 [&_h1]:text-[inherit] [&_h1]:leading-[inherit] [&_h1]:font-[inherit] [&_h2]:m-0 [&_h2]:text-[inherit] [&_h2]:leading-[inherit] [&_h2]:font-[inherit] [&_h3]:m-0 [&_h3]:text-[inherit] [&_h3]:leading-[inherit] [&_h3]:font-[inherit] [&_h4]:m-0 [&_h4]:text-[inherit] [&_h4]:leading-[inherit] [&_h4]:font-[inherit] [&_p]:m-0"
+                className="text-balance text-[clamp(2rem,4.375vw,4.15625rem)] leading-[0.98] font-bold tracking-[-0.045em] text-site-text-primary md:text-[clamp(2.25rem,5vw,4.75rem)] [&_h1]:m-0 [&_h1]:text-[inherit] [&_h1]:leading-[inherit] [&_h1]:font-[inherit] [&_h2]:m-0 [&_h2]:text-[inherit] [&_h2]:leading-[inherit] [&_h2]:font-[inherit] [&_h3]:m-0 [&_h3]:text-[inherit] [&_h3]:leading-[inherit] [&_h3]:font-[inherit] [&_h4]:m-0 [&_h4]:text-[inherit] [&_h4]:leading-[inherit] [&_h4]:font-[inherit] [&_p]:m-0"
                 data={richText}
                 enableGutter={false}
                 enableProse={false}

@@ -90,10 +90,10 @@ export function CapabilitiesBlock({
                       )}
                     </div>
 
-                    <h3 className="text-2xl leading-tight font-semibold tracking-[-0.025em] text-site-text-primary md:text-3xl">
+                    <h3 className="text-[1.3125rem] leading-tight font-semibold tracking-[-0.025em] text-site-text-primary md:text-3xl">
                       {title}
                     </h3>
-                    <p className="mt-5 text-base leading-[1.75] text-site-text-secondary">
+                    <p className="mt-5 text-sm leading-[1.75] text-site-text-secondary md:text-base">
                       {description}
                     </p>
 

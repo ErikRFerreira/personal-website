@@ -109,7 +109,7 @@ export function ProjectArchiveItem({ index, project, total }: ProjectArchiveItem
 
           <div className="grid gap-6 lg:grid-cols-[minmax(0,2.2fr)_minmax(14rem,0.8fr)] lg:gap-12 xl:gap-16">
             <div className="max-w-3xl">
-              <h2 className="text-[1.75rem] leading-[1.08] font-extrabold tracking-[-0.035em] text-site-text-primary transition-colors duration-200 group-hover:text-site-accent md:text-[2.25rem]">
+              <h2 className="text-2xl leading-[1.08] font-extrabold tracking-[-0.035em] text-site-text-primary transition-colors duration-200 group-hover:text-site-accent md:text-[2.25rem]">
                 {project.title}
               </h2>
               {project.description && (

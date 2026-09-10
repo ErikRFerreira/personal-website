@@ -13,8 +13,8 @@ type DisciplinesProps = DisciplinesBlockProps & {
 
 const cardMinHeights = [
   'min-h-[26rem] md:min-h-[28rem]',
-  'min-h-64 md:min-h-72',
-  'min-h-56 md:min-h-64',
+  'min-h-[26rem] md:min-h-72',
+  'min-h-[26rem] md:min-h-64',
 ]
 
 export function DisciplinesBlock({ eyebrow, items, label }: DisciplinesProps) {
@@ -34,10 +34,7 @@ export function DisciplinesBlock({ eyebrow, items, label }: DisciplinesProps) {
         <RevealOnScroll revealName="disciplines-heading">
           <div className="mb-16 flex items-center gap-4 md:mb-24">
             <AccentHexagon />
-            <h2
-              className="site-section-label shrink-0 text-site-accent"
-              id="disciplines-heading"
-            >
+            <h2 className="site-section-label shrink-0 text-site-accent" id="disciplines-heading">
               {heading}
             </h2>
             <div aria-hidden="true" className="h-px flex-1 bg-site-border-subtle" />
@@ -50,13 +47,17 @@ export function DisciplinesBlock({ eyebrow, items, label }: DisciplinesProps) {
 
             return (
               <RevealOnScroll
+                className="h-full [&>div]:h-full md:h-auto md:[&>div]:h-auto"
                 delay={getRevealDelay(index, 100, 200)}
                 key={title}
                 revealName="discipline-card"
               >
                 <SpotlightCard className="discipline-card group">
                   <article
-                    className={cn('relative z-10 flex flex-col', cardMinHeights[index])}
+                    className={cn(
+                      'relative z-10 flex h-full flex-col md:h-auto',
+                      cardMinHeights[index],
+                    )}
                     data-discipline-index={index + 1}
                   >
                     <div className="mb-14 flex items-start justify-between md:mb-16">
@@ -80,10 +81,10 @@ export function DisciplinesBlock({ eyebrow, items, label }: DisciplinesProps) {
                       )}
                     </div>
 
-                    <h3 className="text-2xl leading-tight font-semibold tracking-[-0.025em] text-site-text-primary md:text-3xl">
+                    <h3 className="text-[1.3125rem] leading-tight font-semibold tracking-[-0.025em] text-site-text-primary md:text-3xl">
                       {title}
                     </h3>
-                    <p className="mt-5 text-base leading-[1.75] text-site-text-secondary">
+                    <p className="mt-5 text-sm leading-[1.75] text-site-text-secondary md:text-base">
                       {description}
                     </p>
 

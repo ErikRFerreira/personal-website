@@ -13,15 +13,15 @@ export async function Footer() {
 
   return (
     <footer className="mt-auto bg-site-surface-footer text-site-text-primary" data-theme="dark">
-      <div className="container py-12 md:py-16 flex flex-col md:flex-row md:items-end md:justify-between gap-8 md:gap-6">
+      <div className="container flex flex-col items-center gap-8 py-20 text-center md:flex-row md:items-end md:justify-between md:gap-6 md:py-16 md:text-left">
         {/* Left: brand */}
         <Link href="/" className="flex items-center">
           <Logo className="text-site-text-primary" />
         </Link>
 
         {/* Right: nav links + copyright grouped */}
-        <div className="flex flex-col gap-4 md:items-end">
-          <nav className="flex flex-row flex-wrap gap-x-6 gap-y-2">
+        <div className="flex flex-col items-center gap-4 md:items-end">
+          <nav className="flex flex-row flex-wrap justify-center gap-x-6 gap-y-2 md:justify-end">
             {navItems.map(({ link }, i) => {
               return (
                 <CMSLink
