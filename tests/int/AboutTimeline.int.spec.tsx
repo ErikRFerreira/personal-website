@@ -75,6 +75,7 @@ const milestones: AboutTimelineBlockType['milestones'] = [
 describe('AboutTimelineBlock', () => {
   beforeEach(() => {
     vi.spyOn(HTMLElement.prototype, 'scrollHeight', 'get').mockReturnValue(880)
+    vi.stubGlobal('innerWidth', 390)
     vi.stubGlobal(
       'matchMedia',
       vi.fn().mockImplementation((query: string) => ({
@@ -125,11 +126,15 @@ describe('AboutTimelineBlock', () => {
     expect(screen.getByTestId('about-timeline-media').getAttribute('data-img-class')).toContain(
       'motion-reduce:transition-none',
     )
-    expect(scrollRegion.getAttribute('tabindex')).toBe('0')
-    expect(scrollRegion.hasAttribute('data-lenis-prevent')).toBe(true)
+    expect(scrollRegion.getAttribute('tabindex')).toBeNull()
+    expect(scrollRegion.hasAttribute('data-lenis-prevent')).toBe(false)
     expect(scrollRegion.classList.contains('about-timeline-scroll-region')).toBe(true)
+    expect(scrollRegion.className).toContain('max-h-none')
+    expect(scrollRegion.className).toContain('overflow-visible')
+    expect(scrollRegion.className).toContain('md:max-h-[28rem]')
+    expect(scrollRegion.className).toContain('md:overflow-y-auto')
     expect(scrollRegion.querySelector('[data-scroll-reveal="true"]')).toBeNull()
-    await waitFor(() => expect((scrollRegion as HTMLElement).scrollTop).toBe(880))
+    expect((scrollRegion as HTMLElement).scrollTop).toBe(0)
   })
 
   it('updates the active image and description when a milestone is selected', async () => {
@@ -153,6 +158,18 @@ describe('AboutTimelineBlock', () => {
 
     expect(middleButton.getAttribute('aria-pressed')).toBe('true')
     expect(middleButton.textContent).toBe('2022Instructor Certification')
+  })
+
+  it('restores the independently scrollable timeline at the md breakpoint', async () => {
+    vi.stubGlobal('innerWidth', 1024)
+
+    render(<AboutTimelineBlock blockType="aboutTimeline" milestones={milestones} />)
+
+    const scrollRegion = screen.getByRole('region', { name: 'Timeline milestones' })
+
+    await waitFor(() => expect(scrollRegion.getAttribute('data-lenis-prevent')).toBe('true'))
+    expect(scrollRegion.getAttribute('tabindex')).toBe('0')
+    await waitFor(() => expect((scrollRegion as HTMLElement).scrollTop).toBe(880))
   })
 
   it('falls back safely when a media relationship is not populated', () => {

@@ -51,12 +51,16 @@ describe('AboutHero', () => {
     expect(screen.getByTestId('about-hero').getAttribute('data-has-image')).toBe('true')
     expect(screen.getByTestId('about-hero-image-frame')).not.toBeNull()
     expect(screen.getByTestId('about-hero-offset-frame')).not.toBeNull()
-    expect(container.querySelector('.site-container')?.className).toContain(
-      'pt-[calc(var(--header-height)+6rem)]',
-    )
-    expect(container.querySelector('.site-container')?.className).toContain(
+    const heroContainer = container.querySelector('.site-container')
+    const heroHeading = screen.getByRole('heading', { name: 'ABOUT ME' })
+
+    expect(heroContainer?.className).toContain('py-20')
+    expect(heroContainer?.className).toContain(
       'md:pt-[calc(var(--header-height)+5rem)]',
     )
+    expect(heroHeading.className).toContain('text-[clamp(3.5rem,15vw,6.125rem)]')
+    expect(heroHeading.className).toContain('sm:text-[clamp(4.375rem,12.25vw,7rem)]')
+    expect(heroHeading.className).toContain('md:text-[clamp(7rem,13vw,11.5rem)]')
     const textLayer = container.querySelector('[data-about-hero-text]')
     const imageLayer = container.querySelector('[data-about-hero-image-layer]')
     const headingWords = [...container.querySelectorAll('[data-about-heading-word]')]

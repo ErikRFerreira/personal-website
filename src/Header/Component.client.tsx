@@ -183,7 +183,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
         role="dialog"
       >
         <HeaderNav
-          className="w-full flex-col items-center gap-4 sm:gap-4"
+          className="w-full flex-col items-center gap-8"
           data={data}
           linkClassName="justify-center text-xl font-normal"
           onNavigate={closeMenuAfterNavigation}

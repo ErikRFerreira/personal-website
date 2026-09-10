@@ -142,7 +142,7 @@ describe('mobile layout adjustments', () => {
 
     expect(projectsPage).toContain('pt-36! md:pt-36!')
     expect(lensPage).toContain('pt-36! md:pt-36!')
-    expect(aboutHero).toContain('pt-[calc(var(--header-height)+6rem)]')
+    expect(aboutHero).toContain('site-container relative z-10 py-20')
     expect(aboutHero).toContain('md:pt-[calc(var(--header-height)+5rem)]')
     expect(formCSS).toContain('width: 100%')
     expect(formCSS).toContain('max-width: var(--form-field-width, 100%)')
