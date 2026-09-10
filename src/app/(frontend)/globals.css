@@ -522,6 +522,11 @@ html[data-theme='light'] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .mobile-header-menu,
+  .mobile-header-toggle-line {
+    transition: none;
+  }
+
   .lens-ambient-layer {
     opacity: 0.3;
     animation: none;
