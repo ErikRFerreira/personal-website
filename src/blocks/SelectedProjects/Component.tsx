@@ -1,5 +1,6 @@
 import type { Project } from '@/payload-types'
 import { AccentHexagon } from '@/components/AccentHexagon'
+import Link from 'next/link'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import LazyShapeGrid from '@/components/ShapeGrid/Lazy'
 import { getRevealDelay } from '@/utilities/getRevealDelay'
@@ -46,27 +47,36 @@ export function SelectedProjectsBlock({ eyebrow, label, intro, projects }: Selec
 
       <div className="site-container relative z-10">
         <RevealOnScroll revealName="section-heading">
-          <header className="mb-16 max-w-[42rem] md:mb-24">
-            {resolvedEyebrow && (
-              <div className="mb-5 flex items-center gap-4">
+          <header className="mb-16 md:mb-24">
+            <div className="mb-5 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center gap-4">
                 <AccentHexagon />
-                <p className="site-section-label text-site-accent">{resolvedEyebrow}</p>
+                {resolvedEyebrow && (
+                  <p className="site-section-label text-site-accent">{resolvedEyebrow}</p>
+                )}
               </div>
-            )}
 
-            {!resolvedEyebrow && resolvedLabel && <AccentHexagon className="mb-5" />}
+              <Link
+                className="text-sm font-bold tracking-[0.04em] text-site-text-secondary transition-colors duration-200 hover:text-site-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active motion-reduce:transition-none"
+                href="/projects"
+              >
+                View all
+              </Link>
+            </div>
 
-            {resolvedLabel && (
-              <h2 className="text-[2.625rem] leading-[0.95] font-extrabold tracking-normal text-site-text-primary md:text-[4.5rem]">
-                {resolvedLabel}
-              </h2>
-            )}
+            <div className="max-w-[42rem]">
+              {resolvedLabel && (
+                <h2 className="text-[2.625rem] leading-[0.95] font-extrabold tracking-normal text-site-text-primary md:text-[4.5rem]">
+                  {resolvedLabel}
+                </h2>
+              )}
 
-            {intro && (
-              <p className="mt-8 border-l-2 border-site-accent pl-6 text-sm leading-[1.75] text-site-text-secondary md:text-lg">
-                {intro}
-              </p>
-            )}
+              {intro && (
+                <p className="mt-8 border-l-2 border-site-accent pl-6 text-sm leading-[1.75] text-site-text-secondary md:text-lg">
+                  {intro}
+                </p>
+              )}
+            </div>
           </header>
         </RevealOnScroll>
 

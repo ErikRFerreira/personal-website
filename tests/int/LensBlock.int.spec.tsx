@@ -66,5 +66,6 @@ describe('LensBlockComponent', () => {
     expect(screen.getByRole('link', { name: /Whale Shark/i }).getAttribute('href')).toBe(
       '/lens/whale-shark',
     )
+    expect(screen.getByRole('link', { name: 'View all' }).getAttribute('href')).toBe('/lens')
   })
 })

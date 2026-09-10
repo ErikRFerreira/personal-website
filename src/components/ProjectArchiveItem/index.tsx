@@ -87,10 +87,13 @@ function ProjectTechnologies({ tech }: { tech: ArchiveProject['tech'] }) {
   if (!technologies?.length) return null
 
   return (
-    <div className="mb-4 flex flex-wrap gap-x-6 gap-y-2" data-project-technologies="true">
+    <div
+      className="mb-4 flex min-w-0 max-w-full flex-wrap gap-x-6 gap-y-2"
+      data-project-technologies="true"
+    >
       {technologies.map((item, techIndex) => (
         <span
-          className="site-meta-label text-site-text-muted"
+          className="site-meta-label max-w-full break-words text-site-text-muted"
           key={item.id ?? `${item.techName}-${techIndex}`}
         >
           {item.techName}
@@ -132,14 +135,14 @@ export function ProjectArchiveItem({ index, project, total }: ProjectArchiveItem
   return (
     <article
       ref={articleRef}
-      className={`group grid grid-cols-12 items-center gap-8 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none lg:gap-10 ${
+      className={`group grid min-w-0 max-w-full grid-cols-1 items-center gap-8 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none lg:grid-cols-12 lg:gap-10 ${
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
       }`}
       data-project-card="true"
       data-project-layout={imageOnRight ? 'image-right' : 'image-left'}
     >
       <div
-        className={`relative order-1 col-span-12 lg:col-span-7 ${
+        className={`relative order-1 col-span-1 min-w-0 max-w-full lg:col-span-7 ${
           imageOnRight ? 'lg:order-2' : 'lg:order-1'
         }`}
         data-project-frame="true"
@@ -147,7 +150,7 @@ export function ProjectArchiveItem({ index, project, total }: ProjectArchiveItem
         <div
           aria-hidden="true"
           className={`absolute -top-3 z-20 h-12 w-12 border-t border-site-border-active/70 ${
-            imageOnRight ? '-right-3 border-r' : '-left-3 border-l'
+            imageOnRight ? 'right-0 border-r lg:-right-3' : 'left-0 border-l lg:-left-3'
           }`}
           data-project-corner={imageOnRight ? 'top-right' : 'top-left'}
         />
@@ -155,29 +158,32 @@ export function ProjectArchiveItem({ index, project, total }: ProjectArchiveItem
       </div>
 
       <div
-        className={`order-2 col-span-12 flex flex-col gap-6 lg:col-span-5 ${
+        className={`order-2 col-span-1 flex min-w-0 max-w-full flex-col gap-6 lg:col-span-5 ${
           imageOnRight ? 'lg:order-1 lg:pr-8' : 'lg:order-2 lg:pl-8'
         }`}
         data-project-content="true"
       >
-        <div className="space-y-3">
-          <p className="site-section-label text-site-accent opacity-70" data-project-index="true">
+        <div className="min-w-0 max-w-full space-y-3">
+          <p
+            className="site-section-label max-w-full break-words text-site-accent opacity-70"
+            data-project-index="true"
+          >
             {metadata}
           </p>
-          <h2 className="text-[2.1875rem] leading-[0.98] font-extrabold tracking-[-0.035em] text-site-text-primary md:text-[3rem]">
+          <h2 className="max-w-full break-words text-[2.1875rem] leading-[0.98] font-extrabold tracking-[-0.035em] text-site-text-primary md:text-[3rem]">
             {project.title}
           </h2>
         </div>
 
         {project.description && (
-          <p className="max-w-md text-sm leading-[1.7] text-site-text-secondary md:text-lg">
+          <p className="max-w-md break-words text-sm leading-[1.7] text-site-text-secondary md:text-lg">
             {project.description}
           </p>
         )}
 
         <ProjectTechnologies tech={project.tech} />
         <CtaButton
-          className="w-max font-mono uppercase"
+          className="w-full font-mono uppercase md:w-max"
           label="Read Case Study"
           size="sm"
           type="custom"
