@@ -1,7 +1,7 @@
 'use client'
 
 import LineSidebar from '@/components/LineSidebar'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { type Milestone } from './types'
 import './Timeline.css'
@@ -22,15 +22,25 @@ export function Timeline({
   panelId,
 }: TimelineProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [isScrollable, setIsScrollable] = useState(false)
   const itemLabels = useMemo(
     () => milestones.map((milestone) => milestone.title?.trim() || milestone.description),
     [milestones],
   )
 
   useEffect(() => {
+    const updateScrollableState = () => setIsScrollable(window.innerWidth >= 768)
+
+    updateScrollableState()
+    window.addEventListener('resize', updateScrollableState)
+
+    return () => window.removeEventListener('resize', updateScrollableState)
+  }, [])
+
+  useEffect(() => {
     const scrollContainer = scrollContainerRef.current
 
-    if (!scrollContainer) return
+    if (!scrollContainer || !isScrollable) return
     let disposed = false
 
     const positionInitialItem = () => {
@@ -53,17 +63,17 @@ export function Timeline({
       cancelAnimationFrame(animationFrame)
       window.clearTimeout(settleTimer)
     }
-  }, [milestones.length])
+  }, [isScrollable, milestones.length])
 
   return (
     <div
       aria-label="Timeline milestones"
-      className="about-timeline-scroll-region max-h-[28rem] touch-pan-y overflow-y-auto overscroll-contain px-3 lg:max-h-[32rem]"
-      data-lenis-prevent
+      className="about-timeline-scroll-region max-h-none touch-auto overflow-visible overscroll-auto px-3 md:max-h-[28rem] md:touch-pan-y md:overflow-y-auto md:overscroll-contain lg:max-h-[32rem]"
+      {...(isScrollable ? { 'data-lenis-prevent': 'true' } : {})}
       data-testid="about-timeline-scroll-region"
       ref={scrollContainerRef}
       role="region"
-      tabIndex={0}
+      tabIndex={isScrollable ? 0 : undefined}
     >
       <LineSidebar
         accentColor="var(--site-accent)"

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('About timeline', () => {
-  test('keeps the LineSidebar independently scrollable with a visible left scrollbar', async ({
+  test('keeps desktop timeline behavior and allows normal page scrolling on mobile', async ({
     page,
   }) => {
     test.setTimeout(60_000)
@@ -17,8 +17,7 @@ test.describe('About timeline', () => {
 
     await expect(timeline).toBeVisible()
     await timeline.scrollIntoViewIfNeeded()
-    await expect(scrollRegion).toHaveAttribute('data-lenis-prevent', 'true')
-    expect(await buttons.count()).toBeGreaterThan(5)
+    expect(await buttons.count()).toBeGreaterThanOrEqual(5)
 
     const initialState = await scrollRegion.evaluate((element) => {
       const styles = getComputedStyle(element)
@@ -36,16 +35,11 @@ test.describe('About timeline', () => {
       }
     })
 
-    expect(initialState.canScroll).toBe(true)
     expect(initialState.direction).toBe('rtl')
     expect(initialState.contentDirection).toBe('ltr')
     expect(initialState.scrollbarVisible).toBe(true)
     await page.waitForTimeout(500)
     expect(browserErrors).toEqual([])
-    await expect
-      .poll(() => scrollRegion.evaluate((element) => element.scrollTop))
-      .toBeGreaterThan(0)
-    const initialScrollTop = await scrollRegion.evaluate((element) => element.scrollTop)
     await expect(buttons.last()).toHaveAttribute('aria-pressed', 'true')
     await expect(buttons.last().locator('.scroll-reveal-word')).toHaveCount(0)
     expect(
@@ -55,13 +49,21 @@ test.describe('About timeline', () => {
         .evaluate((element) => getComputedStyle(element).filter),
     ).toBe('none')
 
-    const pageScrollBefore = await page.evaluate(() => window.scrollY)
-    await scrollRegion.hover()
-    await page.mouse.wheel(0, -400)
-    await expect
-      .poll(() => scrollRegion.evaluate((element) => element.scrollTop))
-      .toBeLessThan(initialScrollTop)
-    expect(Math.abs((await page.evaluate(() => window.scrollY)) - pageScrollBefore)).toBeLessThan(2)
+    if (initialState.canScroll) {
+      await expect
+        .poll(() => scrollRegion.evaluate((element) => element.scrollTop))
+        .toBeGreaterThan(0)
+      const initialScrollTop = await scrollRegion.evaluate((element) => element.scrollTop)
+      const pageScrollBefore = await page.evaluate(() => window.scrollY)
+      await scrollRegion.hover()
+      await page.mouse.wheel(0, -400)
+      await expect
+        .poll(() => scrollRegion.evaluate((element) => element.scrollTop))
+        .toBeLessThan(initialScrollTop)
+      expect(Math.abs((await page.evaluate(() => window.scrollY)) - pageScrollBefore)).toBeLessThan(
+        2,
+      )
+    }
 
     await scrollRegion.evaluate((element) => {
       element.scrollTop = 0
@@ -82,10 +84,21 @@ test.describe('About timeline', () => {
     await page.setViewportSize({ height: 844, width: 390 })
     await page.reload({ waitUntil: 'domcontentloaded' })
 
+    const mobileScrollRegion = page.getByTestId('about-timeline-scroll-region')
     const mobileButton = page
       .getByRole('navigation', { name: 'Timeline milestone navigation' })
       .getByRole('button')
       .first()
+    const mobileScrollState = await mobileScrollRegion.evaluate((element) => {
+      const styles = getComputedStyle(element)
+
+      return {
+        canScroll: element.scrollHeight > element.clientHeight,
+        hasLenisPrevention: element.hasAttribute('data-lenis-prevent'),
+        maxHeight: styles.maxHeight,
+        overflowY: styles.overflowY,
+      }
+    })
     const mobileGeometry = await mobileButton.evaluate((element) => ({
       buttonHeight: element.getBoundingClientRect().height,
       markerWidth: Number.parseFloat(
@@ -93,7 +106,19 @@ test.describe('About timeline', () => {
       ),
     }))
 
+    expect(mobileScrollState.canScroll).toBe(false)
+    expect(mobileScrollState.hasLenisPrevention).toBe(false)
+    expect(mobileScrollState.maxHeight).toBe('none')
+    expect(mobileScrollState.overflowY).toBe('visible')
     expect(mobileGeometry.buttonHeight).toBeGreaterThanOrEqual(44)
     expect(mobileGeometry.markerWidth).toBeLessThanOrEqual(44)
+
+    await mobileScrollRegion.scrollIntoViewIfNeeded()
+    const mobilePageScrollBefore = await page.evaluate(() => window.scrollY)
+    await mobileScrollRegion.hover()
+    await page.mouse.wheel(0, 300)
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(
+      mobilePageScrollBefore,
+    )
   })
 })

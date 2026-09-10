@@ -203,7 +203,7 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
             data-archive-frame="true"
             data-archive-format={format}
             overlay={
-              <span className="site-meta-label absolute right-4 bottom-[14%] z-30 flex translate-y-2 items-center gap-1.5 font-bold text-site-accent opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none md:right-5">
+              <span className="site-meta-label absolute right-4 bottom-[10%] z-30 flex translate-y-2 items-center gap-1.5 font-bold text-site-accent opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none md:right-5">
                 View <ArrowUpRight aria-hidden="true" className="size-3.5" />
               </span>
             }

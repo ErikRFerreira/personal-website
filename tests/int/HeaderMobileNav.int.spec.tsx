@@ -64,6 +64,7 @@ describe('mobile header navigation', () => {
     expect(toggle.getAttribute('aria-expanded')).toBe('false')
     expect(toggle.getAttribute('data-state')).toBe('closed')
     expect(menu.getAttribute('aria-hidden')).toBe('true')
+    expect(within(menu).getByRole('navigation', { hidden: true }).className).toContain('gap-8')
 
     fireEvent.click(toggle)
 

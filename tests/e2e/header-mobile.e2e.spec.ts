@@ -19,6 +19,11 @@ test.describe('responsive header navigation', () => {
     await expect(toggle).toHaveAttribute('aria-expanded', 'true')
     await expect(menu).toHaveAttribute('data-state', 'open')
     await expect(menu.getByRole('link').first()).toBeFocused()
+    expect(
+      await menu
+        .getByRole('navigation')
+        .evaluate((element) => Number.parseFloat(getComputedStyle(element).rowGap)),
+    ).toBeGreaterThanOrEqual(32)
     await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe('hidden')
     await expect
       .poll(async () => (await menu.boundingBox())?.x)

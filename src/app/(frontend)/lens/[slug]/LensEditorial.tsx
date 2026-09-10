@@ -11,16 +11,7 @@ export function LensEditorial({ fullStory, licensingText }: Props) {
   if (!fullStory && !licensingText) return null
 
   return (
-    <section
-      className="site-container py-20 md:py-24"
-      data-testid="lens-long-form"
-    >
-      <div className="flex items-center gap-4 pt-10">
-        <p className="site-meta-label shrink-0 text-site-accent">
-          Field perspective
-        </p>
-        <span aria-hidden="true" className="h-px flex-1 bg-site-border-subtle" />
-      </div>
+    <section className="site-container py-20 md:py-24" data-testid="lens-long-form">
       <div>
         {fullStory && (
           <div className="grid gap-8 py-10 lg:grid-cols-12 lg:gap-12 lg:py-12">
@@ -39,12 +30,8 @@ export function LensEditorial({ fullStory, licensingText }: Props) {
 
         {licensingText && (
           <div className="grid gap-4 border border-site-border-subtle bg-site-surface-elevated/65 p-5 sm:p-6 lg:grid-cols-[minmax(12rem,0.7fr)_minmax(0,2fr)] lg:gap-12">
-            <h2 className="site-meta-label text-site-accent">
-              Licensing
-            </h2>
-            <p className="site-body-small max-w-3xl text-site-text-secondary">
-              {licensingText}
-            </p>
+            <h2 className="site-meta-label text-site-accent">Licensing</h2>
+            <p className="site-body-small max-w-3xl text-site-text-secondary">{licensingText}</p>
           </div>
         )}
       </div>

@@ -19,11 +19,11 @@ export function AboutHero({ name, intro, media, imageLabel }: Page['hero']) {
       data-theme="dark"
       data-testid="about-hero"
     >
-      <div className="site-container relative z-10 pt-[calc(var(--header-height)+6rem)] pb-20 md:pt-[calc(var(--header-height)+5rem)] md:pb-28 lg:pt-[calc(var(--header-height)+6rem)] lg:pb-32">
+      <div className="site-container relative z-10 py-20 md:pt-[calc(var(--header-height)+5rem)] md:pb-28 lg:pt-[calc(var(--header-height)+6rem)] lg:pb-32">
         <div className="relative z-20 max-w-[72rem]" data-about-hero-text>
           <h1
             aria-label={heading}
-            className="text-[clamp(4.125rem,21vw,6.5rem)] leading-[0.78] font-black tracking-[-0.065em] text-site-text-primary uppercase md:text-[clamp(7rem,13vw,11.5rem)]"
+            className="text-[clamp(3.5rem,15vw,6.125rem)] leading-[0.78] font-black tracking-[-0.065em] text-site-text-primary uppercase sm:text-[clamp(4.375rem,12.25vw,7rem)] md:text-[clamp(7rem,13vw,11.5rem)]"
             id="about-hero-heading"
           >
             <span className="flex flex-col items-start md:flex-row md:gap-x-[0.2em]">
