@@ -100,6 +100,77 @@ test.describe('mobile layout refinements', () => {
     }
   })
 
+  test('keeps project cards contained and makes their CTA full width only on mobile', async ({
+    page,
+  }) => {
+    test.setTimeout(120_000)
+
+    for (const width of [390, 767]) {
+      await page.setViewportSize({ height: 900, width })
+      await page.goto('http://localhost:3000/projects', { waitUntil: 'domcontentloaded' })
+
+      const projectCards = page.locator('[data-project-card="true"]')
+      const firstProjectCard = projectCards.first()
+      const firstProjectContent = firstProjectCard.locator('[data-project-content="true"]')
+      const firstCaseStudyLink = firstProjectCard.getByRole('link', {
+        name: /Read Case Study/i,
+      })
+
+      await expect(firstProjectCard).toBeVisible()
+      await expect
+        .poll(() =>
+          projectCards.evaluateAll((cards) => {
+            const viewportWidth = document.documentElement.clientWidth
+
+            return cards.every((card) => {
+              const cardBounds = card.getBoundingClientRect()
+              const frameBounds = card
+                .querySelector('[data-project-frame="true"]')
+                ?.getBoundingClientRect()
+
+              return (
+                cardBounds.left >= -0.5 &&
+                cardBounds.right <= viewportWidth + 0.5 &&
+                Boolean(
+                  frameBounds &&
+                    frameBounds.left >= cardBounds.left - 0.5 &&
+                    frameBounds.right <= cardBounds.right + 0.5,
+                )
+              )
+            })
+          }),
+        )
+        .toBe(true)
+      await expect
+        .poll(async () => {
+          const [contentWidth, linkWidth] = await Promise.all([
+            firstProjectContent.evaluate((element) => element.getBoundingClientRect().width),
+            firstCaseStudyLink.evaluate((element) => element.getBoundingClientRect().width),
+          ])
+
+          return Math.abs(contentWidth - linkWidth)
+        })
+        .toBeLessThanOrEqual(1)
+      await expectNoHorizontalOverflow(page)
+    }
+
+    await page.setViewportSize({ height: 900, width: 768 })
+    await page.reload({ waitUntil: 'domcontentloaded' })
+
+    const firstProjectCard = page.locator('[data-project-card="true"]').first()
+    const firstProjectContent = firstProjectCard.locator('[data-project-content="true"]')
+    const firstCaseStudyLink = firstProjectCard.getByRole('link', { name: /Read Case Study/i })
+    await expect(firstProjectCard).toBeVisible()
+    const contentWidth = await firstProjectContent.evaluate(
+      (element) => element.getBoundingClientRect().width,
+    )
+    const linkWidth = await firstCaseStudyLink.evaluate(
+      (element) => element.getBoundingClientRect().width,
+    )
+    expect(linkWidth).toBeLessThan(contentWidth)
+    await expectNoHorizontalOverflow(page)
+  })
+
   test('restores tablet sizing at 768px', async ({ page }) => {
     test.setTimeout(60_000)
     await page.setViewportSize({ height: 900, width: 768 })

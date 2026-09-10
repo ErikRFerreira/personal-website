@@ -84,11 +84,22 @@ describe('ProjectArchiveItem', () => {
     const content = container.querySelector('[data-project-content="true"]')
 
     expect(card?.getAttribute('data-project-layout')).toBe('image-right')
+    expect(card?.className).toContain('grid-cols-1')
+    expect(card?.className).toContain('lg:grid-cols-12')
+    expect(card?.className).toContain('min-w-0')
+    expect(card?.className).toContain('max-w-full')
     expect(frame?.className).toContain('order-1')
+    expect(frame?.className).toContain('col-span-1')
+    expect(frame?.className).toContain('min-w-0')
     expect(frame?.className).toContain('lg:order-2')
     expect(content?.className).toContain('order-2')
+    expect(content?.className).toContain('col-span-1')
+    expect(content?.className).toContain('min-w-0')
     expect(content?.className).toContain('lg:order-1')
-    expect(container.querySelector('[data-project-corner="top-right"]')).not.toBeNull()
+    const corner = container.querySelector('[data-project-corner="top-right"]')
+    expect(corner).not.toBeNull()
+    expect(corner?.className).toContain('right-0')
+    expect(corner?.className).toContain('lg:-right-3')
   })
 
   it('alternates the second project and renders complete archive metadata and technologies', () => {
@@ -137,9 +148,10 @@ describe('ProjectArchiveItem', () => {
     expect(image.className).toContain('motion-reduce:transform-none')
     expect(overlay?.className).toContain('group-hover:opacity-0')
     expect(links).toHaveLength(1)
-    expect(screen.getByRole('link', { name: /Read Case Study/i }).getAttribute('href')).toBe(
-      '/projects/project-one',
-    )
+    const caseStudyLink = screen.getByRole('link', { name: /Read Case Study/i })
+    expect(caseStudyLink.getAttribute('href')).toBe('/projects/project-one')
+    expect(caseStudyLink.className).toContain('w-full')
+    expect(caseStudyLink.className).toContain('md:w-max')
   })
 
   it('keeps the two-column media frame and shows a placeholder without an image', () => {

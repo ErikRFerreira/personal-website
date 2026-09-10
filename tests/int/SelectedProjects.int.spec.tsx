@@ -99,6 +99,7 @@ describe('SelectedProjectsBlock', () => {
     expect(screen.getByRole('link', { name: /Read Case Study/i }).getAttribute('href')).toBe(
       '/projects/project-one',
     )
+    expect(screen.getByRole('link', { name: 'View all' }).getAttribute('href')).toBe('/projects')
     expect(
       screen.getByRole('link', { name: /Read Case Study/i }).classList.contains('specular-button'),
     ).toBe(true)
