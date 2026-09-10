@@ -49,7 +49,7 @@ export default async function Page() {
           subtitle="A collection of digital products built with thoughtful design and robust engineering."
         />
 
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-16 lg:gap-24">
           {projects.docs.map((project, index) => (
             <ProjectArchiveItem
               index={index}

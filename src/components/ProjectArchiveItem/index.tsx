@@ -1,14 +1,19 @@
 'use client'
 
+import { CtaButton } from '@/components/CtaButton'
 import type { Project } from '@/payload-types'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 import Image from 'next/image'
-import Link from 'next/link'
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+type ArchiveProject = Pick<
+  Project,
+  'description' | 'image' | 'slug' | 'tech' | 'title' | 'type' | 'year'
+>
 
 type ProjectArchiveItemProps = {
   index: number
-  project: Pick<Project, 'description' | 'image' | 'slug' | 'tech' | 'title' | 'type' | 'year'>
+  project: ArchiveProject
   total: number
 }
 
@@ -20,25 +25,86 @@ const projectTypeLabels: Partial<Record<NonNullable<Project['type']>, string>> =
   'web-app': 'Web App',
 }
 
-const MIN_MEDIA_ASPECT = 4 / 3
-const MAX_MEDIA_ASPECT = 21 / 9
-
 function formatIndex(value: number) {
   return String(value).padStart(2, '0')
+}
+
+function getProjectMetadata(project: ArchiveProject, index: number, total: number) {
+  const type = project.type ? projectTypeLabels[project.type] : null
+  const typeCode = type?.toUpperCase().replaceAll(' ', '_')
+
+  return [`${formatIndex(index + 1)} / ${formatIndex(total)}`, typeCode, project.year]
+    .filter(Boolean)
+    .join(' // ')
+}
+
+function ProjectImage({ project }: { project: ArchiveProject }) {
+  const image = typeof project.image === 'object' && project.image !== null ? project.image : null
+
+  return (
+    <div
+      className="relative aspect-[16/10] overflow-hidden bg-site-surface-elevated"
+      data-project-media="true"
+    >
+      {image?.url ? (
+        <Image
+          alt={image.alt || project.title}
+          className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
+          decoding="async"
+          fill
+          loading="lazy"
+          quality={75}
+          sizes="(max-width: 1023px) 100vw, 58vw"
+          src={getMediaUrl(image.url, image.updatedAt)}
+        />
+      ) : (
+        <div
+          aria-label={`${project.title} preview unavailable`}
+          className="site-caption flex h-full w-full items-center justify-center px-6 text-center text-site-text-muted uppercase"
+          data-project-image-placeholder="true"
+          role="img"
+        >
+          Preview unavailable
+        </div>
+      )}
+
+      {image?.url && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-site-surface-deep/25 opacity-100 transition-opacity duration-500 ease-out group-hover:opacity-0 motion-reduce:transition-none"
+          data-project-image-overlay="true"
+        />
+      )}
+    </div>
+  )
+}
+
+function ProjectTechnologies({ tech }: { tech: ArchiveProject['tech'] }) {
+  const technologies = tech?.filter(
+    (item): item is NonNullable<typeof item> & { techName: string } => Boolean(item.techName),
+  )
+
+  if (!technologies?.length) return null
+
+  return (
+    <div className="mb-4 flex flex-wrap gap-x-6 gap-y-2" data-project-technologies="true">
+      {technologies.map((item, techIndex) => (
+        <span
+          className="site-meta-label text-site-text-muted"
+          key={item.id ?? `${item.techName}-${techIndex}`}
+        >
+          {item.techName}
+        </span>
+      ))}
+    </div>
+  )
 }
 
 export function ProjectArchiveItem({ index, project, total }: ProjectArchiveItemProps) {
   const articleRef = useRef<HTMLElement>(null)
   const [isVisible, setIsVisible] = useState(false)
-  const image = typeof project.image === 'object' && project.image !== null ? project.image : null
-  const technologies = project.tech
-    ?.map(({ techName }) => techName)
-    .filter((techName): techName is string => Boolean(techName))
-  const rawAspectRatio = image?.width && image.height ? image.width / image.height : 16 / 9
-  const mediaAspectRatio = Math.min(MAX_MEDIA_ASPECT, Math.max(MIN_MEDIA_ASPECT, rawAspectRatio))
-  const mediaStyle = { aspectRatio: mediaAspectRatio } as CSSProperties
-  const indexLabel = `${formatIndex(index + 1)} / ${formatIndex(total)}`
-  const hasMetadata = Boolean(project.year || project.type || technologies?.length)
+  const imageOnRight = index % 2 === 0
+  const metadata = getProjectMetadata(project, index, total)
 
   useEffect(() => {
     const article = articleRef.current
@@ -66,97 +132,60 @@ export function ProjectArchiveItem({ index, project, total }: ProjectArchiveItem
   return (
     <article
       ref={articleRef}
-      className={`${index > 0 ? 'mt-20 pt-20 md:mt-28 md:pt-28 lg:mt-36 lg:pt-32' : ''} ${
-        index % 2 === 1 ? 'lg:w-[92%] lg:self-end' : ''
-      } transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none ${
+      className={`group grid grid-cols-12 items-center gap-8 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none lg:gap-10 ${
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
       }`}
+      data-project-card="true"
+      data-project-layout={imageOnRight ? 'image-right' : 'image-left'}
     >
-      <Link
-        className="group block rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-border-active"
-        href={`/projects/${project.slug}`}
+      <div
+        className={`relative order-1 col-span-12 lg:col-span-7 ${
+          imageOnRight ? 'lg:order-2' : 'lg:order-1'
+        }`}
+        data-project-frame="true"
       >
-        {image?.url && (
-          <div
-            className="relative w-full overflow-hidden bg-site-surface-elevated"
-            data-project-media="true"
-            style={mediaStyle}
-          >
-            <div className="absolute inset-0">
-              <Image
-                alt={image.alt || project.title}
-                className="object-cover opacity-85 transition-[transform,opacity] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:scale-[1.02] group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none motion-reduce:will-change-auto"
-                fill
-                quality={75}
-                sizes="(max-width: 1535px) calc(100vw - 3rem), 84rem"
-                src={getMediaUrl(image.url, image.updatedAt)}
-              />
-            </div>
-            <div className="absolute inset-0 bg-[linear-gradient(to_top,var(--site-surface-base),transparent_45%)] opacity-40 transition-opacity duration-500 group-hover:opacity-20 motion-reduce:transition-none" />
-          </div>
+        <div
+          aria-hidden="true"
+          className={`absolute -top-3 z-20 h-12 w-12 border-t border-site-border-active/70 ${
+            imageOnRight ? '-right-3 border-r' : '-left-3 border-l'
+          }`}
+          data-project-corner={imageOnRight ? 'top-right' : 'top-left'}
+        />
+        <ProjectImage project={project} />
+      </div>
+
+      <div
+        className={`order-2 col-span-12 flex flex-col gap-6 lg:col-span-5 ${
+          imageOnRight ? 'lg:order-1 lg:pr-8' : 'lg:order-2 lg:pl-8'
+        }`}
+        data-project-content="true"
+      >
+        <div className="space-y-3">
+          <p className="site-section-label text-site-accent opacity-70" data-project-index="true">
+            {metadata}
+          </p>
+          <h2 className="text-[2.1875rem] leading-[0.98] font-extrabold tracking-[-0.035em] text-site-text-primary md:text-[3rem]">
+            {project.title}
+          </h2>
+        </div>
+
+        {project.description && (
+          <p className="max-w-md text-sm leading-[1.7] text-site-text-secondary md:text-lg">
+            {project.description}
+          </p>
         )}
 
-        <div className={image?.url ? 'mt-5 md:mt-6' : ''}>
-          <div className="mb-5 flex items-center gap-4 md:mb-6">
-            <span
-              className="site-section-label shrink-0 text-site-accent"
-              data-project-index="true"
-            >
-              {indexLabel}
-            </span>
-            <span className="h-px w-12 bg-site-accent/40 transition-[width,background-color] duration-300 ease-out group-hover:w-20 group-hover:bg-site-accent/70 motion-reduce:transition-none" />
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,2.2fr)_minmax(14rem,0.8fr)] lg:gap-12 xl:gap-16">
-            <div className="max-w-3xl">
-              <h2 className="text-2xl leading-[1.08] font-extrabold tracking-[-0.035em] text-site-text-primary transition-colors duration-200 group-hover:text-site-accent md:text-[2.25rem]">
-                {project.title}
-              </h2>
-              {project.description && (
-                <p className="mt-3 text-sm leading-[1.65] text-site-text-secondary transition-colors duration-200 group-hover:text-site-text-primary md:text-base">
-                  {project.description}
-                </p>
-              )}
-            </div>
-
-            {hasMetadata && (
-              <dl className="site-caption min-w-0 font-bold uppercase lg:pt-1">
-                <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-                  {project.year && (
-                    <div>
-                      <dt className="sr-only">Year</dt>
-                      <dd className="text-site-accent">{project.year}</dd>
-                    </div>
-                  )}
-                  {project.type && (
-                    <div>
-                      <dt className="sr-only">Project type</dt>
-                      <dd className="text-site-text-primary">{projectTypeLabels[project.type]}</dd>
-                    </div>
-                  )}
-                </div>
-
-                {technologies && technologies.length > 0 && (
-                  <div className="mt-3">
-                    <dt className="sr-only">Technologies</dt>
-                    <dd className="flex flex-wrap gap-x-1.5 gap-y-1 text-site-text-secondary transition-colors duration-200 group-hover:text-site-text-primary">
-                      {technologies.map((technology, technologyIndex) => (
-                        <span
-                          className="whitespace-nowrap"
-                          key={`${technology}-${technologyIndex}`}
-                        >
-                          {technology}
-                          {technologyIndex < technologies.length - 1 && ','}
-                        </span>
-                      ))}
-                    </dd>
-                  </div>
-                )}
-              </dl>
-            )}
-          </div>
-        </div>
-      </Link>
+        <ProjectTechnologies tech={project.tech} />
+        <CtaButton
+          className="w-max font-mono uppercase"
+          label="Read Case Study"
+          size="sm"
+          type="custom"
+          url={`/projects/${project.slug}`}
+        >
+          <span aria-hidden="true">&rarr;</span>
+        </CtaButton>
+      </div>
     </article>
   )
 }
