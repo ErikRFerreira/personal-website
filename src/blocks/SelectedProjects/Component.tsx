@@ -57,13 +57,13 @@ export function SelectedProjectsBlock({ eyebrow, label, intro, projects }: Selec
             {!resolvedEyebrow && resolvedLabel && <AccentHexagon className="mb-5" />}
 
             {resolvedLabel && (
-              <h2 className="text-[3rem] leading-[0.95] font-extrabold tracking-normal text-site-text-primary md:text-[4.5rem]">
+              <h2 className="text-[2.625rem] leading-[0.95] font-extrabold tracking-normal text-site-text-primary md:text-[4.5rem]">
                 {resolvedLabel}
               </h2>
             )}
 
             {intro && (
-              <p className="mt-8 border-l-2 border-site-accent pl-6 text-base leading-[1.75] text-site-text-secondary md:text-lg">
+              <p className="mt-8 border-l-2 border-site-accent pl-6 text-sm leading-[1.75] text-site-text-secondary md:text-lg">
                 {intro}
               </p>
             )}

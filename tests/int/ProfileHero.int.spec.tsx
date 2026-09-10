@@ -89,6 +89,12 @@ describe('ProfileHero', () => {
     expect(screen.getByText('Developer and diver')).not.toBeNull()
     expect(screen.getByText('Profile image')).not.toBeNull()
     expect(screen.getByTestId('profile-media')).not.toBeNull()
+    expect(screen.getByTestId('profile-hero-media-frame').className).toContain(
+      'h-[clamp(12rem,55vw,15rem)]',
+    )
+    expect(screen.getByTestId('profile-hero-media-frame').className).toContain(
+      'md:h-[min(43rem,68svh)]',
+    )
     expect(container.querySelector('section')?.getAttribute('data-has-image')).toBe('true')
     expect(container.querySelector('[data-reveal-name="profile-hero-image"]')).not.toBeNull()
     expect(container.querySelector('[data-parallax-text]')).not.toBeNull()
@@ -145,6 +151,9 @@ describe('ProfileHero', () => {
     expect(slider.getAttribute('data-show-controls')).toBe('true')
     expect(slider.getAttribute('data-show-indicators')).toBe('false')
     expect(slider.getAttribute('data-start-index')).toBe('0')
+    expect(screen.getByTestId('profile-hero-media-frame').className).toContain(
+      'h-[clamp(12rem,55vw,15rem)]',
+    )
     expect(screen.getByText(/01 \/ DIVER/)).not.toBeNull()
     expect(screen.queryByTestId('profile-media')).toBeNull()
 

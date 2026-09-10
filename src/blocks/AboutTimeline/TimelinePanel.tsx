@@ -64,7 +64,7 @@ export function TimelinePanel({
 
           <div className="border-t border-site-border-subtle px-5 py-5 sm:px-6 sm:py-6">
             <p
-              className="text-base leading-relaxed text-site-text-secondary"
+              className="text-sm leading-relaxed text-site-text-secondary md:text-base"
               data-testid="about-timeline-description"
             >
               {activeMilestone.description}

@@ -47,19 +47,19 @@ export function InitiateProjectBlock({
       <div className="site-container relative z-10">
         <div className="mx-auto flex w-full max-w-176 flex-col items-center text-center">
           {eyebrowText && (
-            <p className="text-site-accent font-mono text-[2.25rem] leading-none font-semibold">
+            <p className="text-site-accent font-mono text-[2rem] leading-none font-semibold md:text-[2.25rem]">
               {eyebrowText}
             </p>
           )}
 
           {heading && (
-            <h2 className="mt-4 text-[2.75rem] leading-[0.95] font-extrabold tracking-[-0.03em] text-site-text-primary sm:text-[3.4rem] md:text-[4.2rem]">
+            <h2 className="mt-4 text-[2.4375rem] leading-[0.95] font-extrabold tracking-[-0.03em] text-site-text-primary sm:text-[3rem] md:text-[4.2rem]">
               {heading}
             </h2>
           )}
 
           {description && (
-            <p className="mt-7 max-w-160 text-[1.125rem] leading-[1.7] text-site-text-secondary">
+            <p className="mt-7 max-w-160 text-base leading-[1.7] text-site-text-secondary md:text-[1.125rem]">
               {description}
             </p>
           )}

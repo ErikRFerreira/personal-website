@@ -47,7 +47,7 @@
     --site-card-gap: clamp(1.5rem, 2vw, 2rem);
     --site-card-padding: clamp(1.5rem, 2vw, 2rem);
     --site-radius-card: 1rem;
-    --site-font-size-body: 1rem;
+    --site-font-size-body: 0.875rem;
     --site-font-size-body-small: 0.875rem;
     --site-font-size-label: 0.75rem;
     --site-font-size-caption: 0.6875rem;
@@ -369,6 +369,10 @@
   }
 
   @variant md {
+    :root {
+      --site-font-size-body: 1rem;
+    }
+
     .site-container {
       padding-inline: var(--site-gutter-tablet);
     }

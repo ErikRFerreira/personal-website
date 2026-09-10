@@ -62,7 +62,7 @@ export function StoryProgress({ body, eyebrow, heading }: StoryProgressProps) {
 
           <RevealOnScroll delay={80} revealName="about-story-heading">
             <h2
-              className="text-[clamp(2.75rem,7vw,4.75rem)] leading-[0.95] font-extrabold tracking-[-0.04em] text-site-text-primary"
+              className="text-[clamp(2.4375rem,6.125vw,4.15625rem)] leading-[0.95] font-extrabold tracking-[-0.04em] text-site-text-primary md:text-[clamp(2.75rem,7vw,4.75rem)]"
               id="about-story-heading"
             >
               {heading}

@@ -33,13 +33,13 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
             {!eyebrow && label && <AccentHexagon className="mb-5" />}
 
             {label && (
-              <h2 className="text-[3rem] leading-[0.95] font-extrabold tracking-normal text-site-text-primary md:text-[4.5rem]">
+              <h2 className="text-[2.625rem] leading-[0.95] font-extrabold tracking-normal text-site-text-primary md:text-[4.5rem]">
                 {label}
               </h2>
             )}
 
             {intro && (
-              <p className="mt-8 border-l-2 border-site-accent pl-6 text-base leading-[1.75] text-site-text-secondary md:text-lg">
+              <p className="mt-8 border-l-2 border-site-accent pl-6 text-sm leading-[1.75] text-site-text-secondary md:text-lg">
                 {intro}
               </p>
             )}
@@ -86,7 +86,7 @@ export function LensBlockComponent({ eyebrow, label, intro, photos }: LensBlock)
                   </div>
 
                   <div className="mt-4 flex min-w-0 items-start justify-between gap-4">
-                    <h3 className="min-w-0 text-base leading-[1.25] font-extrabold text-site-text-primary transition-colors duration-200 group-hover:text-site-accent">
+                    <h3 className="min-w-0 text-sm leading-[1.25] font-extrabold text-site-text-primary transition-colors duration-200 group-hover:text-site-accent md:text-base">
                       {item.title}
                     </h3>
 

@@ -31,13 +31,13 @@ export function AboutIntroBlock({
               </p>
             )}
 
-            <h2 className="text-4xl font-bold leading-tight tracking-tight text-site-text-primary md:text-5xl lg:text-6xl xl:text-[4.5rem]">
+            <h2 className="text-[2rem] font-bold leading-tight tracking-tight text-site-text-primary md:text-5xl lg:text-6xl xl:text-[4.5rem]">
               {headlineLineOne && <span className="block">{headlineLineOne}</span>}
               {headlineLineTwo && <span className="block">{headlineLineTwo}</span>}
             </h2>
 
             {(bio || bioSecondParagraph) && (
-              <div className="mt-6 max-w-prose space-y-4 text-base leading-[1.75] text-site-text-secondary">
+              <div className="mt-6 max-w-prose space-y-4 text-sm leading-[1.75] text-site-text-secondary md:text-base">
                 {bio && <p>{bio}</p>}
                 {bioSecondParagraph && <p>{bioSecondParagraph}</p>}
               </div>

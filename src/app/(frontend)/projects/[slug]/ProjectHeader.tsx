@@ -87,12 +87,12 @@ export function ProjectHeader({ project }: { project: Project }) {
 
         <div className="mt-8 grid grid-cols-12 gap-x-4 gap-y-12 lg:mt-10 md:gap-x-6 lg:gap-x-8">
           <div className="col-span-12 min-w-0 lg:col-span-7">
-            <h1 className="max-w-[13ch] text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.05] font-black tracking-[-0.03em] text-site-text-primary">
+            <h1 className="max-w-[13ch] text-[clamp(2rem,4.375vw,3.28125rem)] leading-[1.05] font-black tracking-[-0.03em] text-site-text-primary md:text-[clamp(2.25rem,5vw,3.75rem)]">
               {project.title}
             </h1>
 
             {project.description && (
-              <p className="mt-6 max-w-xl text-base leading-[1.7] font-light text-site-text-secondary md:text-lg">
+              <p className="mt-6 max-w-xl text-sm leading-[1.7] font-light text-site-text-secondary md:text-lg">
                 {project.description}
               </p>
             )}

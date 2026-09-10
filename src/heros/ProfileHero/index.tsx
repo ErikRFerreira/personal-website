@@ -67,7 +67,10 @@ export function ProfileHero({
                   className="absolute -inset-3 border border-site-border-active/25"
                 />
                 {shouldRenderImageSlider ? (
-                  <div className="relative aspect-4/5 w-full overflow-hidden bg-site-surface-elevated md:h-[min(43rem,68svh)] md:aspect-auto">
+                  <div
+                    className="relative h-[clamp(12rem,55vw,15rem)] w-full overflow-hidden bg-site-surface-elevated md:h-[min(43rem,68svh)]"
+                    data-testid="profile-hero-media-frame"
+                  >
                     <MorphSlider
                       autoplay={false}
                       className="profile-hero-morph-slider"
@@ -80,7 +83,10 @@ export function ProfileHero({
                     />
                   </div>
                 ) : (
-                  <div className="relative aspect-4/5 w-full overflow-hidden bg-site-surface-elevated md:h-[min(43rem,68svh)] md:aspect-auto">
+                  <div
+                    className="relative h-[clamp(12rem,55vw,15rem)] w-full overflow-hidden bg-site-surface-elevated md:h-[min(43rem,68svh)]"
+                    data-testid="profile-hero-media-frame"
+                  >
                     {hasPopulatedImage ? (
                       <Media
                         fill
@@ -113,7 +119,7 @@ export function ProfileHero({
             <>
               <h1
                 aria-label={name}
-                className="text-[clamp(4rem,17vw,7rem)] leading-[0.78] font-black tracking-[-0.065em] text-site-text-primary uppercase sm:text-[clamp(5rem,14vw,8rem)] md:text-[clamp(6rem,10vw,10rem)]"
+                className="text-[clamp(3.5rem,15vw,6.125rem)] leading-[0.78] font-black tracking-[-0.065em] text-site-text-primary uppercase sm:text-[clamp(4.375rem,12.25vw,7rem)] md:text-[clamp(6rem,10vw,10rem)]"
                 id="profile-hero-heading"
               >
                 {nameParts.map((part, index) => (
@@ -138,7 +144,7 @@ export function ProfileHero({
               </RevealOnScroll>
 
               <RevealOnScroll delay={320} revealName="profile-hero-intro">
-                <p className="mt-8 max-w-2xl text-lg leading-[1.65] font-light text-site-text-secondary sm:text-xl md:mt-10 md:text-2xl">
+                <p className="mt-8 max-w-2xl text-base leading-[1.65] font-light text-site-text-secondary sm:text-lg md:mt-10 md:text-2xl">
                   {intro}
                 </p>
               </RevealOnScroll>

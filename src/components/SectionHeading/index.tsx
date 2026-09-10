@@ -17,7 +17,7 @@ export function SectionHeading({ title, label, className }: Props) {
         </p>
       )}
       {title && (
-        <h2 className="text-2xl leading-[1.08] font-bold text-site-text-primary md:text-6xl">
+        <h2 className="text-[1.3125rem] leading-[1.08] font-bold text-site-text-primary md:text-6xl">
           {title}
         </h2>
       )}

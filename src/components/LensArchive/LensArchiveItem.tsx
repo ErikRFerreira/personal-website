@@ -276,7 +276,7 @@ export function LensArchiveItem({ format, index, pairedFormat, photo }: LensArch
         )}
 
         <div className="mt-5 md:mt-6">
-          <h2 className="text-base leading-tight font-extrabold text-site-text-primary transition-colors duration-200 group-hover:text-site-accent">
+          <h2 className="text-sm leading-tight font-extrabold text-site-text-primary md:text-base transition-colors duration-200 group-hover:text-site-accent">
             {photo.title}
           </h2>
           {caption && (

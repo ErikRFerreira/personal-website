@@ -272,7 +272,7 @@ export function LensArchive({
             })}
           </div>
         ) : (
-          <p className="text-base text-site-text-secondary">
+          <p className="text-sm text-site-text-secondary md:text-base">
             {category || collection
               ? 'No photographs match these filters.'
               : 'No photographs have been published yet.'}

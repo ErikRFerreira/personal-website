@@ -7,13 +7,13 @@ export function RevealText({ text, supportingText }: RevealTextBlockProps) {
   if (!text) return null
 
   return (
-    <section className="relative flex w-full items-center justify-center bg-site-surface-deep px-6 py-64 text-center lg:py-80">
-      <div className="mx-auto flex max-w-4xl flex-col items-center gap-12">
+    <section className="relative flex w-full items-center justify-center bg-site-surface-deep px-6 py-32 text-center md:py-64 lg:py-80">
+      <div className="mx-auto flex max-w-4xl flex-col items-center gap-10 md:gap-12">
         <ScrollReveal
           baseOpacity={0.1}
           baseRotation={3}
           blurStrength={4}
-          containerClassName="text-3xl font-medium leading-relaxed tracking-tight text-site-text-primary lg:text-5xl"
+          containerClassName="text-[1.625rem] font-medium leading-relaxed tracking-tight text-site-text-primary md:text-3xl lg:text-5xl"
           enableBlur
         >
           {text}

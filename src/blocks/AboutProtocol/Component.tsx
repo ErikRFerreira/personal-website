@@ -26,13 +26,13 @@ export function AboutProtocolBlock({
       <div className="site-container">
         <RevealOnScroll revealName="about-protocol-heading">
           <h2
-            className="text-[clamp(2.75rem,6vw,4.75rem)] leading-[0.95] font-extrabold tracking-[-0.04em] text-site-text-primary"
+            className="text-[clamp(2.4375rem,5.25vw,4.15625rem)] leading-[0.95] font-extrabold tracking-[-0.04em] text-site-text-primary md:text-[clamp(2.75rem,6vw,4.75rem)]"
             id="about-protocol-heading"
           >
             {heading}
           </h2>
           <p
-            className="mt-6 max-w-3xl text-base leading-[1.75] text-site-text-secondary md:text-lg"
+            className="mt-6 max-w-3xl text-sm leading-[1.75] text-site-text-secondary md:text-lg"
             data-testid="about-protocol-description"
           >
             {displayDescription}
@@ -57,7 +57,7 @@ export function AboutProtocolBlock({
                         aria-hidden="true"
                         className="mt-[0.45rem] h-3 w-3 shrink-0 bg-site-text-muted/45 transition-[background-color,box-shadow,transform] duration-300 ease-out group-hover:scale-110 group-hover:bg-site-accent group-hover:shadow-[0_0_0.875rem_var(--site-glow-accent)] motion-reduce:transform-none motion-reduce:transition-none"
                       />
-                      <p className="text-base leading-[1.7] text-site-text-primary md:text-lg">
+                      <p className="text-sm leading-[1.7] text-site-text-primary md:text-lg">
                         {text}
                       </p>
                     </div>
@@ -77,7 +77,7 @@ export function AboutProtocolBlock({
                   aria-hidden="true"
                   className="absolute top-0 left-0 h-8 w-8 border-t-2 border-l-2 border-site-border-active/40 transition-colors duration-500 group-focus-visible:border-site-accent motion-reduce:transition-none"
                 />
-                <p className="max-w-[32rem] text-[clamp(1.5rem,3vw,2.125rem)] leading-[1.35] font-medium tracking-[-0.025em] text-site-text-secondary italic transition-colors duration-500 group-focus-visible:text-site-accent motion-reduce:transition-none">
+                <p className="max-w-[32rem] text-[clamp(1.3125rem,2.625vw,1.875rem)] leading-[1.35] font-medium tracking-[-0.025em] text-site-text-secondary italic transition-colors duration-500 group-focus-visible:text-site-accent motion-reduce:transition-none md:text-[clamp(1.5rem,3vw,2.125rem)]">
                   &ldquo;{displayQuote}&rdquo;
                 </p>
                 <span

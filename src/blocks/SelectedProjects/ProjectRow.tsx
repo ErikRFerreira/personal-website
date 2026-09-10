@@ -130,13 +130,13 @@ export function ProjectRow({ project, index }: Props) {
           <p className="site-section-label text-site-accent opacity-70">
             {[labels.number, labels.metadata].filter(Boolean).join(' // ')}
           </p>
-          <h3 className="text-[2.5rem] leading-[0.98] font-extrabold tracking-[-0.035em] text-site-text-primary md:text-[3rem]">
+          <h3 className="text-[2.1875rem] leading-[0.98] font-extrabold tracking-[-0.035em] text-site-text-primary md:text-[3rem]">
             {project.title}
           </h3>
         </div>
 
         {project.description && (
-          <p className="max-w-md text-base leading-[1.7] text-site-text-secondary md:text-lg">
+          <p className="max-w-md text-sm leading-[1.7] text-site-text-secondary md:text-lg">
             {project.description}
           </p>
         )}

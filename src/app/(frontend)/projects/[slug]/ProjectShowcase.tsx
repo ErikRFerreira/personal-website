@@ -19,7 +19,7 @@ export function ProjectShowcase({ project }: { project: Project }) {
       <section data-project-showcase="true">
         {showcaseTitle && (
           <div className="mb-6 flex flex-col items-center text-center md:mb-8">
-            <h2 className="text-2xl leading-tight font-bold tracking-tight text-site-text-primary uppercase md:text-3xl">
+            <h2 className="text-[1.3125rem] leading-tight font-bold tracking-tight text-site-text-primary uppercase md:text-3xl">
               {showcaseTitle}
             </h2>
             {showcaseSubtitle && (

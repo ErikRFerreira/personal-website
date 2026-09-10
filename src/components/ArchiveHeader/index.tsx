@@ -17,13 +17,13 @@ function ArchiveHeader({ detail, title, subtitle }: ArchiveHeaderProps) {
         </p>
       )}
       <h1
-        className={`${styles.title} text-2xl leading-[1.08] font-bold tracking-tighter text-site-text-primary md:text-6xl`}
+        className={`${styles.title} text-[1.3125rem] leading-[1.08] font-bold tracking-tighter text-site-text-primary md:text-6xl`}
       >
         {title}
       </h1>
       {subtitle && (
         <p
-          className={`${styles.subtitle} mt-6 text-base leading-[1.7] text-site-text-secondary md:text-lg`}
+          className={`${styles.subtitle} mt-6 text-sm leading-[1.7] text-site-text-secondary md:text-lg`}
         >
           {subtitle}
         </p>

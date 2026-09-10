@@ -14,7 +14,10 @@ export function HomeBio({ eyebrow, name, roles, bio, portrait, email, cta }: Hom
     >
       <div className="site-container">
         <RevealOnScroll revealName="home-bio">
-          <div className="relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-site-border-subtle bg-[color-mix(in_srgb,var(--site-surface-elevated)_88%,transparent)] p-8 sm:p-10 md:p-12 lg:p-14">
+          <div
+            className="relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-site-border-subtle bg-[color-mix(in_srgb,var(--site-surface-elevated)_88%,transparent)] px-8 py-12 sm:px-14 sm:py-14 md:p-12 lg:p-14"
+            data-home-bio-card="true"
+          >
             {/* Ambient top-right teal blur glow */}
             <div
               aria-hidden="true"
@@ -49,7 +52,10 @@ export function HomeBio({ eyebrow, name, roles, bio, portrait, email, cta }: Hom
               </div>
 
               {/* Text & action column */}
-              <div className="flex flex-1 flex-col items-start justify-center gap-5 text-left">
+              <div
+                className="flex flex-1 flex-col items-center justify-center gap-5 text-center md:items-start md:text-left"
+                data-home-bio-content="true"
+              >
                 <div>
                   {eyebrow && (
                     <span className="mb-2 block font-mono text-xs font-bold uppercase tracking-[0.2em] text-site-accent md:text-sm">
@@ -57,7 +63,7 @@ export function HomeBio({ eyebrow, name, roles, bio, portrait, email, cta }: Hom
                     </span>
                   )}
 
-                  <h2 className="text-3xl font-black tracking-tight text-site-text-primary sm:text-4xl md:text-5xl">
+                  <h2 className="text-[1.625rem] font-black tracking-tight text-site-text-primary sm:text-[2rem] md:text-5xl">
                     {name}
                   </h2>
 
@@ -69,12 +75,15 @@ export function HomeBio({ eyebrow, name, roles, bio, portrait, email, cta }: Hom
                 </div>
 
                 {bio && (
-                  <p className="text-base font-light leading-relaxed text-site-text-secondary md:text-lg">
+                  <p className="text-sm font-light leading-relaxed text-site-text-secondary md:text-lg">
                     {bio}
                   </p>
                 )}
 
-                <div className="mt-1 flex flex-wrap items-center gap-6 sm:gap-8">
+                <div
+                  className="mt-4 flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:justify-start"
+                  data-home-bio-actions="true"
+                >
                   {cta?.url && cta?.label && (
                     <CtaButton type="custom" url={cta.url} label={cta.label} />
                   )}

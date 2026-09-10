@@ -63,7 +63,7 @@ export function ProjectGallery({ project }: { project: Project }) {
               <h3
                 className={cn(
                   'mt-2 leading-tight font-bold tracking-tight text-site-text-primary break-words',
-                  split ? 'text-2xl' : 'text-xl md:text-2xl',
+                  split ? 'text-[1.3125rem] md:text-2xl' : 'text-lg md:text-2xl',
                 )}
               >
                 {entry.title}

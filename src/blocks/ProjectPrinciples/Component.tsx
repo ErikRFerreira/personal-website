@@ -21,11 +21,11 @@ export function ProjectPrinciplesBlock({
           {eyebrow?.trim() && (
             <p className="site-section-label text-site-accent">{eyebrow.trim()}</p>
           )}
-          <h2 className="mt-3 max-w-3xl text-3xl leading-tight font-bold tracking-[-0.03em] text-site-text-primary md:text-4xl">
+          <h2 className="mt-3 max-w-3xl text-[1.625rem] leading-tight font-bold tracking-[-0.03em] text-site-text-primary md:text-4xl">
             {heading}
           </h2>
           {description?.trim() && (
-            <p className="mt-4 max-w-3xl text-base leading-[1.75] text-site-text-secondary md:text-lg">
+            <p className="mt-4 max-w-3xl text-sm leading-[1.75] text-site-text-secondary md:text-lg">
               {description.trim()}
             </p>
           )}
@@ -49,11 +49,11 @@ export function ProjectPrinciplesBlock({
                   <p className="site-meta-label text-site-accent">{item.label.trim()}</p>
                 )}
                 <h3
-                  className={`${item.label?.trim() ? 'mt-8' : ''} text-xl leading-tight font-semibold tracking-[-0.025em] text-site-text-primary md:text-2xl`}
+                  className={`${item.label?.trim() ? 'mt-8' : ''} text-lg leading-tight font-semibold tracking-[-0.025em] text-site-text-primary md:text-2xl`}
                 >
                   {item.title.trim()}
                 </h3>
-                <p className="mt-4 text-base leading-[1.7] text-site-text-secondary">
+                <p className="mt-4 text-sm leading-[1.7] text-site-text-secondary md:text-base">
                   {item.description.trim()}
                 </p>
               </article>
