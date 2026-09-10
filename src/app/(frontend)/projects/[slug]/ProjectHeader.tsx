@@ -31,17 +31,20 @@ function ProjectMetadata({ project }: { project: Project }) {
 
   return (
     <aside
-      className="border-t border-site-border-subtle pt-6 lg:mt-2"
+      className="border border-site-border-subtle bg-site-surface-elevated/80 p-4 shadow-[0_1rem_2.5rem_rgba(0,0,0,0.16)] backdrop-blur-sm lg:mt-2"
       aria-label="Project metadata"
     >
       {cells.length > 0 && (
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-5">
+        <dl className="grid grid-cols-2 gap-x-5 gap-y-3">
           {cells.map(({ label, value }) => (
-            <div key={label} className={label === 'Stack' ? 'col-span-2 min-w-0' : 'min-w-0'}>
-              <dt className="site-meta-label mb-1.5 text-site-text-muted">
-                {label}
-              </dt>
-              <dd className="text-sm leading-[1.55] break-words text-site-text-primary">{value}</dd>
+            <div
+              key={label}
+              className={`min-w-0 border-t border-site-border-subtle pt-3 ${label === 'Stack' ? 'col-span-2' : ''}`}
+            >
+              <dt className="site-meta-label text-site-text-muted">{label}</dt>
+              <dd className="mt-1 font-mono text-xs leading-[1.55] font-medium break-words text-site-text-primary">
+                {value}
+              </dd>
             </div>
           ))}
         </dl>

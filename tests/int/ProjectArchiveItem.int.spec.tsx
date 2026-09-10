@@ -2,20 +2,21 @@ import { cleanup, render, screen } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { formatProjectsArchiveDetail } from '@/app/(frontend)/projects/formatArchiveDetail'
 import { ProjectArchiveItem } from '@/components/ProjectArchiveItem'
 import type { Media, Project } from '@/payload-types'
 
 vi.mock('next/image', () => ({
-  default: ({ alt, src }: { alt: string; src: string }) => (
+  default: ({ alt, className, src }: { alt: string; className?: string; src: string }) => (
     // eslint-disable-next-line @next/next/no-img-element
-    <img alt={alt} src={src} />
+    <img alt={alt} className={className} src={src} />
   ),
 }))
 
 vi.mock('next/link', () => ({
-  default: ({ children, href }: { children: ReactNode; href: string }) => (
-    <a href={href}>{children}</a>
+  default: ({ children, href, ...props }: { children: ReactNode; href: string }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }))
 
@@ -73,72 +74,85 @@ describe('ProjectArchiveItem', () => {
     vi.unstubAllGlobals()
   })
 
-  it('renders a linked, text-led composition without reserving media space', () => {
+  it('renders the first project with its image on the right and content first on desktop', () => {
     const { container } = render(
-      <ProjectArchiveItem index={0} project={makeProject({ image: null })} total={3} />,
+      <ProjectArchiveItem index={0} project={makeProject()} total={3} />,
     )
 
-    expect(container.querySelector('[data-project-media="true"]')).toBeNull()
-    expect(screen.getByRole('link', { name: /Project One/i }).getAttribute('href')).toBe(
-      '/projects/project-one',
-    )
-    expect(container.querySelector('[data-project-index="true"]')?.textContent).toBe('01 / 03')
+    const card = container.querySelector('[data-project-card="true"]')
+    const frame = container.querySelector('[data-project-frame="true"]')
+    const content = container.querySelector('[data-project-content="true"]')
+
+    expect(card?.getAttribute('data-project-layout')).toBe('image-right')
+    expect(frame?.className).toContain('order-1')
+    expect(frame?.className).toContain('lg:order-2')
+    expect(content?.className).toContain('order-2')
+    expect(content?.className).toContain('lg:order-1')
+    expect(container.querySelector('[data-project-corner="top-right"]')).not.toBeNull()
   })
 
-  it('clamps media aspect ratios and falls back to 16:9 dimensions', () => {
-    const { container, rerender } = render(
-      <ProjectArchiveItem
-        index={0}
-        project={makeProject({ image: makeMedia({ height: 600, width: 1800 }) })}
-        total={1}
-      />,
-    )
-
-    const getAspectRatio = () =>
-      (container.querySelector('[data-project-media="true"]') as HTMLElement).style.aspectRatio
-
-    expect(getAspectRatio()).toBe(String(21 / 9))
-
-    rerender(
-      <ProjectArchiveItem
-        index={0}
-        project={makeProject({ image: makeMedia({ height: 1200, width: 800 }) })}
-        total={1}
-      />,
-    )
-    expect(getAspectRatio()).toBe(String(4 / 3))
-
-    rerender(
-      <ProjectArchiveItem
-        index={0}
-        project={makeProject({ image: makeMedia({ height: null, width: null }) })}
-        total={1}
-      />,
-    )
-    expect(getAspectRatio()).toBe(String(16 / 9))
-  })
-
-  it('uses the title as image alt fallback and keeps technologies separately wrappable', () => {
-    const technologies = ['Next.js', 'React', 'TypeScript', 'PostgreSQL']
+  it('alternates the second project and renders complete archive metadata and technologies', () => {
+    const technologies = ['Next.js', 'TypeScript', 'PostgreSQL']
     const { container } = render(
       <ProjectArchiveItem
         index={1}
         project={makeProject({
-          image: makeMedia({ alt: null }),
           tech: technologies.map((techName) => ({ techName })),
+          type: 'mobile-app',
         })}
         total={4}
       />,
     )
 
-    expect(screen.getByRole('img', { name: 'Project One' })).not.toBeNull()
-    expect(container.querySelector('article')?.className).toContain('lg:w-[92%]')
-    expect(screen.getByText('02 / 04')).not.toBeNull()
-    expect(technologies.every((technology) => screen.getByText(new RegExp(technology)))).toBe(true)
+    expect(
+      container.querySelector('[data-project-card="true"]')?.getAttribute('data-project-layout'),
+    ).toBe('image-left')
+    expect(container.querySelector('[data-project-frame="true"]')?.className).toContain(
+      'lg:order-1',
+    )
+    expect(container.querySelector('[data-project-content="true"]')?.className).toContain(
+      'lg:order-2',
+    )
+    expect(container.querySelector('[data-project-corner="top-left"]')).not.toBeNull()
+    expect(screen.getByText('02 / 04 // MOBILE_APP // 2026')).not.toBeNull()
+    expect(technologies.every((technology) => screen.getByText(technology))).toBe(true)
   })
 
-  it('formats singular and plural archive details', () => {
-    expect(formatProjectsArchiveDetail(1)).toBe('Selected work / 01 project')
-    expect(formatProjectsArchiveDetail(3)).toBe('Selected work / 03 projects')
+  it('uses the fixed media treatment, image alt fallback, and CTA-only navigation', () => {
+    const { container } = render(
+      <ProjectArchiveItem
+        index={0}
+        project={makeProject({ image: makeMedia({ alt: null }) })}
+        total={1}
+      />,
+    )
+
+    const media = container.querySelector('[data-project-media="true"]')
+    const image = screen.getByRole('img', { name: 'Project One' })
+    const overlay = container.querySelector('[data-project-image-overlay="true"]')
+    const links = screen.getAllByRole('link')
+
+    expect(media?.className).toContain('aspect-[16/10]')
+    expect(image.className).toContain('group-hover:scale-105')
+    expect(image.className).toContain('motion-reduce:transform-none')
+    expect(overlay?.className).toContain('group-hover:opacity-0')
+    expect(links).toHaveLength(1)
+    expect(screen.getByRole('link', { name: /Read Case Study/i }).getAttribute('href')).toBe(
+      '/projects/project-one',
+    )
+  })
+
+  it('keeps the two-column media frame and shows a placeholder without an image', () => {
+    const { container } = render(
+      <ProjectArchiveItem index={0} project={makeProject({ image: null })} total={3} />,
+    )
+
+    expect(container.querySelector('[data-project-media="true"]')).not.toBeNull()
+    expect(container.querySelector('[data-project-frame="true"]')).not.toBeNull()
+    expect(screen.getByRole('img', { name: 'Project One preview unavailable' })).not.toBeNull()
+    expect(screen.getByText('Preview unavailable')).not.toBeNull()
+    expect(container.querySelector('article')?.className).toContain(
+      'motion-reduce:transition-none',
+    )
   })
 })
