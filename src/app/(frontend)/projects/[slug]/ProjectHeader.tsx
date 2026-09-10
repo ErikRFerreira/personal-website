@@ -30,16 +30,13 @@ function ProjectMetadata({ project }: { project: Project }) {
   if (cells.length === 0 && !links?.length) return null
 
   return (
-    <aside
-      className="border border-site-border-subtle bg-site-surface-elevated/80 p-4 shadow-[0_1rem_2.5rem_rgba(0,0,0,0.16)] backdrop-blur-sm lg:mt-2"
-      aria-label="Project metadata"
-    >
+    <aside className="lg:mt-2" aria-label="Project metadata">
       {cells.length > 0 && (
-        <dl className="grid grid-cols-2 gap-x-5 gap-y-3">
+        <dl className="grid grid-cols-2 gap-x-5 gap-y-3 border border-site-border-subtle bg-site-surface-elevated/80 p-4 shadow-[0_1rem_2.5rem_rgba(0,0,0,0.16)] backdrop-blur-sm">
           {cells.map(({ label, value }) => (
             <div
               key={label}
-              className={`min-w-0 border-t border-site-border-subtle pt-3 ${label === 'Stack' ? 'col-span-2' : ''}`}
+              className={`min-w-0 ${label === 'Role' || label === 'Type' ? '' : 'border-t border-site-border-subtle pt-3'} ${label === 'Stack' ? 'col-span-2' : ''}`}
             >
               <dt className="site-meta-label text-site-text-muted">{label}</dt>
               <dd className="mt-1 font-mono text-xs leading-[1.55] font-medium break-words text-site-text-primary">
@@ -51,7 +48,7 @@ function ProjectMetadata({ project }: { project: Project }) {
       )}
 
       {links && links.length > 0 && (
-        <div className="mt-6 flex flex-wrap gap-3" data-project-external-links="true">
+        <div className="mt-5 flex flex-wrap gap-3" data-project-external-links="true">
           {links.map(({ id, label, url }, index) => (
             <CtaButton
               className="w-fit max-w-full font-mono break-words whitespace-normal uppercase"
