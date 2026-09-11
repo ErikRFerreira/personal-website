@@ -8,6 +8,7 @@ import { cache } from 'react'
 
 import type { Category, Media, Series } from '@/payload-types'
 import { LensCategoryChips } from './LensCategoryChips'
+import { LensDigitalPurchase } from './LensDigitalPurchase'
 import { LensEditorial } from './LensEditorial'
 import { LensHero } from './LensHero'
 import { LensPurchaseOptions } from './LensPurchaseOptions'
@@ -57,7 +58,9 @@ export default async function LensPage({ params: paramsPromise }: Args) {
       })
     : []
   const context = [lens.location?.trim(), lens.year].filter(Boolean).join(' · ')
-  const hasLongForm = Boolean(lens.fullStory || lens.licensingText)
+  const hasLongForm = Boolean(
+    lens.fullStory || lens.digitalPurchaseEnabled || lens.digitalLicenseDescription,
+  )
 
   return (
     <main className="lens-detail-page relative isolate overflow-hidden bg-site-surface-deep pt-[var(--header-height)] text-site-text-primary">
@@ -92,11 +95,7 @@ export default async function LensPage({ params: paramsPromise }: Args) {
                   {lens.title}
                 </h1>
 
-                {context && (
-                  <p className="site-meta-label mt-4 text-site-text-muted">
-                    {context}
-                  </p>
-                )}
+                {context && <p className="site-meta-label mt-4 text-site-text-muted">{context}</p>}
 
                 {lens.intro && (
                   <p className="site-body-small mt-6 text-site-text-secondary xl:text-base">
@@ -106,17 +105,33 @@ export default async function LensPage({ params: paramsPromise }: Args) {
               </header>
 
               <LensTechnicalMeta metadata={lens.technicalMetadata} />
+
+              <LensDigitalPurchase
+                commercialLicensingEnabled={lens.commercialLicensingEnabled}
+                commercialLicensingText={lens.commercialLicensingText}
+                digitalCheckoutUrl={lens.digitalCheckoutUrl}
+                digitalCurrency={lens.digitalCurrency}
+                digitalDimensions={lens.digitalDimensions}
+                digitalFileSize={lens.digitalFileSize}
+                digitalFormat={lens.digitalFormat}
+                digitalLicenseType={lens.digitalLicenseType}
+                digitalPrice={lens.digitalPrice}
+                digitalPurchaseEnabled={lens.digitalPurchaseEnabled}
+              />
             </aside>
           </div>
 
-          <LensPurchaseOptions
-            digitalDownload={lens.digitalDownload}
-            printOptions={lens.printOptions}
-          />
+          <LensPurchaseOptions printOptions={lens.printOptions} />
         </section>
 
         {hasLongForm && (
-          <LensEditorial fullStory={lens.fullStory} licensingText={lens.licensingText} />
+          <LensEditorial
+            commercialLicensingEnabled={lens.commercialLicensingEnabled}
+            commercialLicensingText={lens.commercialLicensingText}
+            digitalLicenseDescription={lens.digitalLicenseDescription}
+            digitalPurchaseEnabled={lens.digitalPurchaseEnabled}
+            fullStory={lens.fullStory}
+          />
         )}
 
         {collection && <LensRelatedPhotos collection={collection} photos={relatedPhotos} />}

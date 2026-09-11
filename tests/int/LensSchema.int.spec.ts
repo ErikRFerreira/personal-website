@@ -35,21 +35,52 @@ describe('Lens taxonomy schema', () => {
   it('keeps commerce optional and separates digital downloads from print variants', () => {
     const fields = getLensContentFields()
     const printOptions = fields.find((field) => 'name' in field && field.name === 'printOptions')
-    const digitalDownload = fields.find(
-      (field) => 'name' in field && field.name === 'digitalDownload',
-    )
     const archiveFormat = Lens.fields.find(
       (field) => 'name' in field && field.name === 'archiveFormat',
     )
 
     expect(printOptions).toMatchObject({ type: 'array' })
-    expect(digitalDownload).toMatchObject({
-      fields: [
-        { defaultValue: false, name: 'available', type: 'checkbox' },
-        { admin: { condition: expect.any(Function) }, name: 'price', type: 'number' },
-      ],
-      type: 'group',
+    expect(
+      fields.find((field) => 'name' in field && field.name === 'digitalPurchaseEnabled'),
+    ).toMatchObject({
+      defaultValue: false,
+      type: 'checkbox',
     })
+    expect(
+      fields.find((field) => 'name' in field && field.name === 'digitalCurrency'),
+    ).toMatchObject({
+      defaultValue: 'EUR',
+      options: [{ value: 'EUR' }, { value: 'USD' }, { value: 'GBP' }],
+      type: 'select',
+    })
+    expect(
+      fields.find((field) => 'name' in field && field.name === 'digitalLicenseType'),
+    ).toMatchObject({ defaultValue: 'Personal use', type: 'text' })
+    expect(
+      fields.find((field) => 'name' in field && field.name === 'commercialLicensingEnabled'),
+    ).toMatchObject({ defaultValue: true, type: 'checkbox' })
+
+    for (const name of [
+      'digitalPrice',
+      'digitalCheckoutUrl',
+      'digitalFormat',
+      'digitalDimensions',
+      'digitalFileSize',
+      'digitalLicenseDescription',
+      'commercialLicensingText',
+    ]) {
+      const field = fields.find((candidate) => 'name' in candidate && candidate.name === name)
+      expect(field).toBeDefined()
+      expect(field).not.toHaveProperty('required')
+      expect(field).toMatchObject({ admin: { condition: expect.any(Function) } })
+    }
+
+    expect(
+      fields.find((field) => 'name' in field && field.name === 'digitalDownload'),
+    ).toBeUndefined()
+    expect(
+      fields.find((field) => 'name' in field && field.name === 'licensingText'),
+    ).toBeUndefined()
     expect(archiveFormat).toMatchObject({ defaultValue: 'auto', type: 'select' })
     expect(archiveFormat).not.toHaveProperty('required')
 
