@@ -1,14 +1,33 @@
 import RichText from '@/components/RichText'
+import Link from 'next/link'
 
 import type { Len } from '@/payload-types'
 
 type Props = {
+  commercialLicensingEnabled?: Len['commercialLicensingEnabled']
+  commercialLicensingText?: Len['commercialLicensingText']
+  digitalLicenseDescription?: Len['digitalLicenseDescription']
+  digitalPurchaseEnabled?: Len['digitalPurchaseEnabled']
   fullStory?: Len['fullStory']
-  licensingText?: string | null
 }
 
-export function LensEditorial({ fullStory, licensingText }: Props) {
-  if (!fullStory && !licensingText) return null
+const defaultLicenseDescription =
+  'Digital purchases include a personal-use license. Copyright remains with the photographer. Commercial, editorial and promotional use requires a separate license.'
+
+export function LensEditorial({
+  commercialLicensingEnabled,
+  commercialLicensingText,
+  digitalLicenseDescription,
+  digitalPurchaseEnabled,
+  fullStory,
+}: Props) {
+  const customLicenseDescription = digitalLicenseDescription?.trim()
+  const licenseDescription =
+    customLicenseDescription || (digitalPurchaseEnabled ? defaultLicenseDescription : null)
+  const commercialPrompt = commercialLicensingText?.trim() || 'Commercial use or publication?'
+  const showLicensing = Boolean(licenseDescription)
+
+  if (!fullStory && !showLicensing) return null
 
   return (
     <section className="site-container py-20 md:py-24" data-testid="lens-long-form">
@@ -28,10 +47,23 @@ export function LensEditorial({ fullStory, licensingText }: Props) {
           </div>
         )}
 
-        {licensingText && (
+        {showLicensing && (
           <div className="grid gap-4 border border-site-border-subtle bg-site-surface-elevated/65 p-5 sm:p-6 lg:grid-cols-[minmax(12rem,0.7fr)_minmax(0,2fr)] lg:gap-12">
             <h2 className="site-meta-label text-site-accent">Licensing</h2>
-            <p className="site-body-small max-w-3xl text-site-text-secondary">{licensingText}</p>
+            <div className="max-w-3xl">
+              <p className="site-body-small text-site-text-secondary">{licenseDescription}</p>
+              {commercialLicensingEnabled && (
+                <p className="mt-3 text-xs leading-relaxed text-site-text-muted">
+                  {commercialPrompt}{' '}
+                  <Link
+                    className="text-site-text-secondary underline decoration-site-border-control underline-offset-2 transition-colors hover:text-site-accent"
+                    href="/contact"
+                  >
+                    Inquire
+                  </Link>
+                </p>
+              )}
+            </div>
           </div>
         )}
       </div>

@@ -1125,16 +1125,34 @@ export interface Len {
       }[]
     | null;
   /**
-   * Optional availability and pricing for a digital download
+   * Show the digital purchase panel on this photograph
    */
-  digitalDownload?: {
-    available?: boolean | null;
-    price?: number | null;
-  };
+  digitalPurchaseEnabled?: boolean | null;
+  digitalPrice?: number | null;
+  digitalCurrency?: ('EUR' | 'USD' | 'GBP') | null;
   /**
-   * Usage rights, licensing terms, or copyright notice
+   * External checkout URL, such as a Lemon Squeezy checkout
    */
-  licensingText?: string | null;
+  digitalCheckoutUrl?: string | null;
+  /**
+   * For example: JPEG
+   */
+  digitalFormat?: string | null;
+  /**
+   * For example: 5568 × 3712 px
+   */
+  digitalDimensions?: string | null;
+  /**
+   * For example: 18 MB
+   */
+  digitalFileSize?: string | null;
+  digitalLicenseType?: string | null;
+  digitalLicenseDescription?: string | null;
+  commercialLicensingEnabled?: boolean | null;
+  /**
+   * For example: Commercial use or publication?
+   */
+  commercialLicensingText?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -2270,13 +2288,17 @@ export interface LensSelect<T extends boolean = true> {
         price?: T;
         id?: T;
       };
-  digitalDownload?:
-    | T
-    | {
-        available?: T;
-        price?: T;
-      };
-  licensingText?: T;
+  digitalPurchaseEnabled?: T;
+  digitalPrice?: T;
+  digitalCurrency?: T;
+  digitalCheckoutUrl?: T;
+  digitalFormat?: T;
+  digitalDimensions?: T;
+  digitalFileSize?: T;
+  digitalLicenseType?: T;
+  digitalLicenseDescription?: T;
+  commercialLicensingEnabled?: T;
+  commercialLicensingText?: T;
   meta?:
     | T
     | {

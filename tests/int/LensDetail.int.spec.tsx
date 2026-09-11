@@ -4,6 +4,7 @@ import type { Payload } from 'payload'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LensCategoryChips } from '@/app/(frontend)/lens/[slug]/LensCategoryChips'
+import { LensDigitalPurchase } from '@/app/(frontend)/lens/[slug]/LensDigitalPurchase'
 import { LensEditorial } from '@/app/(frontend)/lens/[slug]/LensEditorial'
 import { LensPurchaseOptions } from '@/app/(frontend)/lens/[slug]/LensPurchaseOptions'
 import { LensRelatedPhotos } from '@/app/(frontend)/lens/[slug]/LensRelatedPhotos'
@@ -81,7 +82,7 @@ describe('Lens detail components', () => {
     vi.unstubAllGlobals()
   })
 
-  it('omits purchasing when neither format is offered', () => {
+  it('omits print purchasing when no print format is offered', () => {
     const { container } = render(<LensPurchaseOptions />)
     expect(container.innerHTML).toBe('')
   })
@@ -102,32 +103,76 @@ describe('Lens detail components', () => {
     expect(screen.queryByRole('button')).toBeNull()
   })
 
-  it('shows an available digital download with an optional EUR price', () => {
+  it('only renders digital purchasing when it is enabled', () => {
     const { rerender } = render(
-      <LensPurchaseOptions digitalDownload={{ available: false, price: 95 }} />,
+      <LensDigitalPurchase digitalPrice={95} digitalPurchaseEnabled={false} />,
     )
 
-    expect(screen.queryByTestId('lens-purchase-options')).toBeNull()
+    expect(screen.queryByTestId('lens-digital-purchase')).toBeNull()
 
-    rerender(<LensPurchaseOptions digitalDownload={{ available: true, price: 95 }} />)
-    expect(screen.getByTestId('lens-digital-download')).not.toBeNull()
-    expect(screen.getByText('€95.00')).not.toBeNull()
-
-    rerender(<LensPurchaseOptions digitalDownload={{ available: true }} />)
-    expect(screen.getByText('Available')).not.toBeNull()
-    expect(screen.queryByText('€95.00')).toBeNull()
+    rerender(<LensDigitalPurchase digitalPurchaseEnabled />)
+    expect(screen.getByTestId('lens-digital-purchase')).not.toBeNull()
+    expect(screen.getByText('Available as digital download')).not.toBeNull()
+    expect(screen.queryByRole('link', { name: /buy digital download/i })).toBeNull()
   })
 
-  it('renders print and digital formats together when both are offered', () => {
+  it('renders populated digital metadata, checkout, and commercial inquiry', () => {
     render(
-      <LensPurchaseOptions
-        digitalDownload={{ available: true, price: 45 }}
-        printOptions={[{ size: '30 × 40 cm' }]}
+      <LensDigitalPurchase
+        commercialLicensingEnabled
+        commercialLicensingText="Commercial use or publication?"
+        digitalCheckoutUrl="https://example.com/checkout"
+        digitalCurrency="EUR"
+        digitalDimensions="5568 × 3712 px"
+        digitalFileSize="18 MB"
+        digitalFormat="JPEG"
+        digitalLicenseType="Personal use"
+        digitalPrice={18}
+        digitalPurchaseEnabled
       />,
     )
 
+    expect(screen.getByText('€18')).not.toBeNull()
+    expect(screen.getByText('EUR')).not.toBeNull()
+    expect(screen.getByText('Full-resolution JPEG')).not.toBeNull()
+    expect(screen.getByText('5568 × 3712 px')).not.toBeNull()
+    expect(screen.getByText('18 MB')).not.toBeNull()
+    expect(screen.getByText('Personal use')).not.toBeNull()
+
+    const checkout = screen.getByRole('link', { name: /buy digital download/i })
+    expect(checkout.getAttribute('href')).toBe('https://example.com/checkout')
+    expect(checkout.getAttribute('target')).toBe('_blank')
+    expect(checkout.getAttribute('rel')).toBe('noopener noreferrer')
+    expect(screen.getByRole('link', { name: 'Inquire' }).getAttribute('href')).toBe('/contact')
+  })
+
+  it('omits empty digital metadata without leaving empty rows', () => {
+    render(
+      <LensDigitalPurchase
+        commercialLicensingEnabled={false}
+        digitalCurrency="GBP"
+        digitalPrice={18.5}
+        digitalPurchaseEnabled
+      />,
+    )
+
+    expect(screen.getByText('£18.50')).not.toBeNull()
+    expect(screen.queryByText('Dimensions')).toBeNull()
+    expect(screen.queryByText('File size')).toBeNull()
+    expect(screen.queryByText('License')).toBeNull()
+    expect(screen.queryByRole('link')).toBeNull()
+  })
+
+  it('keeps print and digital purchase areas independent', () => {
+    render(
+      <>
+        <LensDigitalPurchase digitalPrice={45} digitalPurchaseEnabled />
+        <LensPurchaseOptions printOptions={[{ size: '30 × 40 cm' }]} />
+      </>,
+    )
+
     expect(screen.getByTestId('lens-print-options')).not.toBeNull()
-    expect(screen.getByTestId('lens-digital-download')).not.toBeNull()
+    expect(screen.getByTestId('lens-digital-purchase')).not.toBeNull()
   })
 
   it('renders only populated technical cells and preserves numeric zero', () => {
@@ -169,11 +214,26 @@ describe('Lens detail components', () => {
   })
 
   it('renders licensing without empty story or marketplace copy', () => {
-    render(<LensEditorial licensingText="Editorial use only." />)
+    render(<LensEditorial digitalLicenseDescription="Editorial use only." />)
 
     expect(screen.getByRole('heading', { name: 'Licensing' })).not.toBeNull()
+    expect(screen.getByText('Editorial use only.')).not.toBeNull()
     expect(screen.queryByText('Shipping & Returns')).toBeNull()
     expect(screen.queryByText('Story Behind the Shot')).toBeNull()
+  })
+
+  it('uses the restrained licensing fallback and optional inquiry action', () => {
+    const { rerender } = render(<LensEditorial commercialLicensingEnabled digitalPurchaseEnabled />)
+
+    expect(
+      screen.getByText(
+        'Digital purchases include a personal-use license. Copyright remains with the photographer. Commercial, editorial and promotional use requires a separate license.',
+      ),
+    ).not.toBeNull()
+    expect(screen.getByRole('link', { name: 'Inquire' }).getAttribute('href')).toBe('/contact')
+
+    rerender(<LensEditorial commercialLicensingEnabled={false} digitalPurchaseEnabled />)
+    expect(screen.queryByRole('link', { name: 'Inquire' })).toBeNull()
   })
 
   it('shows the story as expanded editorial content', () => {

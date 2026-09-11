@@ -119,35 +119,107 @@ export const Lens: CollectionConfig = {
               ],
             },
             {
-              name: 'digitalDownload',
-              type: 'group',
-              label: 'Digital Download',
+              name: 'digitalPurchaseEnabled',
+              type: 'checkbox',
+              label: 'Digital Purchase Enabled',
+              defaultValue: false,
               admin: {
-                description: 'Optional availability and pricing for a digital download',
+                description: 'Show the digital purchase panel on this photograph',
               },
-              fields: [
-                {
-                  name: 'available',
-                  type: 'checkbox',
-                  label: 'Available',
-                  defaultValue: false,
-                },
-                {
-                  name: 'price',
-                  type: 'number',
-                  label: 'Price (EUR)',
-                  admin: {
-                    condition: (_, siblingData) => siblingData?.available === true,
-                  },
-                },
-              ],
             },
             {
-              name: 'licensingText',
-              type: 'textarea',
-              label: 'Licensing / Usage Text',
+              name: 'digitalPrice',
+              type: 'number',
+              label: 'Digital Price',
               admin: {
-                description: 'Usage rights, licensing terms, or copyright notice',
+                condition: (data) => data?.digitalPurchaseEnabled === true,
+              },
+            },
+            {
+              name: 'digitalCurrency',
+              type: 'select',
+              label: 'Digital Currency',
+              defaultValue: 'EUR',
+              options: [
+                { label: 'Euro (EUR)', value: 'EUR' },
+                { label: 'US Dollar (USD)', value: 'USD' },
+                { label: 'British Pound (GBP)', value: 'GBP' },
+              ],
+              admin: {
+                condition: (data) => data?.digitalPurchaseEnabled === true,
+              },
+            },
+            {
+              name: 'digitalCheckoutUrl',
+              type: 'text',
+              label: 'Digital Checkout URL',
+              admin: {
+                condition: (data) => data?.digitalPurchaseEnabled === true,
+                description: 'External checkout URL, such as a Lemon Squeezy checkout',
+              },
+            },
+            {
+              name: 'digitalFormat',
+              type: 'text',
+              label: 'Digital Format',
+              admin: {
+                condition: (data) => data?.digitalPurchaseEnabled === true,
+                description: 'For example: JPEG',
+              },
+            },
+            {
+              name: 'digitalDimensions',
+              type: 'text',
+              label: 'Digital Dimensions',
+              admin: {
+                condition: (data) => data?.digitalPurchaseEnabled === true,
+                description: 'For example: 5568 × 3712 px',
+              },
+            },
+            {
+              name: 'digitalFileSize',
+              type: 'text',
+              label: 'Digital File Size',
+              admin: {
+                condition: (data) => data?.digitalPurchaseEnabled === true,
+                description: 'For example: 18 MB',
+              },
+            },
+            {
+              name: 'digitalLicenseType',
+              type: 'text',
+              label: 'Digital License Type',
+              defaultValue: 'Personal use',
+              admin: {
+                condition: (data) => data?.digitalPurchaseEnabled === true,
+              },
+            },
+            {
+              name: 'digitalLicenseDescription',
+              type: 'textarea',
+              label: 'Digital License Description',
+              admin: {
+                condition: (data) => data?.digitalPurchaseEnabled === true,
+              },
+            },
+            {
+              name: 'commercialLicensingEnabled',
+              type: 'checkbox',
+              label: 'Commercial Licensing Enabled',
+              defaultValue: true,
+              admin: {
+                condition: (data) => data?.digitalPurchaseEnabled === true,
+              },
+            },
+            {
+              name: 'commercialLicensingText',
+              type: 'text',
+              label: 'Commercial Licensing Text',
+              admin: {
+                condition: (data) =>
+                  data?.digitalPurchaseEnabled === true &&
+                  data?.commercialLicensingEnabled === true,
+                description: 'For example: Commercial use or publication?',
               },
             },
           ],
