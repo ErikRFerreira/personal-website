@@ -52,7 +52,7 @@ export const LensTechnicalMeta: React.FC<Props> = ({ metadata }) => {
       className="border border-site-border-subtle bg-site-surface-elevated/80 p-4 shadow-[0_1rem_2.5rem_rgba(0,0,0,0.16)] backdrop-blur-sm"
       data-testid="lens-technical-metadata"
     >
-      <h2 className="site-meta-label mb-3 text-site-accent">
+      <h2 className="site-meta-label flex items-center gap-2 text-site-accent">
         <span aria-hidden="true" className="size-1.5 rounded-full bg-site-accent" />
         Technical capture profile
       </h2>
