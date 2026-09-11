@@ -183,9 +183,8 @@ export function ProjectArchiveItem({ index, project, total }: ProjectArchiveItem
 
         <ProjectTechnologies tech={project.tech} />
         <CtaButton
-          className="w-full font-mono uppercase md:w-max"
+          className="w-full md:w-max"
           label="Read Case Study"
-          size="sm"
           type="custom"
           url={`/projects/${project.slug}`}
         >

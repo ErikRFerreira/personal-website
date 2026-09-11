@@ -85,9 +85,8 @@ function ProjectTechnologies({ tech }: { tech: Project['tech'] }) {
 function ProjectCta({ project }: { project: Project }) {
   return (
     <CtaButton
-      className="w-max font-mono uppercase"
+      className="w-max"
       label="Read Case Study"
-      size="sm"
       type="custom"
       url={`/projects/${project.slug}`}
     >

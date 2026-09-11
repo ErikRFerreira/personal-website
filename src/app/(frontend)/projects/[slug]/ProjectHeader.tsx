@@ -51,11 +51,10 @@ function ProjectMetadata({ project }: { project: Project }) {
         <div className="mt-5 flex flex-wrap gap-3" data-project-external-links="true">
           {links.map(({ id, label, url }, index) => (
             <CtaButton
-              className="w-fit max-w-full font-mono break-words whitespace-normal uppercase"
+              className="w-fit max-w-full break-words whitespace-normal"
               key={id ?? `${label}-${index}`}
               label={label}
               newTab
-              size="sm"
               type="custom"
               url={url}
             >

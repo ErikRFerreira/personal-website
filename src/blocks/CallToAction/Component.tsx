@@ -42,9 +42,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({ links, richText }) 
                 {links.map(({ id, link }, index) => (
                   <CtaButton
                     {...link}
-                    className="font-mono text-[0.6875rem] font-bold tracking-[0.16em] uppercase"
                     key={id ?? index}
-                    size="md"
                   >
                     <ArrowRight aria-hidden="true" className="h-4 w-4" />
                   </CtaButton>

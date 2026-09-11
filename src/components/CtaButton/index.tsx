@@ -1,11 +1,13 @@
 'use client'
 
 import { getCMSLinkHref, type CMSLinkType } from '@/components/Link'
-import SpecularButton, { type ButtonSize } from '@/components/SpecularButton'
+import SpecularButton from '@/components/SpecularButton'
 import type { MouseEventHandler, ReactNode } from 'react'
 
+export type CtaButtonVariant = 'standard' | 'header'
+
 type CtaButtonLinkProps = Omit<CMSLinkType, 'size'> & {
-  size?: ButtonSize
+  variant?: CtaButtonVariant
 }
 
 type CtaButtonActionProps = {
@@ -14,8 +16,8 @@ type CtaButtonActionProps = {
   disabled?: boolean
   form?: string
   onClick?: MouseEventHandler<HTMLButtonElement>
-  size?: ButtonSize
   type: 'button' | 'submit' | 'reset'
+  variant?: CtaButtonVariant
 }
 
 export type CtaButtonProps = CtaButtonLinkProps | CtaButtonActionProps
@@ -45,9 +47,14 @@ const CTA_APPEARANCE = {
 const isActionButton = (props: CtaButtonProps): props is CtaButtonActionProps =>
   props.type === 'button' || props.type === 'submit' || props.type === 'reset'
 
+const CTA_SIZE_BY_VARIANT = {
+  header: 'sm',
+  standard: 'md',
+} as const
+
 export function CtaButton(props: CtaButtonProps) {
   if (isActionButton(props)) {
-    const { children, className, disabled, form, onClick, size = 'lg', type } = props
+    const { children, className, disabled, form, onClick, type, variant = 'standard' } = props
 
     return (
       <SpecularButton
@@ -56,7 +63,7 @@ export function CtaButton(props: CtaButtonProps) {
         disabled={disabled}
         form={form}
         onClick={onClick}
-        size={size}
+        size={CTA_SIZE_BY_VARIANT[variant]}
         type={type}
       >
         {children}
@@ -64,7 +71,7 @@ export function CtaButton(props: CtaButtonProps) {
     )
   }
 
-  const { children, className, label, newTab, size = 'lg', ...link } = props
+  const { children, className, label, newTab, variant = 'standard', ...link } = props
   const href = getCMSLinkHref(link)
 
   if (!href) return null
@@ -76,7 +83,7 @@ export function CtaButton(props: CtaButtonProps) {
       className={className}
       rel={newTab ? 'noopener noreferrer' : undefined}
       target={newTab ? '_blank' : undefined}
-      size={size}
+      size={CTA_SIZE_BY_VARIANT[variant]}
     >
       {label}
       {children}

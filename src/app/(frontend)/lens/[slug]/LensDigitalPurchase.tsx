@@ -56,7 +56,8 @@ export function LensDigitalPurchase({
   const dimensions = digitalDimensions?.trim()
   const fileSize = digitalFileSize?.trim()
   const licenseType = digitalLicenseType?.trim()
-  const commercialPrompt = commercialLicensingText?.trim() || 'Commercial use or publication?'
+  const commercialPrompt =
+    commercialLicensingText?.trim() || 'Need commercial, editorial, or promotional rights?'
   const details = [
     { label: 'Dimensions', value: dimensions },
     { label: 'File size', value: fileSize },
@@ -125,7 +126,7 @@ export function LensDigitalPurchase({
             className="text-site-text-secondary underline decoration-site-border-control underline-offset-2 transition-colors hover:text-site-accent"
             href="/contact"
           >
-            Inquire
+            Request a license
           </Link>
         </p>
       )}

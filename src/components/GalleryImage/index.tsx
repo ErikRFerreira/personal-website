@@ -81,7 +81,6 @@ export function GalleryImage({ children, className, image, title }: Props) {
               <CtaButton
                 className="shrink-0"
                 onClick={() => dialogRef.current?.close()}
-                size="sm"
                 type="button"
               >
                 <X aria-hidden="true" className="h-4 w-4" />

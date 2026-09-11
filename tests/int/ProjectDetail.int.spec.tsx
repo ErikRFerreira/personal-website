@@ -18,29 +18,6 @@ vi.mock('next/link', () => ({
   ),
 }))
 
-vi.mock('@/components/CtaButton', () => ({
-  CtaButton: ({
-    children,
-    label,
-    newTab,
-    url,
-  }: {
-    children?: ReactNode
-    label: string
-    newTab?: boolean
-    url: string
-  }) => (
-    <a
-      href={url}
-      rel={newTab ? 'noopener noreferrer' : undefined}
-      target={newTab ? '_blank' : undefined}
-    >
-      {label}
-      {children}
-    </a>
-  ),
-}))
-
 vi.mock('@/components/Media', () => ({
   Media: ({ resource }: { resource: Media }) => (
     // eslint-disable-next-line @next/next/no-img-element
@@ -170,6 +147,9 @@ describe('ProjectDetail', () => {
     expect(externalLink.getAttribute('href')).toBe('https://example.com')
     expect(externalLink.getAttribute('target')).toBe('_blank')
     expect(externalLink.getAttribute('rel')).toBe('noopener noreferrer')
+    expect(externalLink.classList.contains('specular-button--md')).toBe(true)
+    expect(externalLink.className).not.toContain('font-mono')
+    expect(externalLink.className).not.toContain('uppercase')
     expect(screen.queryByRole('link', { name: /Unsafe Site/i })).toBeNull()
 
     expect(screen.getByRole('link', { name: /Project Two/i }).getAttribute('href')).toBe(

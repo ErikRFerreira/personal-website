@@ -152,6 +152,9 @@ describe('ProjectArchiveItem', () => {
     expect(caseStudyLink.getAttribute('href')).toBe('/projects/project-one')
     expect(caseStudyLink.className).toContain('w-full')
     expect(caseStudyLink.className).toContain('md:w-max')
+    expect(caseStudyLink.classList.contains('specular-button--md')).toBe(true)
+    expect(caseStudyLink.className).not.toContain('font-mono')
+    expect(caseStudyLink.className).not.toContain('uppercase')
   })
 
   it('keeps the two-column media frame and shows a placeholder without an image', () => {
