@@ -16,7 +16,7 @@
   }
 
   .zoomHint {
-    display: flex;
-    opacity: 1;
+    display: block;
+    opacity: 0.72;
   }
 }

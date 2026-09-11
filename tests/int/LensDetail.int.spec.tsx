@@ -140,6 +140,21 @@ describe('Lens detail components', () => {
     expect(screen.getByText('Personal use')).not.toBeNull()
 
     const checkout = screen.getByRole('link', { name: /buy digital download/i })
+    const purchaseSection = screen.getByTestId('lens-digital-purchase')
+    const contentOrder = [
+      'Available as digital download',
+      '€18',
+      'Full-resolution JPEG',
+      '5568 × 3712 px',
+      '18 MB',
+      'Personal use',
+      'Buy digital download',
+      'Commercial use or publication?',
+      'Request a license',
+    ].map((content) => purchaseSection.textContent?.indexOf(content) ?? -1)
+
+    expect(contentOrder.every((position) => position >= 0)).toBe(true)
+    expect(contentOrder).toEqual([...contentOrder].sort((a, b) => a - b))
     expect(checkout.getAttribute('href')).toBe('https://example.com/checkout')
     expect(checkout.getAttribute('target')).toBe('_blank')
     expect(checkout.getAttribute('rel')).toBe('noopener noreferrer')

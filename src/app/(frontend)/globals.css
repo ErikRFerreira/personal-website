@@ -50,6 +50,9 @@
     --site-font-size-body: 0.875rem;
     --site-font-size-body-small: 0.875rem;
     --site-font-size-label: 0.75rem;
+    --site-font-size-eyebrow: 0.6875rem;
+    --site-font-size-field-label: 0.6875rem;
+    --site-font-size-field-value: 0.75rem;
     --site-font-size-caption: 0.6875rem;
     --site-font-size-meta: 0.625rem;
   }
@@ -305,6 +308,31 @@
     text-transform: uppercase;
   }
 
+  .site-eyebrow {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: var(--site-font-size-eyebrow);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .site-field-label {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: var(--site-font-size-field-label);
+    font-weight: 650;
+    line-height: 1.3;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .site-field-value {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: var(--site-font-size-field-value);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
   .site-caption {
     font-family: var(--font-geist-mono), monospace;
     font-size: var(--site-font-size-caption);
@@ -442,6 +470,9 @@ html[data-theme='light'] {
 .lens-detail-page {
   --lens-ambient-origin-y: clamp(8rem, 14vw, 14rem);
   --lens-ambient-center-y: var(--lens-ambient-origin-y);
+  --site-font-size-caption: 0.75rem;
+  --site-font-size-meta: 0.6875rem;
+  --site-text-muted: #8b9698;
 }
 
 [data-block-type='lensBlock'][data-transition-from='revealText'] {

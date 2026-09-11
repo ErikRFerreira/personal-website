@@ -206,6 +206,43 @@ test.describe('Frontend', () => {
         return frameBounds && infoBounds ? frameBounds.width > infoBounds.width : false
       })
       .toBe(true)
+    await expect
+      .poll(async () => {
+        const frameBounds = await detailFrame.boundingBox()
+        const infoBounds = await primaryInfo.boundingBox()
+        return frameBounds && infoBounds ? Math.abs(frameBounds.y - infoBounds.y) : -1
+      })
+      .toBeLessThanOrEqual(1)
+    await expect
+      .poll(async () => {
+        const infoBounds = await primaryInfo.boundingBox()
+        return infoBounds?.width ?? 0
+      })
+      .toBeGreaterThanOrEqual(352)
+    await expect
+      .poll(async () => {
+        const infoBounds = await primaryInfo.boundingBox()
+        return infoBounds?.width ?? Number.POSITIVE_INFINITY
+      })
+      .toBeLessThanOrEqual(416)
+
+    await page.setViewportSize({ height: 1024, width: 768 })
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1,
+        ),
+      )
+      .toBe(true)
+    await expect
+      .poll(async () => {
+        const frameBounds = await detailFrame.boundingBox()
+        const infoBounds = await primaryInfo.boundingBox()
+        return frameBounds && infoBounds
+          ? infoBounds.y >= frameBounds.y + frameBounds.height
+          : false
+      })
+      .toBe(true)
 
     await page.setViewportSize({ height: 844, width: 390 })
     await expect
