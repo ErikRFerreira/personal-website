@@ -59,6 +59,13 @@
   text-shadow: 0 1px 2px rgb(0 0 0 / 80%);
 }
 
+.technicalFrame[data-detail-frame='true'] .frameLabel {
+  color: var(--site-text-muted);
+  font-size: clamp(0.625rem, 0.65vw, var(--site-font-size-caption));
+  line-height: 1.25;
+  letter-spacing: 0.05em;
+}
+
 @media (width < 40rem) {
   .technicalFrame::after {
     inset: 4px;
@@ -66,5 +73,9 @@
 
   .frameLabel {
     font-size: 0.5rem;
+  }
+
+  .technicalFrame[data-detail-frame='true'] .frameLabel {
+    font-size: 0.5625rem;
   }
 }

@@ -1,5 +1,4 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import type { ReactNode } from 'react'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
 import { GalleryImage } from '@/components/GalleryImage'
@@ -9,12 +8,6 @@ vi.mock('@/components/Media', () => ({
   Media: ({ resource }: { resource: Media }) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img alt={resource.alt ?? ''} src={resource.url ?? ''} />
-  ),
-}))
-
-vi.mock('@/components/CtaButton', () => ({
-  CtaButton: ({ children, ...props }: { children: ReactNode; onClick?: () => void }) => (
-    <button {...props}>{children}</button>
   ),
 }))
 
@@ -71,7 +64,9 @@ describe('GalleryImage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'View Calculator full size' }))
     const dialog = await screen.findByRole('dialog', { name: 'Calculator' })
-    fireEvent.click(screen.getByRole('button', { name: 'Close' }))
+    const closeButton = screen.getByRole('button', { name: 'Close' })
+    expect(closeButton.classList.contains('specular-button--md')).toBe(true)
+    fireEvent.click(closeButton)
 
     await waitFor(() => expect(dialog.hasAttribute('open')).toBe(false))
     expect(document.body.style.overflow).toBe('')

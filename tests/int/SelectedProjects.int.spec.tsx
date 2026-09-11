@@ -100,9 +100,11 @@ describe('SelectedProjectsBlock', () => {
       '/projects/project-one',
     )
     expect(screen.getByRole('link', { name: 'View all' }).getAttribute('href')).toBe('/projects')
-    expect(
-      screen.getByRole('link', { name: /Read Case Study/i }).classList.contains('specular-button'),
-    ).toBe(true)
+    const projectCta = screen.getByRole('link', { name: /Read Case Study/i })
+    expect(projectCta.classList.contains('specular-button')).toBe(true)
+    expect(projectCta.classList.contains('specular-button--md')).toBe(true)
+    expect(projectCta.className).not.toContain('font-mono')
+    expect(projectCta.className).not.toContain('uppercase')
     expect(screen.getByRole('img', { name: 'Project dashboard' })).not.toBeNull()
     expect(container.querySelector('[data-project-technologies="true"]')).not.toBeNull()
     expect(

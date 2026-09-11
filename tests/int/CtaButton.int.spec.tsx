@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import type { FormEvent } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
@@ -21,11 +21,11 @@ vi.mock('ogl', () => ({
 afterEach(cleanup)
 
 describe('shared CTA', () => {
-  it('retains native form submission and disabled semantics', () => {
+  it('uses the standard contact-form size and retains native form semantics', () => {
     const onSubmit = vi.fn((event: FormEvent) => event.preventDefault())
     const { getByRole, rerender } = render(
       <form onSubmit={onSubmit}>
-        <CtaButton size="md" type="submit">
+        <CtaButton type="submit">
           Send message
         </CtaButton>
       </form>,
@@ -40,7 +40,7 @@ describe('shared CTA', () => {
 
     rerender(
       <form onSubmit={onSubmit}>
-        <CtaButton disabled size="md" type="submit">
+        <CtaButton disabled type="submit">
           Send message
         </CtaButton>
       </form>,
@@ -48,6 +48,22 @@ describe('shared CTA', () => {
 
     fireEvent.click(getByRole('button', { name: 'Send message' }))
     expect(onSubmit).toHaveBeenCalledTimes(1)
+  })
+
+  it('uses the standard size for links unless the header variant is requested', () => {
+    render(
+      <div>
+        <CtaButton label="View project" type="custom" url="/projects/example" />
+        <CtaButton label="Contact" type="custom" url="/contact" variant="header" />
+      </div>,
+    )
+
+    expect(
+      screen.getByRole('link', { name: 'View project' }).classList.contains('specular-button--md'),
+    ).toBe(true)
+    expect(
+      screen.getByRole('link', { name: 'Contact' }).classList.contains('specular-button--sm'),
+    ).toBe(true)
   })
 
   it('renders only flagged header items with the compact specular CTA', () => {

@@ -36,7 +36,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
     >
       {navItems.map(({ link, isCta }, i) => {
         if (isCta && !renderCtasAsLinks) {
-          return <CtaButton key={i} {...link} className={ctaClassName} size="sm" />
+          return <CtaButton key={i} {...link} className={ctaClassName} variant="header" />
         }
 
         const href = getCMSLinkHref(link)

@@ -1,6 +1,5 @@
 'use client'
 
-import { ZoomIn } from 'lucide-react'
 import Image from 'next/image'
 import { useState, type PointerEvent } from 'react'
 
@@ -69,9 +68,8 @@ export function LensZoomImage({ photo, title }: LensZoomImageProps) {
       />
 
       <div
-        className={`${styles.zoomHint} site-meta-label pointer-events-none absolute right-4 bottom-4 z-30 items-center gap-2 border border-site-border-subtle bg-site-surface-deep/75 px-3 py-2 font-bold text-site-accent backdrop-blur-md`}
+        className={`${styles.zoomHint} site-caption pointer-events-none absolute right-4 bottom-4 z-30 text-site-text-muted uppercase`}
       >
-        <ZoomIn aria-hidden="true" className="size-3.5" />
         Hover to enlarge
       </div>
     </div>

@@ -24,11 +24,8 @@ const MetaCell: React.FC<MetaCell> = ({ label, value, wide }) => {
 
   return (
     <div className={`min-w-0 border-t border-site-border-subtle pt-3 ${wide ? 'col-span-2' : ''}`}>
-      <dt className="site-meta-label text-site-text-muted">{label}</dt>
-      <dd
-        className="mt-1 truncate font-mono text-xs font-medium text-site-text-primary"
-        title={String(value)}
-      >
+      <dt className="site-field-label text-site-text-muted">{label}</dt>
+      <dd className="site-field-value mt-1 truncate text-site-text-primary" title={String(value)}>
         {value}
       </dd>
     </div>
@@ -49,14 +46,11 @@ export const LensTechnicalMeta: React.FC<Props> = ({ metadata }) => {
 
   return (
     <section
-      className="border border-site-border-subtle bg-site-surface-elevated/80 p-4 shadow-[0_1rem_2.5rem_rgba(0,0,0,0.16)] backdrop-blur-sm"
+      className="border-t border-site-border-subtle py-5"
       data-testid="lens-technical-metadata"
     >
-      <h2 className="site-meta-label mb-3 text-site-accent">
-        <span aria-hidden="true" className="size-1.5 rounded-full bg-site-accent" />
-        Technical capture profile
-      </h2>
-      <dl className="grid grid-cols-2 gap-x-5 gap-y-3">
+      <h2 className="site-eyebrow text-site-accent">Technical capture profile</h2>
+      <dl className="mt-4 grid grid-cols-2 gap-x-5 gap-y-3">
         {cells.map((cell) => (
           <MetaCell key={cell.label} {...cell} />
         ))}

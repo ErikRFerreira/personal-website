@@ -125,7 +125,7 @@ describe('contact form layout', () => {
 
     const submit = getByRole('button', { name: 'Send Message' })
     expect(submit.classList.contains('specular-button')).toBe(true)
-    expect(submit.classList.contains('specular-button--quiet')).toBe(true)
+    expect(submit.classList.contains('specular-button--md')).toBe(true)
     expect(submit.getAttribute('type')).toBe('submit')
 
     const css = await readFile('src/blocks/Form/Form.css', 'utf8')

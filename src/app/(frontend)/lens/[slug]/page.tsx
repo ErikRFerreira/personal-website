@@ -76,8 +76,8 @@ export default async function LensPage({ params: paramsPromise }: Args) {
             Back to Lens archive
           </Link>
 
-          <div className="mt-6 grid items-start gap-10 lg:grid-cols-12 lg:gap-12">
-            <div className="lg:col-span-8">
+          <div className="mt-6 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_clamp(22rem,28vw,26rem)] lg:gap-10 xl:gap-14">
+            <div className="min-w-0">
               <LensHero
                 location={lens.location}
                 metadata={lens.technicalMetadata}
@@ -87,20 +87,20 @@ export default async function LensPage({ params: paramsPromise }: Args) {
               />
             </div>
 
-            <aside className="space-y-6 lg:col-span-4 lg:pt-1" data-testid="lens-primary-info">
-              <header>
+            <aside className="w-full min-w-0" data-testid="lens-primary-info">
+              <header className="pb-5">
                 <LensCategoryChips categories={categories} />
 
-                <h1 className="mt-5 text-[2rem] leading-[1.02] font-extrabold tracking-[-0.04em] text-site-text-primary md:text-4xl xl:text-5xl">
+                <h1 className="mt-3 text-[2rem] leading-[1.02] font-extrabold tracking-[-0.04em] text-site-text-primary md:text-4xl xl:text-[2.75rem]">
                   {lens.title}
                 </h1>
 
-                {context && <p className="site-meta-label mt-4 text-site-text-muted">{context}</p>}
+                {context && (
+                  <p className="site-caption mt-3 text-site-text-muted uppercase">{context}</p>
+                )}
 
                 {lens.intro && (
-                  <p className="site-body-small mt-6 text-site-text-secondary xl:text-base">
-                    {lens.intro}
-                  </p>
+                  <p className="site-body-small mt-4 text-site-text-secondary">{lens.intro}</p>
                 )}
               </header>
 

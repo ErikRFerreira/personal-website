@@ -173,13 +173,13 @@ export const FormBlock: React.FC<
 
           {layout === 'contact' ? (
             <div className="mt-14">
-              <CtaButton form={formID} size="md" type="submit">
+              <CtaButton form={formID} type="submit">
                 {effectiveSubmitLabel}
                 <ArrowRight className="h-4 w-4" />
               </CtaButton>
             </div>
           ) : (
-            <CtaButton form={formID} size="md" type="submit">
+            <CtaButton form={formID} type="submit">
               {effectiveSubmitLabel}
             </CtaButton>
           )}

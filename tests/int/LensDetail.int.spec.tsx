@@ -140,10 +140,27 @@ describe('Lens detail components', () => {
     expect(screen.getByText('Personal use')).not.toBeNull()
 
     const checkout = screen.getByRole('link', { name: /buy digital download/i })
+    const purchaseSection = screen.getByTestId('lens-digital-purchase')
+    const contentOrder = [
+      'Available as digital download',
+      '€18',
+      'Full-resolution JPEG',
+      '5568 × 3712 px',
+      '18 MB',
+      'Personal use',
+      'Buy digital download',
+      'Commercial use or publication?',
+      'Request a license',
+    ].map((content) => purchaseSection.textContent?.indexOf(content) ?? -1)
+
+    expect(contentOrder.every((position) => position >= 0)).toBe(true)
+    expect(contentOrder).toEqual([...contentOrder].sort((a, b) => a - b))
     expect(checkout.getAttribute('href')).toBe('https://example.com/checkout')
     expect(checkout.getAttribute('target')).toBe('_blank')
     expect(checkout.getAttribute('rel')).toBe('noopener noreferrer')
-    expect(screen.getByRole('link', { name: 'Inquire' }).getAttribute('href')).toBe('/contact')
+    expect(screen.getByRole('link', { name: 'Request a license' }).getAttribute('href')).toBe(
+      '/contact',
+    )
   })
 
   it('omits empty digital metadata without leaving empty rows', () => {
@@ -222,7 +239,7 @@ describe('Lens detail components', () => {
     expect(screen.queryByText('Story Behind the Shot')).toBeNull()
   })
 
-  it('uses the restrained licensing fallback and optional inquiry action', () => {
+  it('uses the restrained licensing fallback without duplicating the purchase inquiry', () => {
     const { rerender } = render(<LensEditorial commercialLicensingEnabled digitalPurchaseEnabled />)
 
     expect(
@@ -230,10 +247,32 @@ describe('Lens detail components', () => {
         'Digital purchases include a personal-use license. Copyright remains with the photographer. Commercial, editorial and promotional use requires a separate license.',
       ),
     ).not.toBeNull()
-    expect(screen.getByRole('link', { name: 'Inquire' }).getAttribute('href')).toBe('/contact')
+    expect(screen.queryByRole('link', { name: 'Request a license' })).toBeNull()
 
-    rerender(<LensEditorial commercialLicensingEnabled={false} digitalPurchaseEnabled />)
-    expect(screen.queryByRole('link', { name: 'Inquire' })).toBeNull()
+    rerender(
+      <LensEditorial
+        commercialLicensingEnabled
+        digitalLicenseDescription="Editorial use only."
+        digitalPurchaseEnabled={false}
+      />,
+    )
+    expect(screen.getByRole('link', { name: 'Request a license' }).getAttribute('href')).toBe(
+      '/contact',
+    )
+    expect(
+      screen.getByText('Need commercial, editorial, or promotional rights?', { exact: false }),
+    ).not.toBeNull()
+  })
+
+  it('renders one commercial inquiry when purchase and editorial licensing are both shown', () => {
+    render(
+      <>
+        <LensDigitalPurchase commercialLicensingEnabled digitalPurchaseEnabled />
+        <LensEditorial commercialLicensingEnabled digitalPurchaseEnabled />
+      </>,
+    )
+
+    expect(screen.getAllByRole('link', { name: 'Request a license' })).toHaveLength(1)
   })
 
   it('shows the story as expanded editorial content', () => {
@@ -242,6 +281,19 @@ describe('Lens detail components', () => {
     expect(screen.getByRole('heading', { name: 'Story Behind the Shot' })).not.toBeNull()
     expect(screen.getByText('Rich story content')).not.toBeNull()
     expect(screen.queryByRole('button', { name: 'Story Behind the Shot' })).toBeNull()
+  })
+
+  it('shows story and licensing together in the editorial section', () => {
+    render(
+      <LensEditorial
+        digitalLicenseDescription="Personal use only."
+        fullStory={{ root: {} } as Len['fullStory']}
+      />,
+    )
+
+    expect(screen.getByRole('heading', { name: 'Story Behind the Shot' })).not.toBeNull()
+    expect(screen.getByRole('heading', { name: 'Licensing' })).not.toBeNull()
+    expect(screen.getByText('Personal use only.')).not.toBeNull()
   })
 
   it('zooms around the pointer and resets on pointer leave', () => {

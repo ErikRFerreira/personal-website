@@ -7,10 +7,7 @@ export function LensCategoryChips({ categories }: { categories: Category[] }) {
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1" data-testid="lens-categories">
       <span aria-hidden="true" className="h-px w-6 bg-site-accent" />
       {categories.map((category) => (
-        <span
-          className="site-meta-label text-site-accent"
-          key={category.id}
-        >
+        <span className="site-eyebrow text-site-accent" key={category.id}>
           {category.title}
         </span>
       ))}
