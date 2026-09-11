@@ -35,8 +35,8 @@ export function LensEditorial({
         {fullStory && (
           <div className="grid gap-8 py-10 lg:grid-cols-12 lg:gap-12 lg:py-12">
             <header className="lg:col-span-4">
-              <h2 className="font-serif text-[1.3125rem] leading-tight font-medium tracking-[0.01em] text-site-text-primary md:text-2xl">
-                Story Behind the Shot
+              <h2 className="text-[1.3125rem] leading-tight font-medium tracking-[0.01em] text-site-text-primary md:text-2xl">
+                Story Behind the Shot:
               </h2>
             </header>
             <RichText
