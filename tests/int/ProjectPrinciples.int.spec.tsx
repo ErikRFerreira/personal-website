@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { ProjectPrinciplesBlock } from '@/blocks/ProjectPrinciples/Component'
 import { ProjectPrinciples } from '@/blocks/ProjectPrinciples/config'
-import { Projects } from '@/collections/Projects'
+import { Projects } from '@/collections/projects'
 import type { ProjectPrinciplesBlock as ProjectPrinciplesBlockProps } from '@/payload-types'
 
 vi.mock('@/components/RevealOnScroll', () => ({

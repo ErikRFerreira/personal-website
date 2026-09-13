@@ -470,7 +470,12 @@ html[data-theme='light'] {
 .lens-detail-page {
   --lens-ambient-origin-y: clamp(8rem, 14vw, 14rem);
   --lens-ambient-center-y: var(--lens-ambient-origin-y);
+}
+
+.detail-page {
   --site-font-size-caption: 0.75rem;
+  --site-font-size-field-label: 0.6875rem;
+  --site-font-size-field-value: 0.8125rem;
   --site-font-size-meta: 0.6875rem;
   --site-text-muted: #8b9698;
 }

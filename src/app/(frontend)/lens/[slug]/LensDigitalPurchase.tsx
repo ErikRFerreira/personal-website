@@ -1,6 +1,11 @@
-import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
+import {
+  DetailAction,
+  DetailInfoSection,
+  DetailMetaGrid,
+  DetailMetaItem,
+} from '@/components/DetailInfo'
 import type { Len } from '@/payload-types'
 
 type Props = Pick<
@@ -65,12 +70,11 @@ export function LensDigitalPurchase({
   ].filter((detail): detail is { label: string; value: string } => Boolean(detail.value))
 
   return (
-    <section
-      className="border-t border-site-border-subtle pt-5"
+    <DetailInfoSection
+      className="py-3.5"
       data-testid="lens-digital-purchase"
+      title="Available as digital download"
     >
-      <h2 className="site-eyebrow text-site-accent">Available as digital download</h2>
-
       {(digitalPrice != null || format) && (
         <div className="mt-3 flex flex-wrap items-end justify-between gap-x-5 gap-y-2">
           {digitalPrice != null && (
@@ -88,30 +92,25 @@ export function LensDigitalPurchase({
       )}
 
       {details.length > 0 && (
-        <dl className="mt-4 grid grid-cols-2 gap-x-5 gap-y-3 border-t border-site-border-subtle pt-4">
+        <DetailMetaGrid className="mt-4 sm:grid-cols-3">
           {details.map(({ label, value }) => (
-            <div className="min-w-0" key={label}>
-              <dt className="site-field-label text-site-text-muted">{label}</dt>
-              <dd className="site-field-value mt-1 text-site-text-primary">{value}</dd>
-            </div>
+            <DetailMetaItem key={label} label={label} value={value} />
           ))}
-        </dl>
+        </DetailMetaGrid>
       )}
 
       {checkoutUrl && (
-        <a
-          className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 bg-site-text-primary px-4 py-3 font-mono text-[0.6875rem] font-bold tracking-[0.14em] text-site-surface-deep uppercase transition-colors hover:bg-site-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-site-border-active"
+        <DetailAction
+          className="mt-5 w-full"
+          external
           href={checkoutUrl}
-          rel="noopener noreferrer"
-          target="_blank"
         >
           Buy digital download
-          <ArrowRight aria-hidden="true" className="size-3" />
-        </a>
+        </DetailAction>
       )}
 
       {commercialLicensingEnabled && (
-        <p className="site-caption mt-3 text-center leading-relaxed text-site-text-muted">
+        <p className="site-caption mt-3 leading-relaxed text-site-text-muted">
           {commercialPrompt}{' '}
           <Link
             className="text-site-text-secondary underline decoration-site-border-control underline-offset-2 transition-colors hover:text-site-accent"
@@ -121,6 +120,6 @@ export function LensDigitalPurchase({
           </Link>
         </p>
       )}
-    </section>
+    </DetailInfoSection>
   )
 }

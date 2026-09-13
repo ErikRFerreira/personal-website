@@ -7,6 +7,7 @@ import { getPayload } from 'payload'
 import { cache } from 'react'
 
 import type { Category, Media, Series } from '@/payload-types'
+import { DetailInfoPanel, DetailInfoSection } from '@/components/DetailInfo'
 import { LensCategoryChips } from './LensCategoryChips'
 import { LensDigitalPurchase } from './LensDigitalPurchase'
 import { LensEditorial } from './LensEditorial'
@@ -63,7 +64,7 @@ export default async function LensPage({ params: paramsPromise }: Args) {
   )
 
   return (
-    <main className="lens-detail-page relative isolate overflow-hidden bg-site-surface-deep pt-[var(--header-height)] text-site-text-primary">
+    <main className="lens-detail-page detail-page relative isolate overflow-hidden bg-site-surface-deep pt-[var(--header-height)] text-site-text-primary">
       <div aria-hidden="true" className="lens-ambient-layer lens-ambient-layer--detail" />
 
       <div className="relative z-10">
@@ -87,37 +88,41 @@ export default async function LensPage({ params: paramsPromise }: Args) {
               />
             </div>
 
-            <aside className="w-full min-w-0" data-testid="lens-primary-info">
-              <header className="pb-5">
-                <LensCategoryChips categories={categories} />
+            <aside className="w-full min-w-0 lg:self-stretch" data-testid="lens-primary-info">
+              <DetailInfoPanel className="lg:min-h-full">
+                <DetailInfoSection className="py-4">
+                  <header>
+                    <LensCategoryChips categories={categories} />
 
-                <h1 className="mt-3 text-[2rem] leading-[1.02] font-extrabold tracking-[-0.04em] text-site-text-primary md:text-4xl xl:text-[2.75rem]">
-                  {lens.title}
-                </h1>
+                    <h1 className="mt-3 text-[2rem] leading-[1.02] font-extrabold tracking-[-0.04em] text-site-text-primary md:text-4xl xl:text-[2.5rem]">
+                      {lens.title}
+                    </h1>
 
-                {context && (
-                  <p className="site-caption mt-3 text-site-text-muted uppercase">{context}</p>
-                )}
+                    {context && (
+                      <p className="site-caption mt-3 text-site-text-muted uppercase">{context}</p>
+                    )}
 
-                {lens.intro && (
-                  <p className="site-body-small mt-4 text-site-text-secondary">{lens.intro}</p>
-                )}
-              </header>
+                    {lens.intro && (
+                      <p className="site-body-small mt-4 text-site-text-secondary">{lens.intro}</p>
+                    )}
+                  </header>
+                </DetailInfoSection>
 
-              <LensTechnicalMeta metadata={lens.technicalMetadata} />
+                <LensTechnicalMeta metadata={lens.technicalMetadata} />
 
-              <LensDigitalPurchase
-                commercialLicensingEnabled={lens.commercialLicensingEnabled}
-                commercialLicensingText={lens.commercialLicensingText}
-                digitalCheckoutUrl={lens.digitalCheckoutUrl}
-                digitalCurrency={lens.digitalCurrency}
-                digitalDimensions={lens.digitalDimensions}
-                digitalFileSize={lens.digitalFileSize}
-                digitalFormat={lens.digitalFormat}
-                digitalLicenseType={lens.digitalLicenseType}
-                digitalPrice={lens.digitalPrice}
-                digitalPurchaseEnabled={lens.digitalPurchaseEnabled}
-              />
+                <LensDigitalPurchase
+                  commercialLicensingEnabled={lens.commercialLicensingEnabled}
+                  commercialLicensingText={lens.commercialLicensingText}
+                  digitalCheckoutUrl={lens.digitalCheckoutUrl}
+                  digitalCurrency={lens.digitalCurrency}
+                  digitalDimensions={lens.digitalDimensions}
+                  digitalFileSize={lens.digitalFileSize}
+                  digitalFormat={lens.digitalFormat}
+                  digitalLicenseType={lens.digitalLicenseType}
+                  digitalPrice={lens.digitalPrice}
+                  digitalPurchaseEnabled={lens.digitalPurchaseEnabled}
+                />
+              </DetailInfoPanel>
             </aside>
           </div>
 
