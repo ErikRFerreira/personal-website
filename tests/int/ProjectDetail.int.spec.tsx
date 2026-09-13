@@ -144,12 +144,21 @@ describe('ProjectDetail', () => {
     expect(showcaseImage).not.toBeNull()
 
     const externalLink = screen.getByRole('link', { name: /Live Site/i })
+    const metadataPanel = screen
+      .getByRole('complementary', { name: 'Project metadata' })
+      .querySelector('[data-detail-info-panel="true"]')
+    const actionArea = screen
+      .getByRole('complementary', { name: 'Project metadata' })
+      .querySelector('[data-project-external-links="true"]')
+
+    expect(metadataPanel).not.toBeNull()
+    expect(actionArea).not.toBeNull()
+    expect(metadataPanel?.contains(externalLink)).toBe(true)
+    expect(actionArea?.contains(externalLink)).toBe(true)
     expect(externalLink.getAttribute('href')).toBe('https://example.com')
     expect(externalLink.getAttribute('target')).toBe('_blank')
     expect(externalLink.getAttribute('rel')).toBe('noopener noreferrer')
-    expect(externalLink.classList.contains('specular-button--md')).toBe(true)
-    expect(externalLink.className).not.toContain('font-mono')
-    expect(externalLink.className).not.toContain('uppercase')
+    expect(externalLink.className).toContain('bg-site-text-primary')
     expect(screen.queryByRole('link', { name: /Unsafe Site/i })).toBeNull()
 
     expect(screen.getByRole('link', { name: /Project Two/i }).getAttribute('href')).toBe(
@@ -190,6 +199,36 @@ describe('ProjectDetail', () => {
     expect(screen.queryByRole('heading', { name: 'Project principles' })).toBeNull()
     expect(screen.queryByText('Next Project')).toBeNull()
     expect(screen.getAllByRole('link', { name: /Back|All Projects/i })).toHaveLength(2)
+  })
+
+  it('keeps long project metadata readable and inside the shared panel', () => {
+    render(
+      <ProjectDetail
+        project={makeProject({
+          role: 'Full-stack developer, product designer, researcher, and delivery lead',
+          tech: [
+            {
+              id: 'stack',
+              techName:
+                'Next.js, React, TypeScript, PostgreSQL, Prisma, Payload CMS, and observability tooling',
+            },
+          ],
+        })}
+      />,
+    )
+
+    const panel = screen
+      .getByRole('complementary', { name: 'Project metadata' })
+      .querySelector('[data-detail-info-panel="true"]')
+    const role = screen.getByText(/Full-stack developer/)
+    const stack = screen.getByText(/observability tooling/)
+
+    expect(panel?.contains(role)).toBe(true)
+    expect(panel?.contains(stack)).toBe(true)
+    expect(role.className).toContain('overflow-wrap:anywhere')
+    expect(stack.className).toContain('overflow-wrap:anywhere')
+    expect(role.className).not.toContain('truncate')
+    expect(stack.className).not.toContain('truncate')
   })
 
   it('places project detail blocks after the showcase and before the gallery', () => {

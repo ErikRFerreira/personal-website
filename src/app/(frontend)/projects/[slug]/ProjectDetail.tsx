@@ -105,7 +105,7 @@ export function ProjectDetail({ nextProject, project }: ProjectDetailProps) {
 
   return (
     <main
-      className={`${styles.page} relative isolate overflow-hidden bg-site-surface-deep pt-[var(--header-height)] text-site-text-primary`}
+      className={`${styles.page} detail-page relative isolate overflow-hidden bg-site-surface-deep pt-[var(--header-height)] text-site-text-primary`}
     >
       <div
         aria-hidden="true"

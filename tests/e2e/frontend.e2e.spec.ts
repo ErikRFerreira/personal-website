@@ -193,9 +193,11 @@ test.describe('Frontend', () => {
     const detailRoot = page.locator('.lens-detail-page')
     const primaryInfo = detailRoot.getByTestId('lens-primary-info')
     const detailFrame = detailRoot.locator('[data-detail-frame="true"]')
+    const detailPanel = primaryInfo.locator('[data-detail-info-panel="true"]')
 
     await expect(detailRoot).toBeVisible()
     await expect(primaryInfo).toBeVisible()
+    await expect(detailPanel).toHaveCount(1)
     await expect
       .poll(() => primaryInfo.evaluate((element) => getComputedStyle(element).overflowY))
       .not.toMatch(/auto|scroll/)
@@ -225,6 +227,21 @@ test.describe('Frontend', () => {
         return infoBounds?.width ?? Number.POSITIVE_INFINITY
       })
       .toBeLessThanOrEqual(416)
+    await expect
+      .poll(async () => {
+        const frameBounds = await detailFrame.boundingBox()
+        const panelBounds = await detailPanel.boundingBox()
+        return frameBounds && panelBounds ? panelBounds.height / frameBounds.height : 0
+      })
+      .toBeGreaterThanOrEqual(0.85)
+    await expect
+      .poll(async () => {
+        const frameBounds = await detailFrame.boundingBox()
+        const panelBounds = await detailPanel.boundingBox()
+        return frameBounds && panelBounds ? panelBounds.height / frameBounds.height : 2
+      })
+      .toBeLessThanOrEqual(1.16)
+    await page.screenshot({ path: 'test-results/detail-header-lens-1440.png', fullPage: true })
 
     await page.setViewportSize({ height: 1024, width: 768 })
     await expect
@@ -243,6 +260,7 @@ test.describe('Frontend', () => {
           : false
       })
       .toBe(true)
+    await page.screenshot({ path: 'test-results/detail-header-lens-768.png', fullPage: true })
 
     await page.setViewportSize({ height: 844, width: 390 })
     await expect
@@ -261,6 +279,7 @@ test.describe('Frontend', () => {
           : false
       })
       .toBe(true)
+    await page.screenshot({ path: 'test-results/detail-header-lens-390.png', fullPage: true })
 
     expect(browserErrors).toEqual([])
   })

@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { DetailInfoSection, DetailMetaGrid, DetailMetaItem } from '@/components/DetailInfo'
+
 type TechnicalMetadata = {
   camera?: string | null
   lens?: string | null
@@ -19,19 +21,6 @@ type MetaCell = {
   wide?: boolean
 }
 
-const MetaCell: React.FC<MetaCell> = ({ label, value, wide }) => {
-  if (value == null || value === '') return null
-
-  return (
-    <div className={`min-w-0 border-t border-site-border-subtle pt-3 ${wide ? 'col-span-2' : ''}`}>
-      <dt className="site-field-label text-site-text-muted">{label}</dt>
-      <dd className="site-field-value mt-1 truncate text-site-text-primary" title={String(value)}>
-        {value}
-      </dd>
-    </div>
-  )
-}
-
 export const LensTechnicalMeta: React.FC<Props> = ({ metadata }) => {
   const cells: MetaCell[] = [
     { label: 'Aperture', value: metadata?.aperture },
@@ -45,16 +34,20 @@ export const LensTechnicalMeta: React.FC<Props> = ({ metadata }) => {
   if (cells.length === 0) return null
 
   return (
-    <section
-      className="border-t border-site-border-subtle py-5"
+    <DetailInfoSection
+      className="py-3.5"
+      title="Technical capture profile"
       data-testid="lens-technical-metadata"
     >
-      <h2 className="site-eyebrow text-site-accent">Technical capture profile</h2>
-      <dl className="mt-4 grid grid-cols-2 gap-x-5 gap-y-3">
+      <DetailMetaGrid className="mt-4">
         {cells.map((cell) => (
-          <MetaCell key={cell.label} {...cell} />
+          <DetailMetaItem
+            className={cell.wide ? 'sm:col-span-1' : undefined}
+            key={cell.label}
+            {...cell}
+          />
         ))}
-      </dl>
-    </section>
+      </DetailMetaGrid>
+    </DetailInfoSection>
   )
 }

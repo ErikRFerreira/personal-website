@@ -241,6 +241,21 @@ it('lays out mixed screenshots without cropping or overflow and respects reduced
         .filter({ has: page.locator('dt', { hasText: 'Stack' }) })
       const metadata = page.locator('dl')
       expect((await stack.boundingBox())!.width).toBe((await metadata.boundingBox())!.width)
+      const detailPanel = page.locator('[data-detail-info-panel="true"]').first()
+      const liveAction = page.locator('[data-project-external-links="true"] a').first()
+      expect(await detailPanel.evaluate((panel, action) => panel.contains(action), await liveAction.elementHandle())).toBe(true)
+      expect(
+        await detailPanel.locator('dt').first().evaluate((node) => ({
+          fontSize: getComputedStyle(node).fontSize,
+          letterSpacing: Number.parseFloat(getComputedStyle(node).letterSpacing),
+        })),
+      ).toEqual({ fontSize: '11px', letterSpacing: 1.1 })
+      if (width >= 1024) {
+        const intro = page.locator('[data-reveal-name="project-header"] .grid > div').first()
+        const panelBounds = await detailPanel.boundingBox()
+        const introBounds = await intro.boundingBox()
+        expect(Math.abs(panelBounds!.y - introBounds!.y)).toBeLessThanOrEqual(1)
+      }
       const context = page.locator('[data-project-content]')
       expect((await context.boundingBox())!.width).toBeLessThanOrEqual(672)
       expect(

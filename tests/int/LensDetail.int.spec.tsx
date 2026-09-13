@@ -10,6 +10,7 @@ import { LensPurchaseOptions } from '@/app/(frontend)/lens/[slug]/LensPurchaseOp
 import { LensRelatedPhotos } from '@/app/(frontend)/lens/[slug]/LensRelatedPhotos'
 import { LensTechnicalMeta } from '@/app/(frontend)/lens/[slug]/LensTechnicalMeta'
 import { LensZoomImage } from '@/app/(frontend)/lens/[slug]/LensZoomImage'
+import { DetailInfoPanel } from '@/components/DetailInfo'
 import { findRelatedLensPhotos } from '@/app/(frontend)/lens/[slug]/queries'
 import type { Len, Media, Series } from '@/payload-types'
 
@@ -161,6 +162,29 @@ describe('Lens detail components', () => {
     expect(screen.getByRole('link', { name: 'Request a license' }).getAttribute('href')).toBe(
       '/contact',
     )
+  })
+
+  it('composes technical and purchase information as sections of one shared panel', () => {
+    render(
+      <DetailInfoPanel>
+        <LensTechnicalMeta metadata={{ camera: 'Sony A7R V', lens: '90mm Macro' }} />
+        <LensDigitalPurchase
+          digitalCheckoutUrl="https://example.com/checkout"
+          digitalPrice={18}
+          digitalPurchaseEnabled
+        />
+      </DetailInfoPanel>,
+    )
+
+    const panel = document.querySelector('[data-detail-info-panel="true"]')
+    const technical = screen.getByTestId('lens-technical-metadata')
+    const purchase = screen.getByTestId('lens-digital-purchase')
+    const action = screen.getByRole('link', { name: /buy digital download/i })
+
+    expect(panel?.contains(technical)).toBe(true)
+    expect(panel?.contains(purchase)).toBe(true)
+    expect(purchase.contains(action)).toBe(true)
+    expect(screen.getByText('Sony A7R V').className).not.toContain('truncate')
   })
 
   it('omits empty digital metadata without leaving empty rows', () => {
