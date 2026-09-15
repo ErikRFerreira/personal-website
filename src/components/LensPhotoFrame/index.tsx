@@ -12,7 +12,6 @@ type LensPhotoFrameProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'> & {
   stageClassName: string
   technicalPrimary?: string | null
   technicalSecondary?: string | null
-  variant?: 'editorial' | 'technical'
   year?: number | null
 }
 
@@ -39,25 +38,18 @@ export function LensPhotoFrame({
   stageClassName,
   technicalPrimary,
   technicalSecondary,
-  variant = 'technical',
   year,
   ...props
 }: LensPhotoFrameProps) {
   const hasContext = Boolean(context || year)
 
   return (
-    <div
-      className={`${styles.technicalFrame} ${variant === 'editorial' ? styles.editorialFrame : ''} relative overflow-hidden ${className}`}
-      data-photo-frame-variant={variant}
-      {...props}
-    >
+    <div className={`${styles.technicalFrame} relative overflow-hidden ${className}`} {...props}>
       <div className={`${styles.imageStage} ${stageClassName}`}>{children}</div>
 
-      {variant === 'technical' && (
-        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/25 via-transparent to-black/10 opacity-60" />
-      )}
+      <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/25 via-transparent to-black/10 opacity-60" />
 
-      {variant === 'technical' && hasContext && (
+      {hasContext && (
         <div className={`${styles.frameLabel} absolute top-[2.4%] left-3 z-30 md:left-4`}>
           {context && <span>{context}</span>}
           {context && year && <span className="text-white/35"> / </span>}
@@ -65,26 +57,22 @@ export function LensPhotoFrame({
         </div>
       )}
 
-      {variant === 'technical' && (
-        <div
-          className={`${styles.frameLabel} absolute top-[2.1%] right-3 z-30 hidden items-center gap-1.5 sm:flex md:right-4`}
-        >
-          <Aperture aria-hidden="true" className="size-3.5" />
-          <span className="leading-[0.9]">
-            Erik
-            <br />
-            Ferreira
-          </span>
-        </div>
-      )}
+      <div
+        className={`${styles.frameLabel} absolute top-[2.1%] right-3 z-30 hidden items-center gap-1.5 sm:flex md:right-4`}
+      >
+        <Aperture aria-hidden="true" className="size-3.5" />
+        <span className="leading-[0.9]">
+          Erik
+          <br />
+          Ferreira
+        </span>
+      </div>
 
-      {variant === 'technical' && (
-        <div className={`${styles.frameLabel} absolute bottom-[2.7%] left-3 z-30 md:left-4`}>
-          {photoTitle}
-        </div>
-      )}
+      <div className={`${styles.frameLabel} absolute bottom-[2.7%] left-3 z-30 md:left-4`}>
+        {photoTitle}
+      </div>
 
-      {variant === 'technical' && (technicalPrimary || technicalSecondary) && (
+      {(technicalPrimary || technicalSecondary) && (
         <div
           className={`${styles.frameLabel} absolute right-3 bottom-[2.1%] z-30 hidden max-w-[55%] text-right sm:block md:right-4`}
         >

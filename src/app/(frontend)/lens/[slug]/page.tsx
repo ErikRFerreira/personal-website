@@ -80,8 +80,11 @@ export default async function LensPage({ params: paramsPromise }: Args) {
           <div className="mt-6 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_clamp(22rem,28vw,26rem)] lg:gap-10 xl:gap-14">
             <div className="min-w-0">
               <LensHero
+                location={lens.location}
+                metadata={lens.technicalMetadata}
                 photo={photo}
                 title={lens.title}
+                year={lens.year}
               />
             </div>
 

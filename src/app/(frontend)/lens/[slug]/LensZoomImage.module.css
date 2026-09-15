@@ -2,6 +2,10 @@
   isolation: isolate;
 }
 
+.zoomHint {
+  display: none;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .zoomRoot {
     cursor: zoom-in;
@@ -9,5 +13,10 @@
 
   .zoomRoot[data-zoomed='true'] {
     cursor: zoom-out;
+  }
+
+  .zoomHint {
+    display: block;
+    opacity: 0.72;
   }
 }
