@@ -67,6 +67,11 @@ export function LensZoomImage({ photo, title }: LensZoomImageProps) {
         }}
       />
 
+      <div
+        className={`${styles.zoomHint} site-caption pointer-events-none absolute right-4 bottom-4 z-30 text-site-text-muted uppercase`}
+      >
+        Hover to enlarge
+      </div>
     </div>
   )
 }
