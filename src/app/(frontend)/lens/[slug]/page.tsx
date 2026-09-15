@@ -80,21 +80,18 @@ export default async function LensPage({ params: paramsPromise }: Args) {
           <div className="mt-6 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_clamp(22rem,28vw,26rem)] lg:gap-10 xl:gap-14">
             <div className="min-w-0">
               <LensHero
-                location={lens.location}
-                metadata={lens.technicalMetadata}
                 photo={photo}
                 title={lens.title}
-                year={lens.year}
               />
             </div>
 
-            <aside className="w-full min-w-0 lg:self-stretch" data-testid="lens-primary-info">
-              <DetailInfoPanel className="lg:min-h-full">
+            <aside className="w-full min-w-0" data-testid="lens-primary-info">
+              <DetailInfoPanel variant="editorial">
                 <DetailInfoSection className="py-4">
                   <header>
                     <LensCategoryChips categories={categories} />
 
-                    <h1 className="mt-3 text-[2rem] leading-[1.02] font-extrabold tracking-[-0.04em] text-site-text-primary md:text-4xl xl:text-[2.5rem]">
+                    <h1 className="mt-3 text-[2rem] leading-[1.08] font-semibold tracking-[-0.035em] text-site-text-primary md:text-4xl xl:text-[2.5rem]">
                       {lens.title}
                     </h1>
 
@@ -103,7 +100,9 @@ export default async function LensPage({ params: paramsPromise }: Args) {
                     )}
 
                     {lens.intro && (
-                      <p className="site-body-small mt-4 text-site-text-secondary">{lens.intro}</p>
+                      <p className="mt-5 text-[0.9375rem] leading-[1.7] text-site-text-secondary md:text-base">
+                        {lens.intro}
+                      </p>
                     )}
                   </header>
                 </DetailInfoSection>

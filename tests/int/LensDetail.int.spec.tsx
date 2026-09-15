@@ -184,6 +184,8 @@ describe('Lens detail components', () => {
     expect(panel?.contains(technical)).toBe(true)
     expect(panel?.contains(purchase)).toBe(true)
     expect(purchase.contains(action)).toBe(true)
+    expect(action.getAttribute('data-detail-action-variant')).toBe('editorial')
+    expect(screen.getByText('Sony A7R V').getAttribute('data-detail-meta-technical')).toBe('true')
     expect(screen.getByText('Sony A7R V').className).not.toContain('truncate')
   })
 

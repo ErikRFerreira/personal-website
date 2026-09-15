@@ -36,7 +36,7 @@ export const LensTechnicalMeta: React.FC<Props> = ({ metadata }) => {
   return (
     <DetailInfoSection
       className="py-3.5"
-      title="Technical capture profile"
+      title="Capture details"
       data-testid="lens-technical-metadata"
     >
       <DetailMetaGrid className="mt-4">
@@ -44,6 +44,7 @@ export const LensTechnicalMeta: React.FC<Props> = ({ metadata }) => {
           <DetailMetaItem
             className={cell.wide ? 'sm:col-span-1' : undefined}
             key={cell.label}
+            technical
             {...cell}
           />
         ))}
