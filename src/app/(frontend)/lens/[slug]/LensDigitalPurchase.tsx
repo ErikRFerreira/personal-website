@@ -71,22 +71,25 @@ export function LensDigitalPurchase({
 
   return (
     <DetailInfoSection
-      className="py-3.5"
+      className="py-5"
       data-testid="lens-digital-purchase"
+      divided
       title="Available as digital download"
     >
       {(digitalPrice != null || format) && (
         <div className="mt-3 flex flex-wrap items-end justify-between gap-x-5 gap-y-2">
           {digitalPrice != null && (
             <div className="flex items-baseline gap-2">
-              <p className="text-2xl font-bold tracking-[-0.04em] text-site-text-primary tabular-nums">
+              <p className="font-sans text-[2rem] leading-none font-semibold tracking-[-0.04em] text-site-text-primary tabular-nums">
                 {formatPrice(digitalPrice, currency)}
               </p>
               <p className="site-caption text-site-text-muted uppercase">{currency}</p>
             </div>
           )}
           {format && (
-            <p className="site-caption text-site-text-secondary">{getFormatLabel(format)}</p>
+            <p className="text-sm leading-relaxed text-site-text-secondary">
+              {getFormatLabel(format)}
+            </p>
           )}
         </div>
       )}
@@ -94,7 +97,7 @@ export function LensDigitalPurchase({
       {details.length > 0 && (
         <DetailMetaGrid className="mt-4 sm:grid-cols-3">
           {details.map(({ label, value }) => (
-            <DetailMetaItem key={label} label={label} value={value} />
+            <DetailMetaItem key={label} label={label} technical value={value} />
           ))}
         </DetailMetaGrid>
       )}
@@ -104,13 +107,14 @@ export function LensDigitalPurchase({
           className="mt-5 w-full"
           external
           href={checkoutUrl}
+          variant="editorial"
         >
           Buy digital download
         </DetailAction>
       )}
 
       {commercialLicensingEnabled && (
-        <p className="site-caption mt-3 leading-relaxed text-site-text-muted">
+        <p className="mt-3 text-xs leading-relaxed text-site-text-muted">
           {commercialPrompt}{' '}
           <Link
             className="text-site-text-secondary underline decoration-site-border-control underline-offset-2 transition-colors hover:text-site-accent"

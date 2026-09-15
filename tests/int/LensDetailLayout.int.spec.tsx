@@ -37,16 +37,16 @@ function scopeModuleCSS(source: string, classes: Record<string, string>) {
 
 it('balances and stacks the Lens detail header at shared review widths', async () => {
   const svg =
-    '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1067"><rect width="100%" height="100%" fill="#0b171b"/><circle cx="820" cy="500" r="330" fill="#196879"/><path d="M0 850 Q500 650 900 820 T1600 730 V1067 H0Z" fill="#050809"/></svg>'
+    '<svg xmlns="http://www.w3.org/2000/svg" width="1067" height="1600"><rect width="100%" height="100%" fill="#0b171b"/><circle cx="540" cy="650" r="380" fill="#196879"/><path d="M0 1250 Q350 980 620 1220 T1067 1080 V1600 H0Z" fill="#050809"/></svg>'
   const photo: Media = {
     alt: 'Diver beneath the surface',
     createdAt: '',
-    height: 1067,
+    height: 1600,
     id: 1,
     mimeType: 'image/svg+xml',
     updatedAt: '',
     url: `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`,
-    width: 1600,
+    width: 1067,
   }
   const categories: Category[] = [
     { createdAt: '', id: 1, slug: 'underwater', title: 'Underwater', updatedAt: '' },
@@ -64,23 +64,20 @@ it('balances and stacks the Lens detail header at shared review widths', async (
       <section className="site-container py-12">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_clamp(22rem,28vw,26rem)] lg:gap-10 xl:gap-14">
           <LensHero
-            location="Anilao, Philippines"
-            metadata={technicalMetadata}
             photo={photo}
             title="Between Light and Water"
-            year={2026}
           />
-          <aside className="w-full min-w-0 lg:self-stretch" data-testid="lens-primary-info">
-            <DetailInfoPanel className="lg:min-h-full">
+          <aside className="w-full min-w-0" data-testid="lens-primary-info">
+            <DetailInfoPanel variant="editorial">
               <DetailInfoSection className="py-4">
                 <LensCategoryChips categories={categories} />
-                <h1 className="mt-3 text-[2rem] leading-[1.02] font-extrabold tracking-[-0.04em] md:text-4xl xl:text-[2.5rem]">
+                <h1 className="mt-3 text-[2rem] leading-[1.08] font-semibold tracking-[-0.035em] md:text-4xl xl:text-[2.5rem]">
                   Between Light and Water
                 </h1>
                 <p className="site-caption mt-3 text-site-text-muted uppercase">
                   Anilao, Philippines · 2026
                 </p>
-                <p className="site-body-small mt-4 text-site-text-secondary">
+                <p className="mt-5 text-[0.9375rem] leading-[1.7] text-site-text-secondary md:text-base">
                   A quiet encounter below the surface, photographed in shifting natural light.
                 </p>
               </DetailInfoSection>
@@ -135,6 +132,7 @@ it('balances and stacks the Lens detail header at shared review widths', async (
       const panel = info.locator('[data-detail-info-panel="true"]')
       const technical = page.getByTestId('lens-technical-metadata')
       const purchase = page.getByTestId('lens-digital-purchase')
+      const zoomHint = page.locator('[data-lens-zoom-hint="true"]')
 
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
         true,
@@ -154,6 +152,16 @@ it('balances and stacks the Lens detail header at shared review widths', async (
       const panelBounds = await panel.boundingBox()
       expect(frameBounds).not.toBeNull()
       expect(panelBounds).not.toBeNull()
+      expect(await frame.getAttribute('data-photo-frame-variant')).toBe('editorial')
+      expect(await frame.textContent()).not.toContain('Between Light and Water')
+      expect(await frame.textContent()).not.toContain('Anilao')
+      expect(await frame.textContent()).not.toContain('Sony A7R V')
+      expect(await frame.textContent()).not.toContain('Erik')
+      expect(await frame.evaluate((node, hint) => node.contains(hint), await zoomHint.elementHandle())).toBe(false)
+      expect(
+        await frame.evaluate((node) => getComputedStyle(node, '::before').content),
+      ).toBe('none')
+      expect(frameBounds!.width / frameBounds!.height).toBeCloseTo(1067 / 1600, 2)
 
       if (viewport.width >= 1024) {
         expect(Math.abs(frameBounds!.y - panelBounds!.y)).toBeLessThanOrEqual(1)

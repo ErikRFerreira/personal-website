@@ -158,7 +158,9 @@ describe('ProjectDetail', () => {
     expect(externalLink.getAttribute('href')).toBe('https://example.com')
     expect(externalLink.getAttribute('target')).toBe('_blank')
     expect(externalLink.getAttribute('rel')).toBe('noopener noreferrer')
-    expect(externalLink.className).toContain('bg-site-text-primary')
+    expect(externalLink.getAttribute('data-detail-action-variant')).toBe('project')
+    expect(externalLink.getAttribute('data-detail-action-emphasis')).toBe('primary')
+    expect(externalLink.className).not.toContain('bg-site-text-primary')
     expect(screen.queryByRole('link', { name: /Unsafe Site/i })).toBeNull()
 
     expect(screen.getByRole('link', { name: /Project Two/i }).getAttribute('href')).toBe(
@@ -227,6 +229,8 @@ describe('ProjectDetail', () => {
     expect(panel?.contains(stack)).toBe(true)
     expect(role.className).toContain('overflow-wrap:anywhere')
     expect(stack.className).toContain('overflow-wrap:anywhere')
+    expect(role.className).toContain('font-sans')
+    expect(stack.className).toContain('font-sans')
     expect(role.className).not.toContain('truncate')
     expect(stack.className).not.toContain('truncate')
   })

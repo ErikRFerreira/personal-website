@@ -32,7 +32,7 @@ function ProjectMetadata({ project }: { project: Project }) {
 
   return (
     <aside aria-label="Project metadata">
-      <DetailInfoPanel>
+      <DetailInfoPanel variant="project">
         {cells.length > 0 && (
           <DetailInfoSection>
             <DetailMetaGrid>
@@ -47,6 +47,7 @@ function ProjectMetadata({ project }: { project: Project }) {
           <DetailInfoSection
             className="flex flex-wrap gap-3 py-4"
             data-project-external-links="true"
+            divided
           >
             {links.map(({ id, label, url }, index) => (
               <DetailAction
@@ -55,6 +56,7 @@ function ProjectMetadata({ project }: { project: Project }) {
                 external
                 href={url.trim()}
                 key={id ?? `${label}-${index}`}
+                variant="project"
               >
                 <span className="min-w-0 [overflow-wrap:anywhere]">{label}</span>
               </DetailAction>
@@ -85,7 +87,7 @@ export function ProjectHeader({ project }: { project: Project }) {
 
         <div className="mt-8 grid grid-cols-12 items-start gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-10 lg:mt-10 lg:gap-x-10">
           <div className="col-span-12 min-w-0 lg:col-span-7">
-            <h1 className="max-w-[13ch] text-[clamp(2rem,4.375vw,3.28125rem)] leading-[1.05] font-black tracking-[-0.03em] text-site-text-primary md:text-[clamp(2.25rem,5vw,3.75rem)]">
+            <h1 className="max-w-[13ch] text-[clamp(2rem,4.375vw,3.28125rem)] leading-[1.05] font-black tracking-[-0.03em] text-site-text-primary md:text-[clamp(2.25rem,5vw,3.5rem)]">
               {project.title}
             </h1>
 
