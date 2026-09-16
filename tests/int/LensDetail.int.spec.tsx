@@ -11,6 +11,7 @@ import { LensPurchaseOptions } from '@/app/(frontend)/lens/[slug]/LensPurchaseOp
 import { LensRelatedPhotos } from '@/app/(frontend)/lens/[slug]/LensRelatedPhotos'
 import { LensTechnicalMeta } from '@/app/(frontend)/lens/[slug]/LensTechnicalMeta'
 import { LensZoomImage } from '@/app/(frontend)/lens/[slug]/LensZoomImage'
+import { resolveLensDetailImage } from '@/app/(frontend)/lens/[slug]/resolveLensDetailImage'
 import { DetailInfoPanel } from '@/components/DetailInfo'
 import { findRelatedLensPhotos } from '@/app/(frontend)/lens/[slug]/queries'
 import type { Len, Media, Series } from '@/payload-types'
@@ -360,6 +361,66 @@ describe('Lens detail components', () => {
 
     expect(stage?.style.aspectRatio).toBe('4 / 3')
     expect(frame?.className).not.toContain('lens-detail-portrait-max-width')
+  })
+
+  it('selects the largest aspect-preserving detail rendition and ignores square crops', () => {
+    const photo = makeMedia()
+    photo.sizes = {
+      large: {
+        height: 933,
+        url: '/media/photo-large.jpg',
+        width: 1400,
+      },
+      square: {
+        height: 500,
+        url: '/media/photo-square.jpg',
+        width: 500,
+      },
+      xlarge: {
+        height: 1280,
+        url: '/media/photo-xlarge.jpg',
+        width: 1920,
+      },
+    }
+
+    expect(resolveLensDetailImage(photo)).toMatchObject({
+      height: 1280,
+      url: '/media/photo-xlarge.jpg',
+      width: 1920,
+    })
+
+    const { container } = render(<LensHero photo={photo} title="Landscape photo" />)
+    const frame = container.querySelector<HTMLElement>('[data-detail-frame="true"]')
+    const stage = frame?.firstElementChild as HTMLElement | null
+
+    expect(screen.getByRole('img').getAttribute('src')).toContain('/media/photo-xlarge.jpg')
+    expect(stage?.style.aspectRatio).toBe('1920 / 1280')
+  })
+
+  it('falls back through aspect-preserving sizes before using the original', () => {
+    const photo = makeMedia()
+    photo.sizes = {
+      large: {
+        height: null,
+        url: '/media/incomplete-large.jpg',
+        width: 1400,
+      },
+      medium: {
+        height: 600,
+        url: '/media/photo-medium.jpg',
+        width: 900,
+      },
+      square: {
+        height: 500,
+        url: '/media/photo-square.jpg',
+        width: 500,
+      },
+    }
+
+    expect(resolveLensDetailImage(photo).url).toBe('/media/photo-medium.jpg')
+    expect(resolveLensDetailImage({ ...photo, sizes: { square: photo.sizes.square } }).url).toBe(
+      photo.url,
+    )
   })
 })
 

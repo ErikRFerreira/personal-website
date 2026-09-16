@@ -3,6 +3,7 @@ import React, { type CSSProperties } from 'react'
 import type { Len, Media as MediaType } from '@/payload-types'
 import { formatLensFrameTechnical, LensPhotoFrame } from '@/components/LensPhotoFrame'
 import { LensZoomImage } from './LensZoomImage'
+import { resolveLensDetailImage } from './resolveLensDetailImage'
 
 type Props = {
   location?: string | null
@@ -20,15 +21,16 @@ export const LensHero: React.FC<Props> = ({
   year,
 }) => {
   const { primary, secondary } = formatLensFrameTechnical(metadata)
+  const image = resolveLensDetailImage(photo)
   const hasValidDimensions =
-    typeof photo.width === 'number' &&
-    Number.isFinite(photo.width) &&
-    photo.width > 0 &&
-    typeof photo.height === 'number' &&
-    Number.isFinite(photo.height) &&
-    photo.height > 0
-  const width = hasValidDimensions ? photo.width! : 4
-  const height = hasValidDimensions ? photo.height! : 3
+    typeof image.width === 'number' &&
+    Number.isFinite(image.width) &&
+    image.width > 0 &&
+    typeof image.height === 'number' &&
+    Number.isFinite(image.height) &&
+    image.height > 0
+  const width = hasValidDimensions ? image.width! : 4
+  const height = hasValidDimensions ? image.height! : 3
   const aspectRatio = width / height
   const isPortrait = aspectRatio < 1
 
@@ -55,7 +57,7 @@ export const LensHero: React.FC<Props> = ({
       technicalSecondary={secondary}
       year={year}
     >
-      <LensZoomImage photo={photo} title={title} />
+      <LensZoomImage imageUrl={image.url} photo={photo} title={title} />
     </LensPhotoFrame>
   )
 }
