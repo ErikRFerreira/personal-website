@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { LensCategoryChips } from '@/app/(frontend)/lens/[slug]/LensCategoryChips'
 import { LensDigitalPurchase } from '@/app/(frontend)/lens/[slug]/LensDigitalPurchase'
 import { LensEditorial } from '@/app/(frontend)/lens/[slug]/LensEditorial'
+import { LensHero } from '@/app/(frontend)/lens/[slug]/LensHero'
 import { LensPurchaseOptions } from '@/app/(frontend)/lens/[slug]/LensPurchaseOptions'
 import { LensRelatedPhotos } from '@/app/(frontend)/lens/[slug]/LensRelatedPhotos'
 import { LensTechnicalMeta } from '@/app/(frontend)/lens/[slug]/LensTechnicalMeta'
@@ -346,6 +347,19 @@ describe('Lens detail components', () => {
 
     fireEvent.pointerLeave(zoomRoot!, { pointerType: 'mouse' })
     expect(zoomRoot?.dataset.zoomed).toBe('false')
+  })
+
+  it('falls back to a 4:3 detail stage when media dimensions are unavailable', () => {
+    const photo = makeMedia()
+    photo.height = null
+    photo.width = null
+
+    const { container } = render(<LensHero photo={photo} title="Fallback title" />)
+    const frame = container.querySelector<HTMLElement>('[data-detail-frame="true"]')
+    const stage = frame?.firstElementChild as HTMLElement | null
+
+    expect(stage?.style.aspectRatio).toBe('4 / 3')
+    expect(frame?.className).not.toContain('lens-detail-portrait-max-width')
   })
 })
 

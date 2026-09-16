@@ -35,7 +35,7 @@ function scopeModuleCSS(source: string, classes: Record<string, string>) {
   )
 }
 
-it('balances and stacks the Lens detail header at shared review widths', async () => {
+it('preserves intrinsic Lens image ratios across shared review widths', async () => {
   const svg =
     '<svg xmlns="http://www.w3.org/2000/svg" width="1067" height="1600"><rect width="100%" height="100%" fill="#0b171b"/><circle cx="540" cy="650" r="380" fill="#196879"/><path d="M0 1250 Q350 980 620 1220 T1067 1080 V1600 H0Z" fill="#050809"/></svg>'
   const photo: Media = {
@@ -63,13 +63,15 @@ it('balances and stacks the Lens detail header at shared review widths', async (
     <main className="lens-detail-page detail-page bg-site-surface-deep text-site-text-primary">
       <section className="site-container py-12">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_clamp(22rem,28vw,26rem)] lg:gap-10 xl:gap-14">
-          <LensHero
-            location="Anilao, Philippines"
-            metadata={technicalMetadata}
-            photo={photo}
-            title="Between Light and Water"
-            year={2026}
-          />
+          <div className="min-w-0">
+            <LensHero
+              location="Anilao, Philippines"
+              metadata={technicalMetadata}
+              photo={photo}
+              title="Between Light and Water"
+              year={2026}
+            />
+          </div>
           <aside className="w-full min-w-0" data-testid="lens-primary-info">
             <DetailInfoPanel variant="editorial">
               <DetailInfoSection className="py-4">
@@ -133,10 +135,12 @@ it('balances and stacks the Lens detail header at shared review widths', async (
       )
 
       const frame = page.locator('[data-detail-frame="true"]')
+      const frameParent = frame.locator('..')
       const info = page.getByTestId('lens-primary-info')
       const panel = info.locator('[data-detail-info-panel="true"]')
       const technical = page.getByTestId('lens-technical-metadata')
       const purchase = page.getByTestId('lens-digital-purchase')
+      const zoomRoot = page.locator(`.${zoomStyles.zoomRoot}`)
       const zoomHint = page.locator(`.${zoomStyles.zoomHint}`)
 
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
@@ -154,9 +158,13 @@ it('balances and stacks the Lens detail header at shared review widths', async (
       ).toBe(true)
 
       const frameBounds = await frame.boundingBox()
+      const frameParentBounds = await frameParent.boundingBox()
       const panelBounds = await panel.boundingBox()
+      const zoomBounds = await zoomRoot.boundingBox()
       expect(frameBounds).not.toBeNull()
+      expect(frameParentBounds).not.toBeNull()
       expect(panelBounds).not.toBeNull()
+      expect(zoomBounds).not.toBeNull()
       expect(await frame.textContent()).toContain('Between Light and Water')
       expect(await frame.textContent()).toContain('Anilao, Philippines')
       expect(await frame.evaluate((node, hint) => node.contains(hint), await zoomHint.elementHandle())).toBe(true)
@@ -167,13 +175,19 @@ it('balances and stacks the Lens detail header at shared review widths', async (
       expect(await frame.locator('img').evaluate((node) => getComputedStyle(node).objectFit)).toBe(
         'contain',
       )
-      expect(frameBounds!.width / frameBounds!.height).toBeCloseTo(4 / 3, 2)
+      expect(zoomBounds!.width / zoomBounds!.height).toBeCloseTo(1067 / 1600, 2)
 
       if (viewport.width >= 1024) {
+        const expectedHeightCap = Math.min(viewport.height * 0.72, 46 * 16)
+        const leftInset = frameBounds!.x - frameParentBounds!.x
+        const rightInset =
+          frameParentBounds!.x + frameParentBounds!.width - frameBounds!.x - frameBounds!.width
+
+        expect(frameBounds!.height).toBeLessThanOrEqual(expectedHeightCap + 3)
+        expect(Math.abs(leftInset - rightInset)).toBeLessThanOrEqual(1)
         expect(Math.abs(frameBounds!.y - panelBounds!.y)).toBeLessThanOrEqual(1)
-        expect(panelBounds!.height / frameBounds!.height).toBeGreaterThanOrEqual(0.85)
-        expect(panelBounds!.height / frameBounds!.height).toBeLessThanOrEqual(1.16)
       } else {
+        expect(Math.abs(frameBounds!.width - frameParentBounds!.width)).toBeLessThanOrEqual(1)
         expect(panelBounds!.y).toBeGreaterThanOrEqual(frameBounds!.y + frameBounds!.height)
       }
 
@@ -182,6 +196,50 @@ it('balances and stacks the Lens detail header at shared review widths', async (
         path: `test-results/detail-header-lens-${viewport.width}.png`,
       })
     }
+
+    const landscapeSvg =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1067"><rect width="100%" height="100%" fill="#0b171b"/><circle cx="800" cy="534" r="380" fill="#196879"/></svg>'
+    const landscapePhoto: Media = {
+      ...photo,
+      alt: 'A landscape photograph',
+      height: 1067,
+      url: `data:image/svg+xml;base64,${Buffer.from(landscapeSvg).toString('base64')}`,
+      width: 1600,
+    }
+    const landscapeMarkup = renderToStaticMarkup(
+      <div className="site-container">
+        <div data-testid="landscape-column">
+          <LensHero
+            location="Dubai"
+            metadata={technicalMetadata}
+            photo={landscapePhoto}
+            title="Dubai Cityscape"
+            year={2020}
+          />
+        </div>
+      </div>,
+    )
+
+    await page.setViewportSize({ height: 900, width: 1440 })
+    await page.setContent(
+      `<html data-theme="dark"><head><style>${css.css}\n${frameCSS}\n${zoomCSS}\nbody { margin: 0; --font-geist-sans: Arial; --font-geist-mono: monospace; }</style></head><body>${landscapeMarkup}</body></html>`,
+    )
+
+    const landscapeFrame = page.locator('[data-detail-frame="true"]')
+    const landscapeColumn = page.getByTestId('landscape-column')
+    const landscapeZoom = page.locator(`.${zoomStyles.zoomRoot}`)
+    const landscapeFrameBounds = await landscapeFrame.boundingBox()
+    const landscapeColumnBounds = await landscapeColumn.boundingBox()
+    const landscapeZoomBounds = await landscapeZoom.boundingBox()
+
+    expect(landscapeFrameBounds).not.toBeNull()
+    expect(landscapeColumnBounds).not.toBeNull()
+    expect(landscapeZoomBounds).not.toBeNull()
+    expect(Math.abs(landscapeFrameBounds!.width - landscapeColumnBounds!.width)).toBeLessThanOrEqual(
+      1,
+    )
+    expect(landscapeZoomBounds!.width / landscapeZoomBounds!.height).toBeCloseTo(1600 / 1067, 2)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   } finally {
     await browser.close()
   }

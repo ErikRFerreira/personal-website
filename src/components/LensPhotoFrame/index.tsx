@@ -1,5 +1,5 @@
 import { Aperture } from 'lucide-react'
-import type { HTMLAttributes, ReactNode } from 'react'
+import type { CSSProperties, HTMLAttributes, ReactNode } from 'react'
 
 import type { Len } from '@/payload-types'
 import styles from './LensPhotoFrame.module.css'
@@ -10,6 +10,7 @@ type LensPhotoFrameProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'> & {
   overlay?: ReactNode
   photoTitle: string
   stageClassName: string
+  stageStyle?: CSSProperties
   technicalPrimary?: string | null
   technicalSecondary?: string | null
   year?: number | null
@@ -36,6 +37,7 @@ export function LensPhotoFrame({
   overlay,
   photoTitle,
   stageClassName,
+  stageStyle,
   technicalPrimary,
   technicalSecondary,
   year,
@@ -45,7 +47,9 @@ export function LensPhotoFrame({
 
   return (
     <div className={`${styles.technicalFrame} relative overflow-hidden ${className}`} {...props}>
-      <div className={`${styles.imageStage} ${stageClassName}`}>{children}</div>
+      <div className={`${styles.imageStage} ${stageClassName}`} style={stageStyle}>
+        {children}
+      </div>
 
       <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/25 via-transparent to-black/10 opacity-60" />
 
