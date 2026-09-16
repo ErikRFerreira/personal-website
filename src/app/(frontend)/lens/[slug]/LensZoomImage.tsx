@@ -15,8 +15,8 @@ type LensZoomImageProps = {
 
 export function LensZoomImage({ imageUrl, photo, title }: LensZoomImageProps) {
   const [isZoomed, setIsZoomed] = useState(false)
+  const [source, setSource] = useState(imageUrl || photo.url)
   const objectPosition = `${photo.focalX ?? 50}% ${photo.focalY ?? 50}%`
-  const source = imageUrl || photo.url
 
   const canZoom = (event: PointerEvent<HTMLDivElement>) => {
     return (
@@ -59,6 +59,9 @@ export function LensZoomImage({ imageUrl, photo, title }: LensZoomImageProps) {
           isZoomed ? 'scale-[3]' : 'scale-100'
         }`}
         fill
+        onError={() => {
+          if (photo.url && source !== photo.url) setSource(photo.url)
+        }}
         priority
         quality={75}
         sizes="(max-width: 767px) calc(100vw - 3rem), 60vw"

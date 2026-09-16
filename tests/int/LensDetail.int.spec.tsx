@@ -17,9 +17,19 @@ import { findRelatedLensPhotos } from '@/app/(frontend)/lens/[slug]/queries'
 import type { Len, Media, Series } from '@/payload-types'
 
 vi.mock('next/image', () => ({
-  default: ({ alt, src, style }: { alt: string; src: string; style?: CSSProperties }) => (
+  default: ({
+    alt,
+    onError,
+    src,
+    style,
+  }: {
+    alt: string
+    onError?: () => void
+    src: string
+    style?: CSSProperties
+  }) => (
     // eslint-disable-next-line @next/next/no-img-element
-    <img alt={alt} src={src} style={style} />
+    <img alt={alt} onError={onError} src={src} style={style} />
   ),
 }))
 
@@ -348,6 +358,25 @@ describe('Lens detail components', () => {
 
     fireEvent.pointerLeave(zoomRoot!, { pointerType: 'mouse' })
     expect(zoomRoot?.dataset.zoomed).toBe('false')
+  })
+
+  it('falls back to the original media URL when a generated rendition is missing', () => {
+    render(
+      <LensZoomImage
+        imageUrl="/media/missing-xlarge.jpg"
+        photo={makeMedia()}
+        title="Fallback title"
+      />,
+    )
+
+    const image = screen.getByRole('img')
+    expect(image.getAttribute('src')).toContain('/media/missing-xlarge.jpg')
+
+    fireEvent.error(image)
+    expect(image.getAttribute('src')).toContain('/media/photo-1.jpg')
+
+    fireEvent.error(image)
+    expect(image.getAttribute('src')).toContain('/media/photo-1.jpg')
   })
 
   it('falls back to a 4:3 detail stage when media dimensions are unavailable', () => {
