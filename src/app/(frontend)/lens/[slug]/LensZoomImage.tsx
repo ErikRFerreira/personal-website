@@ -8,13 +8,15 @@ import { getMediaUrl } from '@/utilities/getMediaUrl'
 import styles from './LensZoomImage.module.css'
 
 type LensZoomImageProps = {
+  imageUrl?: string | null
   photo: Media
   title: string
 }
 
-export function LensZoomImage({ photo, title }: LensZoomImageProps) {
+export function LensZoomImage({ imageUrl, photo, title }: LensZoomImageProps) {
   const [isZoomed, setIsZoomed] = useState(false)
   const objectPosition = `${photo.focalX ?? 50}% ${photo.focalY ?? 50}%`
+  const source = imageUrl || photo.url
 
   const canZoom = (event: PointerEvent<HTMLDivElement>) => {
     return (
@@ -41,7 +43,7 @@ export function LensZoomImage({ photo, title }: LensZoomImageProps) {
     setIsZoomed(false)
   }
 
-  if (!photo.url) return null
+  if (!source) return null
 
   return (
     <div
@@ -60,7 +62,7 @@ export function LensZoomImage({ photo, title }: LensZoomImageProps) {
         priority
         quality={75}
         sizes="(max-width: 767px) calc(100vw - 3rem), 60vw"
-        src={getMediaUrl(photo.url, photo.updatedAt)}
+        src={getMediaUrl(source, photo.updatedAt)}
         style={{
           objectPosition,
           transformOrigin: 'var(--lens-zoom-x) var(--lens-zoom-y)',
