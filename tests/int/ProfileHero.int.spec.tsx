@@ -19,6 +19,7 @@ vi.mock('@/components/Media', () => ({
 vi.mock('@/components/MorphSlider', () => ({
   default: ({
     autoplay,
+    autoplayDelay,
     className,
     items,
     loop,
@@ -28,6 +29,7 @@ vi.mock('@/components/MorphSlider', () => ({
     startIndex,
   }: {
     autoplay?: boolean
+    autoplayDelay?: number
     className?: string
     items: Array<{ alt?: string; caption?: string; image: string }>
     loop?: boolean
@@ -39,6 +41,7 @@ vi.mock('@/components/MorphSlider', () => ({
     <div
       className={className}
       data-autoplay={String(autoplay)}
+      data-autoplay-delay={autoplayDelay}
       data-items={JSON.stringify(items)}
       data-loop={String(loop)}
       data-radius={radius}
@@ -71,6 +74,14 @@ const developerImage = {
   createdAt: '2026-09-02T00:00:00.000Z',
   updatedAt: '2026-09-02T00:00:00.000Z',
   url: '/media/developer.jpg',
+} as Media
+
+const photographerImage = {
+  id: 12,
+  alt: 'Erik photographing marine life',
+  createdAt: '2026-09-02T00:00:00.000Z',
+  updatedAt: '2026-09-02T00:00:00.000Z',
+  url: '/media/photographer.jpg',
 } as Media
 
 describe('ProfileHero', () => {
@@ -125,6 +136,8 @@ describe('ProfileHero', () => {
         secondaryMedia={developerImage}
         stackPrimaryLabel="01 / DIVER"
         stackSecondaryLabel="02 / DEVELOPER"
+        tertiaryMedia={photographerImage}
+        stackTertiaryLabel="03 / PHOTOGRAPHER"
         type="profileHero"
       />,
     )
@@ -143,9 +156,15 @@ describe('ProfileHero', () => {
         caption: '02 / DEVELOPER',
         image: '/media/developer.jpg?2026-09-02T00%3A00%3A00.000Z',
       },
+      {
+        alt: 'Erik photographing marine life',
+        caption: '03 / PHOTOGRAPHER',
+        image: '/media/photographer.jpg?2026-09-02T00%3A00%3A00.000Z',
+      },
     ])
     expect(slider.className).toContain('profile-hero-morph-slider')
-    expect(slider.getAttribute('data-autoplay')).toBe('false')
+    expect(slider.getAttribute('data-autoplay')).toBe('true')
+    expect(slider.getAttribute('data-autoplay-delay')).toBe('5')
     expect(slider.getAttribute('data-loop')).toBe('true')
     expect(slider.getAttribute('data-radius')).toBe('0')
     expect(slider.getAttribute('data-show-controls')).toBe('true')
@@ -206,5 +225,43 @@ describe('ProfileHero', () => {
       screen.getByTestId('profile-morph-slider').getAttribute('data-items') || '[]',
     )
     expect(cmsItems[1].alt).toBe('Erik Ferreira working as a software developer')
+  })
+
+  it('uses an accessible default for populated Photographer media and omits it for legacy data', () => {
+    const { rerender } = render(
+      <ProfileHero
+        enableImageStack
+        intro="Developer, diver, and photographer"
+        media={profileImage}
+        name="Erik Ferreira"
+        tertiaryMedia={{ ...photographerImage, alt: '' }}
+        type="profileHero"
+      />,
+    )
+
+    let items = JSON.parse(
+      screen.getByTestId('profile-morph-slider').getAttribute('data-items') || '[]',
+    )
+    expect(items).toHaveLength(3)
+    expect(items[2]).toEqual({
+      alt: 'Erik Ferreira working as a photographer',
+      caption: '03 / PHOTOGRAPHER',
+      image: '/media/photographer.jpg?2026-09-02T00%3A00%3A00.000Z',
+    })
+
+    rerender(
+      <ProfileHero
+        enableImageStack
+        intro="Developer and diver"
+        media={profileImage}
+        name="Erik Ferreira"
+        type="profileHero"
+      />,
+    )
+
+    items = JSON.parse(
+      screen.getByTestId('profile-morph-slider').getAttribute('data-items') || '[]',
+    )
+    expect(items).toHaveLength(2)
   })
 })

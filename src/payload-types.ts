@@ -174,7 +174,7 @@ export interface Page {
     media?: (number | null) | Media;
     imageLabel?: string | null;
     /**
-     * Show the interactive Diver / Developer image slider.
+     * Show the interactive Diver / Developer / Photographer image slider.
      */
     enableImageStack?: boolean | null;
     stackPrimaryLabel?: string | null;
@@ -183,6 +183,8 @@ export interface Page {
      */
     secondaryMedia?: (number | null) | Media;
     stackSecondaryLabel?: string | null;
+    tertiaryMedia?: (number | null) | Media;
+    stackTertiaryLabel?: string | null;
     richText?: {
       root: {
         type: string;
@@ -1661,6 +1663,8 @@ export interface PagesSelect<T extends boolean = true> {
         stackPrimaryLabel?: T;
         secondaryMedia?: T;
         stackSecondaryLabel?: T;
+        tertiaryMedia?: T;
+        stackTertiaryLabel?: T;
         richText?: T;
         links?:
           | T

@@ -21,6 +21,7 @@ import * as migration_20260908_121602_add_project_principles from './20260908_12
 import * as migration_20260909_014605 from './20260909_014605'
 import * as migration_20260909_030026_remove_about_timeline_metadata from './20260909_030026_remove_about_timeline_metadata'
 import * as migration_20260910_122108_extend_lens_digital_sales from './20260910_122108_extend_lens_digital_sales'
+import * as migration_20260922_000000_add_profile_hero_photographer from './20260922_000000_add_profile_hero_photographer'
 
 export const migrations = [
   {
@@ -137,5 +138,10 @@ export const migrations = [
     up: migration_20260910_122108_extend_lens_digital_sales.up,
     down: migration_20260910_122108_extend_lens_digital_sales.down,
     name: '20260910_122108_extend_lens_digital_sales',
+  },
+  {
+    up: migration_20260922_000000_add_profile_hero_photographer.up,
+    down: migration_20260922_000000_add_profile_hero_photographer.down,
+    name: '20260922_000000_add_profile_hero_photographer',
   },
 ]

@@ -57,6 +57,16 @@ const requiredForProfileImageSlider =
     return true
   }
 
+const photographerImageRequired: UploadFieldSingleValidation = (value, { siblingData }) => {
+  const data = siblingData as { enableImageStack?: boolean; type?: string }
+
+  if (data?.type === 'profileHero' && data.enableImageStack && !value) {
+    return 'Photographer image is required when the image slider is enabled'
+  }
+
+  return true
+}
+
 export const hero: Field = {
   name: 'hero',
   type: 'group',
@@ -121,7 +131,7 @@ export const hero: Field = {
       type: 'checkbox',
       admin: {
         condition: (_, { type } = {}) => type === 'profileHero',
-        description: 'Show the interactive Diver / Developer image slider.',
+        description: 'Show the interactive Diver / Developer / Photographer image slider.',
       },
       defaultValue: false,
       label: 'Enable image slider',
@@ -158,6 +168,28 @@ export const hero: Field = {
       defaultValue: '02 / DEVELOPER',
       label: 'Secondary image label',
       validate: requiredForProfileImageSlider('Secondary image label'),
+    },
+    {
+      name: 'tertiaryMedia',
+      type: 'upload',
+      admin: {
+        condition: (_, { enableImageStack, type } = {}) =>
+          type === 'profileHero' && Boolean(enableImageStack),
+      },
+      label: 'Photographer image',
+      relationTo: 'media',
+      validate: photographerImageRequired,
+    },
+    {
+      name: 'stackTertiaryLabel',
+      type: 'text',
+      admin: {
+        condition: (_, { enableImageStack, type } = {}) =>
+          type === 'profileHero' && Boolean(enableImageStack),
+      },
+      defaultValue: '03 / PHOTOGRAPHER',
+      label: 'Tertiary image label',
+      validate: requiredForProfileImageSlider('Tertiary image label'),
     },
     {
       name: 'richText',
