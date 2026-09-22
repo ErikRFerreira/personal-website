@@ -17,11 +17,15 @@ export function ProfileHero({
   stackPrimaryLabel,
   secondaryMedia,
   stackSecondaryLabel,
+  tertiaryMedia,
+  stackTertiaryLabel,
 }: Page['hero']) {
   const nameParts = name?.trim().split(/\s+/).filter(Boolean) ?? []
   const populatedImage = typeof media === 'object' && media !== null ? media : null
   const populatedSecondaryImage =
     typeof secondaryMedia === 'object' && secondaryMedia !== null ? secondaryMedia : null
+  const populatedTertiaryImage =
+    typeof tertiaryMedia === 'object' && tertiaryMedia !== null ? tertiaryMedia : null
   const hasPopulatedImage = Boolean(populatedImage)
   const shouldRenderImageSlider = Boolean(enableImageStack && populatedImage)
   const sliderItems: MorphItem[] = populatedImage
@@ -40,6 +44,16 @@ export function ProfileHero({
             ? getMediaUrl(populatedSecondaryImage.url, populatedSecondaryImage.updatedAt)
             : '/images/hero-code-bg.svg',
         },
+        ...(populatedTertiaryImage
+          ? [
+              {
+                alt:
+                  populatedTertiaryImage.alt?.trim() || 'Erik Ferreira working as a photographer',
+                caption: stackTertiaryLabel?.trim() || '03 / PHOTOGRAPHER',
+                image: getMediaUrl(populatedTertiaryImage.url, populatedTertiaryImage.updatedAt),
+              },
+            ]
+          : []),
       ]
     : []
 
@@ -72,7 +86,8 @@ export function ProfileHero({
                     data-testid="profile-hero-media-frame"
                   >
                     <MorphSlider
-                      autoplay={false}
+                      autoplay
+                      autoplayDelay={5}
                       className="profile-hero-morph-slider"
                       items={sliderItems}
                       loop

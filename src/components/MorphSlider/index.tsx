@@ -578,6 +578,7 @@ export default function MorphSlider({
   const engineRef = useRef<MorphEngine | null>(null)
   const [index, setIndex] = useState(startIndex)
   const [hovering, setHovering] = useState(false)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   const optsRef = useRef<EngineOptions>({
     transition,
@@ -606,6 +607,16 @@ export default function MorphSlider({
   }, [aberration, drift, duration, ease, intensity, loop, overlayColor, scale, transition])
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const updateReducedMotion = () => setPrefersReducedMotion(mediaQuery.matches)
+
+    updateReducedMotion()
+    mediaQuery.addEventListener('change', updateReducedMotion)
+
+    return () => mediaQuery.removeEventListener('change', updateReducedMotion)
+  }, [])
+
+  useEffect(() => {
     if (!containerRef.current) return undefined
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -629,10 +640,10 @@ export default function MorphSlider({
   const handlePrev = useCallback(() => engineRef.current?.prev(), [])
 
   useEffect(() => {
-    if (!autoplay || hovering) return undefined
+    if (!autoplay || hovering || prefersReducedMotion) return undefined
     const id = window.setTimeout(() => engineRef.current?.next(), Math.max(autoplayDelay, 1) * 1000)
     return () => window.clearTimeout(id)
-  }, [autoplay, autoplayDelay, hovering, index])
+  }, [autoplay, autoplayDelay, hovering, index, prefersReducedMotion])
 
   useEffect(() => {
     const el = containerRef.current

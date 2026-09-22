@@ -4,11 +4,13 @@ import type { Media } from '@/payload-types'
 type HomeArgs = {
   heroImage: Media
   metaImage: Media
+  photographerImage: Media
 }
 
 export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
   heroImage,
   metaImage,
+  photographerImage,
 }) => {
   return {
     slug: 'home',
@@ -22,6 +24,8 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       enableImageStack: true,
       stackPrimaryLabel: '01 / DIVER',
       stackSecondaryLabel: '02 / DEVELOPER',
+      tertiaryMedia: photographerImage.id,
+      stackTertiaryLabel: '03 / PHOTOGRAPHER',
     },
     layout: [
       {

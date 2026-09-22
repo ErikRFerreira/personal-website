@@ -6,7 +6,11 @@ import type { Media } from '@/payload-types'
 describe('home page seed', () => {
   it('uses Profile Hero with the shared profile content', () => {
     const heroImage = { id: 10 } as Media
-    const page = home({ heroImage, metaImage: { id: 20 } as Media })
+    const page = home({
+      heroImage,
+      metaImage: { id: 20 } as Media,
+      photographerImage: { id: 30 } as Media,
+    })
 
     expect(page.hero).toEqual({
       type: 'profileHero',
@@ -17,6 +21,8 @@ describe('home page seed', () => {
       enableImageStack: true,
       stackPrimaryLabel: '01 / DIVER',
       stackSecondaryLabel: '02 / DEVELOPER',
+      tertiaryMedia: 30,
+      stackTertiaryLabel: '03 / PHOTOGRAPHER',
     })
   })
 })

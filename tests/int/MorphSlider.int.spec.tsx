@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const animationState = vi.hoisted(() => ({
@@ -107,6 +107,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup()
+  vi.useRealTimers()
   vi.clearAllMocks()
   vi.unstubAllGlobals()
 })
@@ -149,5 +150,81 @@ describe('MorphSlider', () => {
       { value: 0 },
       expect.objectContaining({ duration: 0.4 }),
     )
+  })
+
+  it('autoplays after the configured delay and resets the timer after navigation', () => {
+    vi.useFakeTimers()
+    render(<MorphSlider autoplay autoplayDelay={5} items={items} />)
+
+    act(() => vi.advanceTimersByTime(4_000))
+    fireEvent.click(screen.getByRole('button', { name: 'Next slide' }))
+    expect(screen.getByText('02 / DEVELOPER').className).toContain('is-active')
+
+    act(() => vi.advanceTimersByTime(4_999))
+    expect(screen.getByText('02 / DEVELOPER').className).toContain('is-active')
+
+    act(() => vi.advanceTimersByTime(1))
+    expect(screen.getByText('01 / DIVER').className).toContain('is-active')
+  })
+
+  it('pauses autoplay while hovered', () => {
+    vi.useFakeTimers()
+    render(<MorphSlider autoplay autoplayDelay={5} items={items} />)
+
+    const slider = screen.getByRole('group', { name: 'Image morph slider' }).parentElement
+    expect(slider).not.toBeNull()
+    fireEvent.mouseEnter(slider!)
+    act(() => vi.advanceTimersByTime(5_000))
+    expect(screen.getByText('01 / DIVER').className).toContain('is-active')
+
+    fireEvent.mouseLeave(slider!)
+    act(() => vi.advanceTimersByTime(5_000))
+    expect(screen.getByText('02 / DEVELOPER').className).toContain('is-active')
+  })
+
+  it('disables autoplay for reduced motion while keeping manual navigation available', () => {
+    vi.useFakeTimers()
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn(() => ({
+        addEventListener: vi.fn(),
+        matches: true,
+        removeEventListener: vi.fn(),
+      })),
+    )
+
+    render(<MorphSlider autoplay autoplayDelay={5} items={items} />)
+    act(() => vi.advanceTimersByTime(10_000))
+    expect(screen.getByText('01 / DIVER').className).toContain('is-active')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Next slide' }))
+    expect(screen.getByText('02 / DEVELOPER').className).toContain('is-active')
+  })
+
+  it('stops autoplay when the reduced-motion preference changes', () => {
+    vi.useFakeTimers()
+    let listener: (() => void) | undefined
+    const mediaQuery = {
+      addEventListener: vi.fn((_event: string, callback: () => void) => {
+        listener = callback
+      }),
+      matches: false,
+      removeEventListener: vi.fn(),
+    }
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn(() => mediaQuery),
+    )
+
+    render(<MorphSlider autoplay autoplayDelay={5} items={items} />)
+    act(() => vi.advanceTimersByTime(5_000))
+    expect(screen.getByText('02 / DEVELOPER').className).toContain('is-active')
+
+    act(() => {
+      mediaQuery.matches = true
+      listener?.()
+    })
+    act(() => vi.advanceTimersByTime(10_000))
+    expect(screen.getByText('02 / DEVELOPER').className).toContain('is-active')
   })
 })
