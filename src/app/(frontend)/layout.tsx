@@ -5,6 +5,7 @@ import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import { Cormorant_Garamond } from 'next/font/google'
 import React from 'react'
+import { Analytics } from '@vercel/analytics/next'
 
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ['latin'],
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
           <Footer />
         </Providers>
+        <Analytics />
       </body>
     </html>
   )
